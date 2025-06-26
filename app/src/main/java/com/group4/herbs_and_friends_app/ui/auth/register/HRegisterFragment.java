@@ -10,27 +10,44 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.databinding.FragmentHRegisterBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HRegisterFragment extends Fragment {
 
-    private HRegisterViewModel mViewModel;
+    // ================================
+    // === Fields
+    // ================================
 
-    public static HRegisterFragment newInstance() {
-        return new HRegisterFragment();
-    }
+    private FragmentHRegisterBinding binding;
+    private HRegisterViewModel hRegisterViewModel;
+
+    // ================================
+    // === Lifecycle
+    // ================================
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_register, container, false);
+        binding = FragmentHRegisterBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HRegisterViewModel.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hRegisterViewModel = new ViewModelProvider(this).get(HRegisterViewModel.class);
     }
 
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ================================
+    // === Methods
+    // ================================
+    // Add UI interactions, LiveData observers, or helper methods here
 }

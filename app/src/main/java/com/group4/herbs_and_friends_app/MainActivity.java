@@ -12,6 +12,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.group4.herbs_and_friends_app.databinding.ActivityMainBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     // ================================
