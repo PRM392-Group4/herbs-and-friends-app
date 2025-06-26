@@ -1,4 +1,4 @@
-package com.group4.herbs_and_friends_app.ui.notification;
+package com.group4.herbs_and_friends_app.ui.auth.register;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,24 +12,24 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.group4.herbs_and_friends_app.R;
 
-public class HNotificationFragment extends Fragment {
+public class HRegisterFragment extends Fragment {
 
-    private HNotificationVM mViewModel;
+    private HRegisterViewModel mViewModel;
 
-    public static HNotificationFragment newInstance() {
-        return new HNotificationFragment();
+    public static HRegisterFragment newInstance() {
+        return new HRegisterFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_notification, container, false);
+        return inflater.inflate(R.layout.fragment_h_register, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HNotificationVM.class);
+        mViewModel = new ViewModelProvider(this).get(HRegisterViewModel.class);
         // TODO: Use the ViewModel
     }
 

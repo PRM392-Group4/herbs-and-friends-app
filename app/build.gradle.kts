@@ -46,10 +46,7 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
-    implementation(libs.legacy.support.v4)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    annotationProcessor("com.google.dagger:hilt-android-compiler:2.47")
+    annotationProcessor("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // Firebase (BOM)
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
@@ -65,6 +62,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.legacy.support.v4)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
