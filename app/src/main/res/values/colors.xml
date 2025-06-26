@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_black">#FF000000</color>
-    <color name="app_white">#FFFFFFFF</color>
-    <color name="app_green">#00ac53</color>
-    <color name="app_blue">#3165fd</color>
-    <color name="app_yellow">#fbbb04</color>
+    <!-- Brand Colors -->
+    <color name="md_theme_light_primary">#00AC53</color>
+    <color name="md_theme_light_secondary">#FFB300</color>
+    <color name="md_theme_light_tertiary">#00AC53</color>
+
+    <!-- Background & Surface -->
+    <color name="md_theme_light_background">#FFFFFF</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_onSecondary">#1C1C1C</color>
+    <color name="md_theme_light_onBackground">#1C1C1C</color>
+    <color name="md_theme_light_onSurface">#1C1C1C</color>
+
+    <!-- Neutrals -->
+    <color name="gray_light">#E6E0E9</color>
+    <color name="gray_medium">#8F8F8F</color>
+    <color name="black">#1C1C1C</color>
+
+    <!-- Semantic -->
+    <color name="info">#1691FB</color>
+    <color name="error">#FB4942</color>
+
+    <!-- Extras -->
+    <color name="purple">#1691FB</color>
+    <color name="blue">#3165FD</color>
 </resources>
