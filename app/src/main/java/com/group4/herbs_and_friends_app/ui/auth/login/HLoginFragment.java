@@ -17,12 +17,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class HLoginFragment extends Fragment {
 
+    // ================================
+    // === Fields
+    // ================================
+
     private FragmentHLoginBinding binding;
     private HLoginViewModel hLoginViewModel;
 
-    public static HLoginFragment newInstance() {
-        return new HLoginFragment();
-    }
+    // ================================
+    // === Lifecycles
+    // ================================
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,4 +41,14 @@ public class HLoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         hLoginViewModel = new ViewModelProvider(this).get(HLoginViewModel.class);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ================================
+    // === Methods
+    // ================================
 }

@@ -10,27 +10,48 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.databinding.FragmentHCartBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HCartFragment extends Fragment {
 
-    private HCartVM mViewModel;
+    // ================================
+    // === Fields
+    // ================================
 
-    public static HCartFragment newInstance() {
-        return new HCartFragment();
-    }
+    private FragmentHCartBinding binding;
+    private HCartVM hCartVM;
+
+    // ================================
+    // === Lifecycle
+    // ================================
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_cart, container, false);
+        binding = FragmentHCartBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HCartVM.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hCartVM = new ViewModelProvider(this).get(HCartVM.class);
+
+        // TODO: Observe LiveData and bind UI here
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ================================
+    // === Methods
+    // ================================
+    // Add custom methods for interaction
 
 }
