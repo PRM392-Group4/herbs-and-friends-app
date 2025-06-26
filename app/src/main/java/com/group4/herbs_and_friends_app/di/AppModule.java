@@ -17,6 +17,10 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 public class AppModule {
 
+    // =========================
+    // === Firebase Services
+    // =========================
+
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
@@ -29,6 +33,10 @@ public class AppModule {
         return FirebaseAuth.getInstance();
     }
 
+    // =========================
+    // === Repositories
+    // =========================
+
     @Provides
     @Singleton
     public AuthRepository provideAuthRepository(FirebaseAuth firebaseAuth) {
@@ -40,5 +48,4 @@ public class AppModule {
     public ProductRepository provideProductRepository(FirebaseFirestore firestore) {
         return new ProductRepository(firestore);
     }
-
 }

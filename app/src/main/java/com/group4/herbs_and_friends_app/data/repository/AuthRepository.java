@@ -7,5 +7,6 @@ public class AuthRepository {
     private FirebaseAuth firebaseAuth;
 
     public AuthRepository(FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
     }
 }

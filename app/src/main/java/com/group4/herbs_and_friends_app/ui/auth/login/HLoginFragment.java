@@ -1,22 +1,24 @@
 package com.group4.herbs_and_friends_app.ui.auth.login;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.group4.herbs_and_friends_app.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.group4.herbs_and_friends_app.databinding.FragmentHLoginBinding;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HLoginFragment extends Fragment {
 
-    private HLoginViewModel mViewModel;
+    private FragmentHLoginBinding binding;
+    private HLoginViewModel hLoginViewModel;
 
     public static HLoginFragment newInstance() {
         return new HLoginFragment();
@@ -25,14 +27,14 @@ public class HLoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_login, container, false);
+
+        binding = FragmentHLoginBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HLoginViewModel.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hLoginViewModel = new ViewModelProvider(this).get(HLoginViewModel.class);
     }
-
 }
