@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.group4.herbs_and_friends_app.R;
 
-public class ProfileFragment extends Fragment {
+public class HProfileFragment extends Fragment {
 
-    private ProfileViewModel mViewModel;
+    private HProfileVM mViewModel;
 
-    public static ProfileFragment newInstance() {
-        return new ProfileFragment();
+    public static HProfileFragment newInstance() {
+        return new HProfileFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_h_profile, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(HProfileVM.class);
         // TODO: Use the ViewModel
     }
 

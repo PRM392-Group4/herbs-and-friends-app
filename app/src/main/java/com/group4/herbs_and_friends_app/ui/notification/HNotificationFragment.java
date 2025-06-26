@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.group4.herbs_and_friends_app.R;
 
-public class NotificationFragment extends Fragment {
+public class HNotificationFragment extends Fragment {
 
-    private NotificationViewModel mViewModel;
+    private HNotificationVM mViewModel;
 
-    public static NotificationFragment newInstance() {
-        return new NotificationFragment();
+    public static HNotificationFragment newInstance() {
+        return new HNotificationFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        return inflater.inflate(R.layout.fragment_h_notification, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(HNotificationVM.class);
         // TODO: Use the ViewModel
     }
 

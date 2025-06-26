@@ -12,24 +12,24 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.group4.herbs_and_friends_app.R;
 
-public class CartFragment extends Fragment {
+public class HCartFragment extends Fragment {
 
-    private CartViewModel mViewModel;
+    private HCartVM mViewModel;
 
-    public static CartFragment newInstance() {
-        return new CartFragment();
+    public static HCartFragment newInstance() {
+        return new HCartFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        return inflater.inflate(R.layout.fragment_h_cart, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CartViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(HCartVM.class);
         // TODO: Use the ViewModel
     }
 

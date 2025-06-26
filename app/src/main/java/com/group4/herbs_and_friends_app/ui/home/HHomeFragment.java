@@ -12,24 +12,24 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.group4.herbs_and_friends_app.R;
 
-public class HomeFragment extends Fragment {
+public class HHomeFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private HHomeVM mViewModel;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static HHomeFragment newInstance() {
+        return new HHomeFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_h_home, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(HHomeVM.class);
         // TODO: Use the ViewModel
     }
 

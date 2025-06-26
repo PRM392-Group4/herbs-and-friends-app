@@ -6,22 +6,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HomeFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeFragment"
         android:label="Home" />
 
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.cart.CartFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
         android:label="Cart" />
 
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.notification.NotificationFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.notification.HNotificationFragment"
         android:label="Notification" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.profile.ProfileFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
         android:label="Profile" />
 
 </navigation>

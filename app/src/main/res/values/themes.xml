@@ -3,23 +3,23 @@
     <style name="Theme.HerbsAndFriends" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Brand Colors -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimary">@color/h_primary</item>
+        <item name="colorOnPrimary">@color/h_on_primary</item>
 
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondary">@color/h_secondary</item>
+        <item name="colorOnSecondary">@color/h_on_secondary</item>
 
-        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorTertiary">@color/h_tertiary</item>
 
         <!-- Backgrounds -->
-        <item name="android:colorBackground">@color/background</item>
-        <item name="colorOnBackground">@color/on_background</item>
+        <item name="android:colorBackground">@color/h_background</item>
+        <item name="colorOnBackground">@color/h_on_background</item>
 
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurface">@color/h_surface</item>
+        <item name="colorOnSurface">@color/h_on_surface</item>
 
         <!-- Semantic Colors -->
-        <item name="colorError">@color/error</item>
+        <item name="colorError">@color/h_error</item>
 
         <!-- Optional status bar styling -->
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>

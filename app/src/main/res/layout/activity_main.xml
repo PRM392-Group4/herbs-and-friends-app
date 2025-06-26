@@ -19,24 +19,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/herb_navigation_main"
-        tools:layout="@layout/fragment_home" />
+        app:navGraph="@navigation/navigation_h_main"
+        tools:layout="@layout/fragment_h_home" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/herb_bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/h_background"
         app:itemActiveIndicatorStyle="@android:color/transparent"
-        app:itemBackground="@color/background"
-        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemBackground="@color/h_background"
+        app:itemIconTint="@color/h_bottom_nav_selector"
         app:itemRippleColor="@android:color/transparent"
-        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemTextColor="@color/h_bottom_nav_selector"
         app:labelVisibilityMode="labeled"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/herb_bottom_nav_menu" />
+        app:menu="@menu/view_h_bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
