@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "524169331415",
+    "project_id": "modern-environs-437216-m4",
+    "storage_bucket": "modern-environs-437216-m4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524169331415:android:cd8420129d29c4b207a692",
+        "android_client_info": {
+          "package_name": "com.group4.herbs_and_friends_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524169331415-3edb1lrnd0chcmqge6cevnoe3oc7h7m6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQKXVcExlr2gNT8V1KsICOgnGKfGOZhZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524169331415-3edb1lrnd0chcmqge6cevnoe3oc7h7m6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
