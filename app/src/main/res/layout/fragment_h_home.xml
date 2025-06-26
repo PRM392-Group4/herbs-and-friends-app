@@ -1,13 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HHomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.HHomeFragment"
+    android:padding="20dp">
+
+    <!-- Home Banner -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/home_banner"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner_homepage"
+        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+    <!-- Category section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_banner"
+        android:layout_marginTop="30dp"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/home_category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/home_category_title"
+            android:textSize="23sp"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_category_rv"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/home_category_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Product section -->
+    <TextView
+        android:id="@+id/home_product_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_category"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/product_list_title"
+        android:textSize="23sp"
+        android:textStyle="bold"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/home_product_see_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/home_product_title"
+        android:text="@string/home_product_see_more"
+        android:layout_marginEnd="10dp"
+        android:textSize="17sp"
+        android:textColor="@color/h_info"
+        android:clickable="true"
+        app:layout_constraintBaseline_toBaselineOf="@id/home_product_title"/>
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_product_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_product_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
