@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:navGraph="@navigation/navigation_h_home"
-        app:defaultNavHost="false" />
+        app:defaultNavHost="false"
+        tools:layout="@layout/fragment_h_home" />
 
 </FrameLayout>
