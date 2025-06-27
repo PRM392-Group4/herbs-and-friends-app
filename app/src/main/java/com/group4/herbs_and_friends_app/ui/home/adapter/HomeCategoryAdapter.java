@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Category;
+import com.group4.herbs_and_friends_app.databinding.ItemHomeCategoryBinding;
 import com.group4.herbs_and_friends_app.utils.AppCts;
 
 import java.util.ArrayList;
@@ -43,9 +44,8 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     @NonNull
     @Override
     public HomeCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View categoryView = inflater.inflate(R.layout.home_category_item_layout, parent, false);
-        return new HomeCategoryViewHolder(categoryView);
+        return new HomeCategoryViewHolder(ItemHomeCategoryBinding.inflate(LayoutInflater.from(context),
+                parent, false));
     }
 
     @Override
@@ -69,10 +69,10 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView categoryIcon;
         TextView categoryName;
-        public HomeCategoryViewHolder(@NonNull View itemView) {
-            super(itemView);
-            categoryIcon = itemView.findViewById(R.id.category_ic);
-            categoryName = itemView.findViewById(R.id.category_name);
+        public HomeCategoryViewHolder(@NonNull ItemHomeCategoryBinding binding) {
+            super(binding.getRoot());
+            categoryIcon = binding.categoryIc;
+            categoryName = binding.categoryName;
         }
     }
 

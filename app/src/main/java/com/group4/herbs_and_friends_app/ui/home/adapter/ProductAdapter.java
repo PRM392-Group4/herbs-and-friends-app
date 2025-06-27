@@ -2,7 +2,6 @@ package com.group4.herbs_and_friends_app.ui.home.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Product;
+import com.group4.herbs_and_friends_app.databinding.ItemProductBinding;
 
 import java.util.List;
 
@@ -38,9 +38,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductAdapter.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View productView = inflater.inflate(R.layout.product_item_layout, parent, false);
-        return new ProductViewHolder(productView);
+        return new ProductViewHolder(ItemProductBinding.inflate(LayoutInflater.from(context),
+                parent, false));
     }
 
     @Override
@@ -83,13 +82,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         TextView name, price;
         MaterialButton btnDetail;
         ChipGroup tags;
-        public ProductViewHolder(@NonNull View itemView) {
-            super(itemView);
-            image = itemView.findViewById(R.id.product_image);
-            name = itemView.findViewById(R.id.product_name);
-            price = itemView.findViewById(R.id.product_price);
-            btnDetail = itemView.findViewById(R.id.btn_product_detail);
-            tags = itemView.findViewById(R.id.product_tags);
+        public ProductViewHolder(@NonNull ItemProductBinding binding) {
+            super(binding.getRoot());
+            image = binding.productImage;
+            name = binding.productName;
+            price = binding.productPrice;
+            btnDetail = binding.btnProductDetail;
+            tags = binding.productTags;
         }
     }
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_h_home"
+    app:startDestination="@id/homeMainFragment">
+
+    <fragment
+        android:id="@+id/homeMainFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeFragment"
+        android:label="Home Main" />
+
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductListFragment"
+        android:label="Product List" />
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductDetailFragment"
+        android:label="Product Detail" />
+
+</navigation>
