@@ -208,6 +208,20 @@
                 android:textStyle="bold"
                 android:backgroundTint="@color/h_secondary"/>
 
+            <!-- Display when product is out of stock -->
+            <TextView
+                android:id="@+id/product_out_of_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_2"
+                android:text="@string/product_out_of_stock"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:visibility="gone"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

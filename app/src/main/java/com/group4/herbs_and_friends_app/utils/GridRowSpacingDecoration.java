@@ -19,7 +19,7 @@ public class GridRowSpacingDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view);
 
         // Add top spacing to items that are NOT in the first row
-        if (position > spanCount) {
+        if (position >= spanCount) {
             outRect.top = spacing;
         }
     }
