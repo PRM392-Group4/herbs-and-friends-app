@@ -2,6 +2,7 @@ package com.group4.herbs_and_friends_app.ui.home.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Product;
@@ -54,20 +54,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.name.setText(product.getName());
         holder.price.setText(product.getPriceDisplay());
 
-        // Clear old chips
-        holder.tags.removeAllViews();
-        // Set new tag chips
-        if (product.getTags() != null || !product.getTags().isEmpty()) {
-            for (String tag : product.getTags()) {
-                Chip chip = new Chip(context);
-                chip.setText(tag);
-                chip.setTextColor(ContextCompat.getColor(context, R.color.h_info));
-                chip.setChipStrokeColorResource(R.color.h_info);
-                chip.setChipStartPadding(0);
-                chip.setChipEndPadding(0);
-                holder.tags.addView(chip);
-            }
-        }
+        List<String> tags = product.getTags();
+        if (tags != null && !tags.isEmpty()) {
+            holder.tag.setText(tags.get(0));
+            holder.tag.setVisibility(View.VISIBLE);
+        } else holder.tag.setVisibility(View.INVISIBLE);
 
         holder.btnDetail.setOnClickListener(v -> listener.onProductDetailCLick(product.getId()));
     }
@@ -81,14 +72,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ShapeableImageView image;
         TextView name, price;
         MaterialButton btnDetail;
-        ChipGroup tags;
+        Chip tag;
         public ProductViewHolder(@NonNull ItemProductBinding binding) {
             super(binding.getRoot());
             image = binding.productImage;
             name = binding.productName;
             price = binding.productPrice;
             btnDetail = binding.btnProductDetail;
-            tags = binding.productTags;
+            tag = binding.productTag;
         }
     }
 

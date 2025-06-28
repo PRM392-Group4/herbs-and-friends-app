@@ -20,9 +20,11 @@
     <string name="product_description_placeholder_txt">The standard Lorem Ipsum passage, used since the 1500s. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</string>
     <string name="btn_add_to_cart">Thêm vào giỏ hàng</string>
     <string name="btn_fast_checkout">Mua ngay</string>
-    <string name="product_stock_placeholder_txt">Kho: 100</string>
+    <string name="product_stock_placeholder_txt">Kho:</string>
     <string name="btn_quantity_minus">−</string>
     <string name="btn_quantity_add">+</string>
     <string name="product_quantity_placeholder_txt">1</string>
     <string name="quantity_label">Số lượng</string>
+    <string name="product_not_found">Không tìm thấy sản phẩm</string>
+    <string name="product_tag_placeholder_txt">Tag</string>
 </resources>

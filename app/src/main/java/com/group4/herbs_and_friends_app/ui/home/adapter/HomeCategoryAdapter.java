@@ -2,7 +2,6 @@ package com.group4.herbs_and_friends_app.ui.home.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -38,7 +37,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
 
     public void setCategoryList(List<Category> categoryList) {
         this.categoryList.addAll(1, categoryList);
-        notifyItemRangeChanged(1, categoryList.size());
+        notifyDataSetChanged();
     }
 
     @NonNull

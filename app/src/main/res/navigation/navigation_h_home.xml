@@ -7,16 +7,52 @@
     <fragment
         android:id="@+id/homeMainFragment"
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeFragment"
-        android:label="Home Main" />
+        android:label="Home Main" >
+
+        <action
+            android:id="@+id/home_to_productList"
+            app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/home_to_productDetail"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductListFragment"
-        android:label="Product List" />
+        android:label="Product List" >
+
+        <!-- TODO: Replace args with shared VM filters -->
+        <argument
+            android:name="categoryId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="search"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/productList_to_productDetail"
+            app:destination="@id/productDetailFragment" />
+        <action
+            android:id="@+id/productList_to_home"
+            app:destination="@id/homeMainFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductDetailFragment"
-        android:label="Product Detail" />
+        android:label="Product Detail" >
+
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="false"/>
+
+        <action
+            android:id="@+id/productDetail_to_productList"
+            app:destination="@id/productListFragment" />
+    </fragment>
 
 </navigation>

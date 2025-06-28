@@ -1,9 +1,9 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,6 +19,8 @@ public class Product {
     private ArrayList<String> tags;
     private Date createdAt;
     private Date updatedAt;
+    @Exclude
+    private Category category;
 
     public Product() {}
 

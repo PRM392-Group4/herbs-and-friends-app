@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="157dp"
-    android:layout_height="360dp"
+    android:layout_height="310dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -44,13 +44,13 @@
         android:text="@string/btn_product_detail"
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"/>
-    
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/product_tags"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/product_tag"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:singleLine="false"
-        app:chipSpacing="3dp" />
+        app:chipStrokeColor="@color/h_info"
+        android:textColor="@color/h_info"
+        android:text="@string/product_tag_placeholder_txt" />
 
 </LinearLayout>

@@ -18,9 +18,13 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ImageV
     private ArrayList<String> imageUrlList;
     private Context context;
 
-    public CarouselAdapter(Context context, ArrayList<String> imageUrlList) {
+    public CarouselAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setImageUrlList(ArrayList<String> imageUrlList) {
         this.imageUrlList = imageUrlList;
+        notifyDataSetChanged();
     }
 
     @NonNull

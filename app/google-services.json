@@ -7,6 +7,80 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:524169331415:android:4c6c0136670484cb07a692",
+        "android_client_info": {
+          "package_name": "com.duyvukim.drowsinessalertsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524169331415-eshame8asighrmnp4g0skubbjds3j88c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duyvukim.drowsinessalertsystem",
+            "certificate_hash": "aa30c600c1b7dcee461de8c47fbdd4d64129dc67"
+          }
+        },
+        {
+          "client_id": "524169331415-gl3ldl1mt8chgh99rk7oaqs756iq13uc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duyvukim.drowsinessalertsystem",
+            "certificate_hash": "12941020cdb0bc4a2b7020fe084e7132e7122382"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQKXVcExlr2gNT8V1KsICOgnGKfGOZhZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524169331415-3edb1lrnd0chcmqge6cevnoe3oc7h7m6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524169331415:android:b173bd0a586f9d3907a692",
+        "android_client_info": {
+          "package_name": "com.duyvukim.mobile_hackathon_softelligence"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524169331415-0k6qde27bithnegsf676ekqb8kscipk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duyvukim.mobile_hackathon_softelligence",
+            "certificate_hash": "12941020cdb0bc4a2b7020fe084e7132e7122382"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQKXVcExlr2gNT8V1KsICOgnGKfGOZhZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524169331415-3edb1lrnd0chcmqge6cevnoe3oc7h7m6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:524169331415:android:cd8420129d29c4b207a692",
         "android_client_info": {
           "package_name": "com.group4.herbs_and_friends_app"
@@ -14,8 +88,20 @@
       },
       "oauth_client": [
         {
-          "client_id": "524169331415-3edb1lrnd0chcmqge6cevnoe3oc7h7m6.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "524169331415-d221m3jiuu1r3djv60un0g2dv0nk92bt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.group4.herbs_and_friends_app",
+            "certificate_hash": "12941020cdb0bc4a2b7020fe084e7132e7122382"
+          }
+        },
+        {
+          "client_id": "524169331415-mhg5u8fo1ea1brup8fmuj8uut3lv01j0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.group4.herbs_and_friends_app",
+            "certificate_hash": "aa30c600c1b7dcee461de8c47fbdd4d64129dc67"
+          }
         }
       ],
       "api_key": [
