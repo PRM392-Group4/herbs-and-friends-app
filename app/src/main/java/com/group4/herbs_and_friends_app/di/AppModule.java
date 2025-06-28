@@ -3,7 +3,9 @@ package com.group4.herbs_and_friends_app.di;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
+import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 
 import javax.inject.Singleton;
@@ -24,7 +26,7 @@ public class AppModule {
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
-        return FirebaseFirestore.getInstance();
+        return FirebaseFirestore.getInstance("herbs");
     }
 
     @Provides
@@ -47,5 +49,11 @@ public class AppModule {
     @Singleton
     public ProductRepository provideProductRepository(FirebaseFirestore firestore) {
         return new ProductRepository(firestore);
+    }
+
+    @Provides
+    @Singleton
+    public CategoryRepository provideCategoryRepository(FirebaseFirestore firestore) {
+        return new CategoryRepository(firestore);
     }
 }
