@@ -31,12 +31,14 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     public HomeCategoryAdapter(Context context, HomeCategoryClickListener listener) {
         this.context = context;
         this.listener = listener;
-
-        initCategoryList();
     }
 
     public void setCategoryList(List<Category> categoryList) {
-        this.categoryList.addAll(1, categoryList);
+        Category allCategory = new Category();
+        allCategory.setId(AppCts.ALL_CATEGORY_ID);
+        allCategory.setName(AppCts.ALL_CATEGORY_NAME);
+        categoryList.add(0, allCategory);
+        this.categoryList = categoryList;
         notifyDataSetChanged();
     }
 
@@ -76,14 +78,6 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
     }
 
     public interface HomeCategoryClickListener { void onHomeCategoryClick(String categoryId); }
-
-    private void initCategoryList() {
-        categoryList = new ArrayList<>();
-        Category allCategory = new Category();
-        allCategory.setId(AppCts.ALL_CATEGORY_ID);
-        allCategory.setName(AppCts.ALL_CATEGORY_NAME);
-        categoryList.add(allCategory);
-    }
 
     private int[] getResIds(int position) {
         int[] resIds = new int[3];

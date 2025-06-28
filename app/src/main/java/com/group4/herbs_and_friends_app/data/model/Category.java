@@ -1,12 +1,15 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 
 public class Category {
     @DocumentId
     private String id;
     private String name;
     private String categoryParentId;
+    @Exclude
+    private Category categoryParent;
 
     public Category() {}
 

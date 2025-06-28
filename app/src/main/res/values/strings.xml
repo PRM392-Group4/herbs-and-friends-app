@@ -16,6 +16,7 @@
     <string name="product_price_placeholder_txt">100.000 ₫</string>
     <string name="btn_sort_placeholder_txt">Giá giảm dần</string>
     <string name="btn_filter_placeholder_txt">Tất cả</string>
+    <string name="product_tag_placeholder_txt">Tag</string>
 
     <string name="product_description_placeholder_txt">The standard Lorem Ipsum passage, used since the 1500s. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</string>
     <string name="btn_add_to_cart">Thêm vào giỏ hàng</string>
@@ -26,5 +27,5 @@
     <string name="product_quantity_placeholder_txt">1</string>
     <string name="quantity_label">Số lượng</string>
     <string name="product_not_found">Không tìm thấy sản phẩm</string>
-    <string name="product_tag_placeholder_txt">Tag</string>
+    <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
 </resources>

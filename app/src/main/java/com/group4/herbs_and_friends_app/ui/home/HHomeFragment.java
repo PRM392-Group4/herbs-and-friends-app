@@ -107,7 +107,7 @@ public class HHomeFragment extends Fragment {
     private void setProductAdapter() {
         binding.homeProductRv.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
-        binding.homeCategoryRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
+        binding.homeProductRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
 
         productAdapter = new ProductAdapter(requireContext(), productId -> {
             // Set productId into arguments and navigate to product detail fragment

@@ -37,6 +37,8 @@ public class HHomeProductDetailFragment extends Fragment {
     private FragmentHHomeProductDetailBinding binding;
     private HHomeVM hHomeVM;
     private CarouselAdapter carouselAdapter;
+    private String productId;
+    private int currentStock;
     private int quantity;
 
     // ================================
@@ -55,12 +57,9 @@ public class HHomeProductDetailFragment extends Fragment {
         setActionBar();
         setCarouselAdapter();
 
-        String productId = HHomeProductDetailFragmentArgs.fromBundle(getArguments()).getProductId();
-
+        productId = HHomeProductDetailFragmentArgs.fromBundle(getArguments()).getProductId();
         hHomeVM = new ViewModelProvider(this).get(HHomeVM.class);
         fetchData(productId);
-
-        quantitySelectorListener();
 
         binding.btnAddToCart.setOnClickListener(v -> {
             //TODO: Add product to cart
@@ -142,6 +141,13 @@ public class HHomeProductDetailFragment extends Fragment {
                 binding.tags.addView(chip);
             }
         }
+
+        // Set current stock and check if out of stock
+        currentStock = product.getInStock();
+        checkOutOfStock();
+
+        quantity = 1;
+        quantitySelectorListener();
     }
 
     private void productNotFoundView() {
@@ -149,11 +155,19 @@ public class HHomeProductDetailFragment extends Fragment {
         binding.productNotFound.setVisibility(View.VISIBLE);
     }
 
-    private void quantitySelectorListener() {
-        quantity = Integer.parseInt(binding.textQuantity.getText().toString());
+    private void checkOutOfStock() {
+        if(currentStock == 0) {
+            binding.quantityLabel.setVisibility(View.GONE);
+            binding.quantitySelector.setVisibility(View.GONE);
+            binding.btnAddToCart.setVisibility(View.GONE);
+            binding.btnFastCheckout.setVisibility(View.GONE);
+            binding.productOutOfStock.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void quantitySelectorListener() {
         binding.btnQuantityAdd.setOnClickListener(v -> {
-            quantity++;
+            if(quantity < currentStock) quantity++;
             binding.textQuantity.setText(String.valueOf(quantity));
         });
 
