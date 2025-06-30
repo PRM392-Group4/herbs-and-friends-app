@@ -24,7 +24,7 @@ import java.util.List;
  *  Not to be confused with full category list for filtering in product list fragment
  */
 public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapter.HomeCategoryViewHolder> {
-    private List<Category> categoryList;
+    private List<Category> categoryList = new ArrayList<>();
     private Context context;
     private HomeCategoryClickListener listener;
 
@@ -35,8 +35,8 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
 
     public void setCategoryList(List<Category> categoryList) {
         Category allCategory = new Category();
-        allCategory.setId(AppCts.ALL_CATEGORY_ID);
-        allCategory.setName(AppCts.ALL_CATEGORY_NAME);
+        allCategory.setId(context.getString(R.string.all_cate_id));
+        allCategory.setName(context.getString(R.string.all_cate_name));
         categoryList.add(0, allCategory);
         this.categoryList = categoryList;
         notifyDataSetChanged();
@@ -59,7 +59,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         holder.categoryIcon.setColorFilter(ContextCompat.getColor(context, resIds[1]));
         holder.categoryIcon.setBackgroundColor(ContextCompat.getColor(context, resIds[2]));
 
-        holder.itemView.setOnClickListener(v -> listener.onHomeCategoryClick(category.getId()));
+        holder.itemView.setOnClickListener(v -> listener.onHomeCategoryClick(category));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         }
     }
 
-    public interface HomeCategoryClickListener { void onHomeCategoryClick(String categoryId); }
+    public interface HomeCategoryClickListener { void onHomeCategoryClick(Category category); }
 
     private int[] getResIds(int position) {
         int[] resIds = new int[3];

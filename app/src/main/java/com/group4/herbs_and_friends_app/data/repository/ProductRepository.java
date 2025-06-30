@@ -1,14 +1,15 @@
 package com.group4.herbs_and_friends_app.data.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class ProductRepository {
 
     private FirebaseFirestore firestore;
     private CollectionReference products;
-    private final String TAG = "product_repo";
 
     public ProductRepository(FirebaseFirestore firestore) {
         this.firestore = firestore;
@@ -35,13 +35,47 @@ public class ProductRepository {
                     productListLive.setValue(productList);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching products", e);
                     productListLive.setValue(Collections.emptyList());
                 });
         return productListLive;
     }
 
-    //TODO: Get products with params
+    public LiveData<List<Product>> getProductsWithParams(Params params) {
+        MutableLiveData<List<Product>> productListLive = new MutableLiveData<>();
+        Query query = products;
+
+        // Apply categories
+        if(params.getCategoryIds() != null && !params.getCategoryIds().isEmpty())
+            query = query.whereIn("categoryId", params.getCategoryIds());
+
+        // Apply sort
+        if(params.getSort() != null) {
+            switch (params.getSort()) {
+                case PRICE_DEFAULT: break;
+                case PRICE_ASC:
+                    query = query.orderBy("price", Query.Direction.ASCENDING);
+                    break;
+                case PRICE_DESC:
+                    query = query.orderBy("price", Query.Direction.DESCENDING);
+            }
+        }
+
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Product> productList = querySnapshot.toObjects(Product.class);
+
+                    // Apply search
+                    if(params.getSearch() != null && !params.getSearch().isEmpty()) {
+                        List<Product> filteredList = filterBySearch(productList, params.getSearch());
+                        productListLive.setValue(filteredList);
+                    } else productListLive.setValue(productList);
+                })
+                .addOnFailureListener(e -> {
+                    productListLive.setValue(Collections.emptyList());
+                });
+
+        return productListLive;
+    }
 
     public LiveData<Product> getProductById(String productId) {
         MutableLiveData<Product> productLive = new MutableLiveData<>();
@@ -53,9 +87,23 @@ public class ProductRepository {
                     } else productLive.setValue(null);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching product by Id", e);
                     productLive.setValue(null);
                 });
         return productLive;
+    }
+
+    private List<Product> filterBySearch(List<Product> productList, String search) {
+        List<Product> filteredList = new ArrayList<>();
+
+        for (Product product : productList) {
+            boolean nameMatch = product.getName().toLowerCase().contains(search.toLowerCase());
+            boolean tagMatch = product.getTags() != null &&
+                    product.getTags()
+                            .stream()
+                            .anyMatch(tag -> tag.toLowerCase().contains(search.toLowerCase()));
+            if(nameMatch || tagMatch) filteredList.add(product);
+        }
+
+        return filteredList;
     }
 }

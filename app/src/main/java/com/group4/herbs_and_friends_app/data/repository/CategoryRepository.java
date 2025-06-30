@@ -1,11 +1,8 @@
 package com.group4.herbs_and_friends_app.data.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,12 +10,13 @@ import com.group4.herbs_and_friends_app.data.model.Category;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryRepository {
     private FirebaseFirestore firestore;
     private CollectionReference categories;
-    private final String TAG = "cate_repo";
 
     public CategoryRepository(FirebaseFirestore firestore) {
         this.firestore = firestore;
@@ -34,11 +32,36 @@ public class CategoryRepository {
         MutableLiveData<List<Category>> categoryListLive = new MutableLiveData<>();
         categories.get()
                 .addOnSuccessListener(query -> {
-                    List<Category> categoryList = query.toObjects(Category.class);
-                    categoryListLive.setValue(categoryList);
+                    // Get parent categories
+                    List<Category> parentCategories = new ArrayList<>();
+                    for (DocumentSnapshot doc : query) {
+                        Category category = doc.toObject(Category.class);
+                        if (!doc.contains("categoryParentId")) {
+                            category.setChildCategory(false);
+                            parentCategories.add(category);
+                        } else {
+                            // Add as child category to parent category
+                            for (Category parent : parentCategories) {
+                                if(Objects.equals(parent.getId(), category.getCategoryParentId())) {
+                                    category.setChildCategory(true);
+                                    parent.addChildCategory(category);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Flat list containing all parent-child categories in arrangement
+                    List<Category> arrangedCategories = new ArrayList<>();
+                    for (Category parent : parentCategories) {
+                        arrangedCategories.add(parent);
+                        if(parent.getChildCategories() != null)
+                            arrangedCategories.addAll(parent.getChildCategories());
+                    }
+
+                    categoryListLive.setValue(arrangedCategories);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching categories", e);
                     categoryListLive.setValue(Collections.emptyList());
                 });
         return categoryListLive;
@@ -49,15 +72,27 @@ public class CategoryRepository {
         MutableLiveData<List<Category>> parentCategoriesLive = new MutableLiveData<>();
         categories.get()
                 .addOnSuccessListener(query -> {
+                    // Get parent categories
                     List<Category> parentCategories = new ArrayList<>();
                     for (DocumentSnapshot doc : query) {
-                        if (!doc.contains("categoryParentId"))
-                            parentCategories.add(doc.toObject(Category.class));
+                        Category category = doc.toObject(Category.class);
+                        if (!doc.contains("categoryParentId")) {
+                            category.setChildCategory(false);
+                            parentCategories.add(category);
+                        } else {
+                            // Add as child category to parent category
+                            for (Category parent : parentCategories) {
+                                if(Objects.equals(parent.getId(), category.getCategoryParentId())) {
+                                    category.setChildCategory(true);
+                                    parent.addChildCategory(category);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     parentCategoriesLive.setValue(parentCategories);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching parent categories", e);
                     parentCategoriesLive.setValue(Collections.emptyList());
                 });
         return parentCategoriesLive;
