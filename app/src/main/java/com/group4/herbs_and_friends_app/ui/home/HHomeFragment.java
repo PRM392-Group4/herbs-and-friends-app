@@ -1,10 +1,15 @@
 package com.group4.herbs_and_friends_app.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +19,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.model.Category;
+import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.ui.home.adapter.HomeCategoryAdapter;
 import com.group4.herbs_and_friends_app.ui.home.adapter.ProductAdapter;
 import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -46,17 +56,20 @@ public class HHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
+
         setActionBar();
         setCategoryAdapter();
         setProductAdapter();
 
-        hHomeVM = new ViewModelProvider(this).get(HHomeVM.class);
         fetchData();
 
         // Navigate to product list when 'See More' is clicked
         binding.homeProductSeeMore.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HHomeFragment.this)
-                    .navigate(R.id.home_to_productList);
+            hHomeVM.setParamsLive(new Params()); // Set empty params
+            NavHostFragment.findNavController(this).navigate(
+                    HHomeFragmentDirections.homeToProductList()
+            );
         });
     }
 
@@ -73,19 +86,47 @@ public class HHomeFragment extends Fragment {
     private void setActionBar() {
         ViewHActionbarBinding actionbarBinding = binding.includeActionbarHome;
         actionbarBinding.btnBack.setVisibility(View.GONE);
-        actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
-            Editable editable = actionbarBinding.etSearch.getText();
-            if(editable == null) return;
 
-            String search = editable.toString().trim();
-            if(search.isEmpty()) return;
-
-            // Set search into arguments and navigate to product list fragment
-            // TODO: Replace with shared VM filters
-            NavHostFragment.findNavController(this).navigate(
-                    HHomeFragmentDirections.homeToProductList(null, search)
-            );
+        // Handle search when user presses the "Search" on keyboard
+        actionbarBinding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                            event.getAction() == KeyEvent.ACTION_DOWN)) {
+                performSearch();
+                hideKeyboard(v);
+                return true;
+            }
+            return false;
         });
+
+        // Handle search when user presses search icon
+        actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
+            performSearch();
+            hideKeyboard(actionbarBinding.etSearch);
+        });
+    }
+
+    private void performSearch() {
+        Editable editable = binding.includeActionbarHome.etSearch.getText();
+        if(editable == null) return;
+
+        String search = editable.toString().trim();
+        if (!search.isEmpty()) {
+            Params params = new Params();
+            params.setSearch(search);
+            hHomeVM.setParamsLive(params);
+            NavHostFragment.findNavController(this).navigate(
+                    HHomeFragmentDirections.homeToProductList()
+            );
+        }
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
     }
 
     private void setCategoryAdapter() {
@@ -93,11 +134,38 @@ public class HHomeFragment extends Fragment {
         int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
         binding.homeCategoryRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 3));
 
-        categoryAdapter = new HomeCategoryAdapter(requireContext(), categoryId -> {
-            // Set categoryId into arguments and navigate to product list fragment
-            // TODO: Replace with shared VM filters
+        categoryAdapter = new HomeCategoryAdapter(requireContext(), category -> {
+            Log.d("HHomeFragment", "Selected category: " + category.getName() + " (ID: " + category.getId() + ")");
+
+            if(!category.getId().equals(getString(R.string.all_cate_id))) {
+                List<String> categoryIds = new ArrayList<>();
+                categoryIds.add(category.getId());
+                Log.d("HHomeFragment", "Added parent category ID: " + category.getId());
+
+                // Include child categories
+                if(category.getChildCategories() != null) {
+                    List<String> childIds = category.getChildCategories()
+                            .stream()
+                            .map(Category::getId)
+                            .toList();
+                    categoryIds.addAll(childIds);
+                    Log.d("HHomeFragment", "Added child category IDs: " + childIds);
+                } else {
+                    Log.d("HHomeFragment", "No child categories found");
+                }
+
+                Log.d("HHomeFragment", "Final category IDs list: " + categoryIds);
+
+                Params params = new Params();
+                params.setCategoryIds(categoryIds);
+                hHomeVM.setParamsLive(params);
+            } else {
+                Log.d("HHomeFragment", "Selected 'All' category - clearing params");
+                hHomeVM.setParamsLive(new Params());
+            }
+
             NavHostFragment.findNavController(this).navigate(
-                    HHomeFragmentDirections.homeToProductList(categoryId, null)
+                    HHomeFragmentDirections.homeToProductList()
             );
         });
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Indent for child category -->
+    <View
+        android:id="@+id/indent"
+        android:layout_width="24dp"
+        android:layout_height="1dp"
+        android:visibility="gone"/>
+
+    <CheckBox
+        android:id="@+id/filter_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_filter_checkbox_placeholder_txt"
+        android:textSize="17sp"
+        android:paddingHorizontal="8dp"/>
+
+</LinearLayout>

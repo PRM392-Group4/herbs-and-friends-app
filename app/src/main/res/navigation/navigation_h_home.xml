@@ -22,16 +22,6 @@
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductListFragment"
         android:label="Product List" >
 
-        <!-- TODO: Replace args with shared VM filters -->
-        <argument
-            android:name="categoryId"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="search"
-            app:argType="string"
-            app:nullable="true" />
-
         <action
             android:id="@+id/productList_to_productDetail"
             app:destination="@id/productDetailFragment" />

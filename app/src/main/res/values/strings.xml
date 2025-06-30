@@ -14,7 +14,7 @@
     <string name="btn_product_detail">Chi tiết</string>
     <string name="product_name_placeholder_txt">Product name</string>
     <string name="product_price_placeholder_txt">100.000 ₫</string>
-    <string name="btn_sort_placeholder_txt">Giá giảm dần</string>
+    <string name="btn_sort_placeholder_txt">Giá mặc định</string>
     <string name="btn_filter_placeholder_txt">Tất cả</string>
     <string name="product_tag_placeholder_txt">Tag</string>
 
@@ -28,4 +28,16 @@
     <string name="quantity_label">Số lượng</string>
     <string name="product_not_found">Không tìm thấy sản phẩm</string>
     <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
+
+    <string name="filter_sheet_title_placeholder_txt">Lọc theo phân loại</string>
+    <string name="btn_clear_filter">Thiết lập lại</string>
+    <string name="btn_apply_filter">Áp dụng</string>
+
+    <string name="all_cate_id">all</string>
+    <string name="all_cate_name">Tất cả</string>
+    <string name="sort_price_default">Giá mặc định</string>
+    <string name="sort_price_asc">Giá tăng dần</string>
+    <string name="sort_price_desc">Giá giảm dần</string>
+    <string name="item_filter_checkbox_placeholder_txt">Filter option</string>
+    <string name="btn_product_filter_set">Bộ lọc</string>
 </resources>

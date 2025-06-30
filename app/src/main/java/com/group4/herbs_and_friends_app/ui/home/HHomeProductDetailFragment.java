@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app.ui.home;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,14 +12,18 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.CarouselSnapHelper;
 import com.google.android.material.chip.Chip;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeProductDetailBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
@@ -54,11 +59,13 @@ public class HHomeProductDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
+
         setActionBar();
         setCarouselAdapter();
 
         productId = HHomeProductDetailFragmentArgs.fromBundle(getArguments()).getProductId();
-        hHomeVM = new ViewModelProvider(this).get(HHomeVM.class);
         fetchData(productId);
 
         binding.btnAddToCart.setOnClickListener(v -> {
@@ -82,25 +89,52 @@ public class HHomeProductDetailFragment extends Fragment {
 
     private void setActionBar() {
         ViewHActionbarBinding actionbarBinding = binding.includeActionbarProductDetail;
-        actionbarBinding.btnBack.setVisibility(View.VISIBLE);
 
+        // Navigate back to product list fragment
         actionbarBinding.btnBack.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).navigateUp();
         });
 
-        actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
-            Editable editable = actionbarBinding.etSearch.getText();
-            if(editable == null) return;
-
-            String search = editable.toString().trim();
-            if(search.isEmpty()) return;
-
-            // Set search into arguments and navigate to product list fragment
-            // TODO: Replace with shared VM filters
-            NavHostFragment.findNavController(this).navigate(
-                    HHomeProductDetailFragmentDirections.productDetailToProductList(null, search)
-            );
+        // Handle search when user presses the "Search" on keyboard
+        actionbarBinding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                            event.getAction() == KeyEvent.ACTION_DOWN)) {
+                performSearch();
+                hideKeyboard(v);
+                return true;
+            }
+            return false;
         });
+
+        // Handle search when user presses search icon
+        actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
+            performSearch();
+            hideKeyboard(actionbarBinding.etSearch);
+        });
+    }
+
+    private void performSearch() {
+        Editable editable = binding.includeActionbarProductDetail.etSearch.getText();
+        if(editable == null) return;
+
+        String search = editable.toString().trim();
+        if (!search.isEmpty()) {
+            Params params = new Params();
+            params.setSearch(search);
+            hHomeVM.setParamsLive(params);
+            NavHostFragment.findNavController(this).navigate(
+                    HHomeProductDetailFragmentDirections.productDetailToProductList()
+            );
+        }
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
     }
 
     private void setCarouselAdapter() {
