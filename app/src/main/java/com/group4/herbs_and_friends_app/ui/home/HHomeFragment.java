@@ -3,7 +3,6 @@ package com.group4.herbs_and_friends_app.ui.home;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,12 +134,9 @@ public class HHomeFragment extends Fragment {
         binding.homeCategoryRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 3));
 
         categoryAdapter = new HomeCategoryAdapter(requireContext(), category -> {
-            Log.d("HHomeFragment", "Selected category: " + category.getName() + " (ID: " + category.getId() + ")");
-
             if(!category.getId().equals(getString(R.string.all_cate_id))) {
                 List<String> categoryIds = new ArrayList<>();
                 categoryIds.add(category.getId());
-                Log.d("HHomeFragment", "Added parent category ID: " + category.getId());
 
                 // Include child categories
                 if(category.getChildCategories() != null) {
@@ -149,18 +145,13 @@ public class HHomeFragment extends Fragment {
                             .map(Category::getId)
                             .toList();
                     categoryIds.addAll(childIds);
-                    Log.d("HHomeFragment", "Added child category IDs: " + childIds);
-                } else {
-                    Log.d("HHomeFragment", "No child categories found");
                 }
-
-                Log.d("HHomeFragment", "Final category IDs list: " + categoryIds);
 
                 Params params = new Params();
                 params.setCategoryIds(categoryIds);
                 hHomeVM.setParamsLive(params);
             } else {
-                Log.d("HHomeFragment", "Selected 'All' category - clearing params");
+                // If selected 'All' then set empty params
                 hHomeVM.setParamsLive(new Params());
             }
 
