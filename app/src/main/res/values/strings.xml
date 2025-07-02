@@ -28,4 +28,5 @@
     <string name="quantity_label">Số lượng</string>
     <string name="product_not_found">Không tìm thấy sản phẩm</string>
     <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
+
 </resources>
