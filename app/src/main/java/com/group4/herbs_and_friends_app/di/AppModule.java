@@ -1,9 +1,11 @@
 package com.group4.herbs_and_friends_app.di;
 
+import android.content.Context;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
@@ -13,6 +15,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 @Module
@@ -22,12 +25,13 @@ public class AppModule {
     // =========================
     // === Firebase Services
     // =========================
-
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
+
         return FirebaseFirestore.getInstance("herbs");
     }
+
 
     @Provides
     @Singleton
@@ -38,11 +42,10 @@ public class AppModule {
     // =========================
     // === Repositories
     // =========================
-
     @Provides
     @Singleton
-    public AuthRepository provideAuthRepository(FirebaseAuth firebaseAuth) {
-        return new AuthRepository(firebaseAuth);
+    public AuthRepository provideAuthRepository(FirebaseAuth firebaseAuth, FirebaseFirestore firestore, ResourceManager resourceManager) {
+        return new AuthRepository(firebaseAuth, firestore, resourceManager);
     }
 
     @Provides
@@ -55,5 +58,14 @@ public class AppModule {
     @Singleton
     public CategoryRepository provideCategoryRepository(FirebaseFirestore firestore) {
         return new CategoryRepository(firestore);
+    }
+
+    // =========================
+    // === Utilities
+    // =========================
+    @Provides
+    @Singleton
+    public ResourceManager provideResourceManager(@ApplicationContext Context context) {
+        return new ResourceManager(context);
     }
 }
