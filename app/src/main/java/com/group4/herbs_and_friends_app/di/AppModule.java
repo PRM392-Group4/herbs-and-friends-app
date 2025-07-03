@@ -6,6 +6,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.storage.FirebaseStorage;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
@@ -28,10 +30,12 @@ public class AppModule {
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
-
         return FirebaseFirestore.getInstance("herbs");
     }
 
+    @Provides
+    @Singleton
+    public FirebaseStorage provideFirebaseStorage() { return FirebaseStorage.getInstance("gs://modern-environs-437216-m4.firebasestorage.app"); }
 
     @Provides
     @Singleton
@@ -50,8 +54,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public ProductRepository provideProductRepository(FirebaseFirestore firestore) {
-        return new ProductRepository(firestore);
+    public ProductRepository provideProductRepository(FirebaseFirestore firestore, FirebaseStorage storage) {
+        return new ProductRepository(firestore, storage);
     }
 
     @Provides

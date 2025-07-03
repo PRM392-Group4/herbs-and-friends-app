@@ -1,15 +1,20 @@
 package com.group4.herbs_and_friends_app.ui.home;
 
+import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
+
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.view.KeyEvent;
@@ -20,13 +25,16 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupMenu;
 
+import com.google.android.material.button.MaterialButton;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Category;
 import com.group4.herbs_and_friends_app.data.model.Params;
+import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.data.model.enums.SortOptions;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeProductListBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHFilterSheetBinding;
+import com.group4.herbs_and_friends_app.ui.base.ProductFilterBaseFragment;
 import com.group4.herbs_and_friends_app.ui.home.adapter.CategoryAdapter;
 import com.group4.herbs_and_friends_app.ui.home.adapter.ProductAdapter;
 import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
@@ -37,21 +45,9 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HHomeProductListFragment extends Fragment {
-
-    // ================================
-    // === Fields
-    // ================================
+public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM> implements ProductAdapter.ProductActionListener {
     private FragmentHHomeProductListBinding binding;
-    private HHomeVM hHomeVM;
-    private ProductAdapter productAdapter;
-    private CategoryAdapter categoryAdapter;
-    private Params params;
-    private List<String> selectedCategoryIds = new ArrayList<>();
 
-    // ================================
-    // === Lifecycle
-    // ================================
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -62,18 +58,7 @@ public class HHomeProductListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
-
-        setActionBar();
-        setProductAdapter();
-        setCategoryAdapter();
-
-        initParams();
-        fetchData();
-
-        binding.btnProductFilter.setOnClickListener(v -> showCategoryFilter());
-        binding.btnPriceSort.setOnClickListener(v -> showSortPriceMenu());
+        setupProductAdapter();
     }
 
     @Override
@@ -82,221 +67,99 @@ public class HHomeProductListFragment extends Fragment {
         binding = null;
     }
 
+    // ================================================
+    //    Abstract Method Implementations from Base
+    // ================================================
+    // Provide the specific UI elements from this fragment's binding
+    @Override
+    protected RecyclerView getProductRecyclerView() {
+        return binding.productRv;
+    }
+
+    @Override
+    protected MaterialButton getFilterButton() {
+        return binding.btnProductFilter;
+    }
+
+    @Override
+    protected MaterialButton getSortButton() {
+        return binding.btnPriceSort;
+    }
+
+    @Override
+    protected ViewHActionbarBinding getActionBarBinding() {
+        return binding.includeActionbarProductList;
+    }
+
+    @Override
+    protected ViewHFilterSheetBinding getFilterSheetBinding() {
+        return binding.includeCategoryFilter;
+    }
+
+    // Provide the specific ViewModel instance for this fragment
+    @Override
+    protected HHomeVM getConcreteViewModel() {
+        return new ViewModelProvider(requireActivity()).get(HHomeVM.class);
+    }
+
+    // Provide how to get/set params and data from HHomeVM
+    @Override
+    protected LiveData<Params> getParamsLiveFromVM(HHomeVM vm) {
+        return vm.getParamsLive();
+    }
+
+    @Override
+    protected void setParamsLiveToVM(HHomeVM vm, Params params) {
+        vm.setParamsLive(params);
+    }
+
+    @Override
+    protected LiveData<List<Product>> getProductsWithParamsLiveFromVM(HHomeVM vm) {
+        return vm.getProductsWithParamsLive();
+    }
+
+    @Override
+    protected LiveData<List<Category>> getAllCategoriesLiveFromVM(HHomeVM vm) {
+        return vm.getAllCategoriesLive();
+    }
+
+    // Provide the NavController for navigation specific to this fragment
+    @Override
+    protected NavController getNavController() {
+        return NavHostFragment.findNavController(this);
+    }
+
     // ================================
-    // === Methods
+    //      Product Adapter Setup
     // ================================
-
-    private void setActionBar() {
-        ViewHActionbarBinding actionbarBinding = binding.includeActionbarProductList;
-
-        // Navigate back to home fragment
-        actionbarBinding.btnBack.setOnClickListener(v -> {
-            if(params != null) params.clear();
-            hHomeVM.setParamsLive(null);
-            NavHostFragment.findNavController(this).navigate(
-                    HHomeProductListFragmentDirections.productListToHome()
-            );
-        });
-
-        // Handle search when user presses the "Search" on keyboard
-        actionbarBinding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
-                            event.getAction() == KeyEvent.ACTION_DOWN)) {
-                performSearch();
-                hideKeyboard(v);
-                return true;
-            }
-            return false;
-        });
-
-        // Handle search when user presses search icon
-        actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
-            performSearch();
-            hideKeyboard(actionbarBinding.etSearch);
-        });
-    }
-
-    private void performSearch() {
-        Editable editable = binding.includeActionbarProductList.etSearch.getText();
-        if(editable == null) return;
-
-        String search = editable.toString().trim();
-        if (!search.isEmpty()) {
-            if(params == null) params = new Params();
-            params.setSearch(search);
-            hHomeVM.setParamsLive(params);
-        }
-    }
-
-    private void hideKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) v.getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
-    }
-
-    private void setProductAdapter() {
-        binding.productRv.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+    @Override
+    protected void setupProductAdapter() {
+        getProductRecyclerView().setLayoutManager(new GridLayoutManager(requireContext(), 2));
         int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
-        binding.productRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
+        getProductRecyclerView().addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
 
-        productAdapter = new ProductAdapter(requireContext(), productId -> {
-            // Set productId into arguments and navigate to product detail fragment
-            NavHostFragment.findNavController(this).navigate(
-                    HHomeProductListFragmentDirections.productListToProductDetail(productId)
-            );
-        });
-
-        binding.productRv.setAdapter(productAdapter);
+        // productAdapter field is inherited from base
+        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_LISTING);
+        getProductRecyclerView().setAdapter(productAdapter);
     }
 
-    private void setCategoryAdapter() {
-        binding.includeCategoryFilter.filtersRv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        categoryAdapter = new CategoryAdapter(requireContext(), category -> {
-            if (category.isChecked()) {
-                selectedCategoryIds.add(category.getId());
-                if(category.getChildCategories() != null) {
-                    selectedCategoryIds.addAll(category.getChildCategories()
-                            .stream()
-                            .map(Category::getId)
-                            .toList());
-                }
-            } else {
-                selectedCategoryIds.remove(category.getId());
-
-                // If child category, remove parent from selection
-                if (category.isChildCategory()) selectedCategoryIds.remove(category.getCategoryParentId());
-
-                // If parent category, remove all child categories
-                if (category.getChildCategories() != null) {
-                    selectedCategoryIds.removeAll(category.getChildCategories()
-                            .stream()
-                            .map(Category::getId)
-                            .toList());
-                }
-            }
-        });
-        binding.includeCategoryFilter.filtersRv.setAdapter(categoryAdapter);
+    // =========================================
+    //      ProductActionListener Callbacks
+    // =========================================
+    @Override
+    public void onProductDetailCLick(String productId) {
+        NavHostFragment.findNavController(this).navigate(
+            HHomeProductListFragmentDirections.productListToProductDetail(productId)
+        );
     }
 
-    private void initParams() {
-        if(hHomeVM.getParamsLive() != null && hHomeVM.getParamsLive().getValue() != null) {
-            params = hHomeVM.getParamsLive().getValue();
-
-            // Populate search bar
-            if (params.getSearch() != null)
-                binding.includeActionbarProductList.etSearch.setText(params.getSearch());
-
-            // Set selected category
-            if (params.getCategoryIds() != null && !params.getCategoryIds().isEmpty()) {
-                selectedCategoryIds.addAll(params.getCategoryIds());
-                binding.btnProductFilter.setText(R.string.btn_product_filter_set);
-            }
-        } else {
-            // Empty params to show all products
-            params = new Params();
-            hHomeVM.setParamsLive(params);
-        }
+    @Override
+    public void onProductEditClick(String productId) {
+        // Not applicable for customer list, implementation remains empty
     }
 
-    private void fetchData() {
-        // Observe products with params - this will automatically update when params change
-        hHomeVM.getProductsWithParamsLive().observe(getViewLifecycleOwner(), products -> {
-            if (products != null) {
-                productAdapter.setProductList(products);
-            }
-        });
-
-        // Observe categories for filter
-        hHomeVM.getAllCategoriesLive().observe(getViewLifecycleOwner(), categories -> {
-            if (categories != null) {
-                categoryAdapter.setCategoryList(categories);
-                if (!selectedCategoryIds.isEmpty()) {
-                    categoryAdapter.setSelectedCategories(selectedCategoryIds);
-                }
-            }
-        });
-    }
-
-    private void showCategoryFilter() {
-        ViewHFilterSheetBinding filterSheetBinding = binding.includeCategoryFilter;
-        View filterSheet = filterSheetBinding.filterSheet;
-        filterSheet.setVisibility(View.VISIBLE);
-        filterSheet.post(() -> {
-            float width = filterSheet.getWidth();
-            filterSheet.setTranslationX(-width);
-            filterSheet.animate()
-                    .translationX(0f)
-                    .setDuration(300)
-                    .start();
-        });
-
-        filterSheetBinding.btnApplyFilter.setOnClickListener(v -> applyFilter(filterSheet));
-
-        filterSheetBinding.btnClearFilter.setOnClickListener(v -> clearFilter(filterSheet));
-
-        filterSheetBinding.btnCloseFilter.setOnClickListener(v -> closeFilter(filterSheet));
-    }
-
-    private void applyFilter(View filterSheet) {
-        if(params == null) params = new Params();
-        params.setCategoryIds(selectedCategoryIds.isEmpty() ? null : selectedCategoryIds);
-        hHomeVM.setParamsLive(params);
-
-        binding.btnProductFilter.setText(R.string.btn_product_filter_set);
-
-        hideFilterSheet(filterSheet);
-    }
-
-    private void clearFilter(View filterSheet) {
-        categoryAdapter.clearSelectedCategories();
-        selectedCategoryIds.clear();
-
-        if(params == null) params = new Params();
-        params.setCategoryIds(null);
-        hHomeVM.setParamsLive(params);
-
-        binding.btnProductFilter.setText(R.string.btn_filter_placeholder_txt);
-
-        hideFilterSheet(filterSheet);
-    }
-
-    private void closeFilter(View filterSheet) {
-        clearFilter(filterSheet);
-        hideFilterSheet(filterSheet);
-    }
-
-    private void hideFilterSheet(View filterSheet) {
-        filterSheet.animate()
-                .translationX(-filterSheet.getWidth())
-                .setDuration(300)
-                .withEndAction(() -> filterSheet.setVisibility(View.GONE))
-                .start();
-    }
-
-    private void showSortPriceMenu() {
-        PopupMenu sortPriceMenu = new PopupMenu(requireContext(), binding.btnPriceSort);
-        sortPriceMenu.getMenuInflater().inflate(R.menu.view_h_sort_price_menu, sortPriceMenu.getMenu());
-
-        sortPriceMenu.setOnMenuItemClickListener(sortOption -> {
-            binding.btnPriceSort.setText(sortOption.getTitle());
-
-            if(params == null) params = new Params();
-
-            if(sortOption.getItemId() == R.id.sort_price_default) {
-                params.setSort(SortOptions.PRICE_DEFAULT);
-            } else if(sortOption.getItemId() == R.id.sort_price_asc) {
-                params.setSort(SortOptions.PRICE_ASC);
-            } else if(sortOption.getItemId() == R.id.sort_price_desc) {
-                params.setSort(SortOptions.PRICE_DESC);
-            }
-
-            hHomeVM.setParamsLive(params);
-            return true;
-        });
-
-        sortPriceMenu.show();
+    @Override
+    public void onProductDeleteClick(String productId, String productName) {
+        // Not applicable for customer list, implementation remains empty
     }
 }

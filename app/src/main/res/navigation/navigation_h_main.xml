@@ -21,6 +21,11 @@
 
     <!-- Profile (đổi id thành profileFragment như bạn yêu cầu) -->
     <fragment
+        android:id="@+id/productManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageContainerFragment"
+        android:label="Manage" />
+
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
         android:label="Profile">
