@@ -24,6 +24,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.group4.herbs_and_friends_app.data.model.Category;
 import com.group4.herbs_and_friends_app.data.model.Product;
@@ -46,6 +47,7 @@ public class HProductFormFragment extends Fragment {
     private final List<String> tags = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
     private String editingProductId;
+    private Product currentProduct;
 
     @Nullable
     @Override
@@ -75,9 +77,15 @@ public class HProductFormFragment extends Fragment {
 
         // If editing, load existing product
         if (getArguments() != null && getArguments().containsKey("productId")) {
-            editingProductId = getArguments().getString("productId");
-            viewModel.getSelectedProductLive(editingProductId)
-                    .observe(getViewLifecycleOwner(), this::populateForm);
+            String argId = getArguments().getString("productId");
+            if (argId != null) {
+                editingProductId = argId;
+                viewModel.getSelectedProductLive(editingProductId)
+                        .observe(getViewLifecycleOwner(), product -> {
+                            currentProduct = product;
+                            populateForm(product);
+                        });
+            }
         }
     }
 
@@ -111,6 +119,8 @@ public class HProductFormFragment extends Fragment {
     private void setupCategorySpinner() {
         viewModel.getAllCategoriesLive().observe(getViewLifecycleOwner(), categories -> {
             if (categories != null) {
+
+                // Set the categories list to the adapter
                 categoryList = categories;
                 List<String> names = new ArrayList<>();
                 for (Category c : categories) names.add(c.getName());
@@ -118,6 +128,18 @@ public class HProductFormFragment extends Fragment {
                         requireContext(), android.R.layout.simple_spinner_item, names);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.spinnerCategory.setAdapter(adapter);
+
+                // Check if the the fragment is in edit mode (currentProduct is not null)
+                if (currentProduct != null) {
+                    String catId = currentProduct.getCategoryId();
+                    for (int i = 0; i < categoryList.size(); i++) {
+                        if (categoryList.get(i).getId().equals(catId)) {
+                            // Set selected category to the spinner
+                            binding.spinnerCategory.setSelection(i);
+                            break;
+                        }
+                    }
+                }
             }
         });
     }
@@ -165,7 +187,7 @@ public class HProductFormFragment extends Fragment {
             FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(200,200);
             iv.setLayoutParams(ivParams);
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            iv.setImageURI(uri);
+            Glide.with(this).load(uri).into(iv);
             container.addView(iv);
 
             // Show image remove button
@@ -213,6 +235,7 @@ public class HProductFormFragment extends Fragment {
                 binding.chipGroupTags.addView(chip);
             }
         }
+
         // Images
         imageUris.clear();
         if (product.getImageUrls() != null) {
@@ -224,38 +247,57 @@ public class HProductFormFragment extends Fragment {
     }
 
     private void saveProduct() {
-        // Get input data
+        // collect and validate input
         String name = binding.etName.getText().toString().trim();
         String priceStr = binding.etPrice.getText().toString().trim();
         String stockStr = binding.etStock.getText().toString().trim();
         String desc = binding.etDescription.getText().toString().trim();
-        final String prodId = editingProductId != null ? editingProductId
-                : UUID.randomUUID().toString();
+        final String prodId = editingProductId != null ? editingProductId : UUID.randomUUID().toString();
 
-        // Get validation state (description is optional)
-        boolean valid = getDataAndValidate(name, priceStr, stockStr);
+        // description, tags, images is optional
+        if (!getDataAndValidate(name, priceStr, stockStr)) return;
 
-        // If invalid then return
-        if (!valid) return;
+        List<Uri> toUpload = getLocalImageUris();
+        List<String> finalUrls = getExistingImageUrls();
 
-        // If image uris list is empty then just post the product
-        if (imageUris.isEmpty()) {
-            postProduct(prodId, name, priceStr, desc, stockStr, new ArrayList<>());
-            return;
-        }
-
-        // disable button and show loading state
+        // disable button and show loading
         disableButtonAndShowLoading();
-        
-        // upload images via ViewModel
-        viewModel.uploadImages(prodId, imageUris)
-            .observe(getViewLifecycleOwner(), urls -> {
-                // when urls are ready post the product
-                postProduct(prodId, name, priceStr, desc, stockStr, urls);
-                
-                // reset button
-                enableButtonAndShowLoading();
-            });
+
+        if (toUpload.isEmpty()) {
+            postProduct(prodId, name, priceStr, desc, stockStr, finalUrls);
+            enableButtonAndShowLoading();
+        } else {
+            viewModel.uploadImages(prodId, toUpload)
+                    .observe(getViewLifecycleOwner(), urls -> {
+                        finalUrls.addAll(urls);
+                        postProduct(prodId, name, priceStr, desc, stockStr, finalUrls);
+                        enableButtonAndShowLoading();
+                    });
+        }
+    }
+
+    // Extract local URIs (non-http) to upload
+    private List<Uri> getLocalImageUris() {
+        List<Uri> local = new ArrayList<>();
+        for (Uri uri : imageUris) {
+            String scheme = uri.getScheme();
+            if (scheme == null || !(scheme.startsWith("http") || scheme.startsWith("https"))) {
+                local.add(uri);
+            }
+        }
+        return local;
+    }
+
+    // Extract already-uploaded URLs
+    private List<String> getExistingImageUrls() {
+        List<String> existing = new ArrayList<>();
+        for (Uri uri : imageUris) {
+            String scheme = uri.getScheme();
+            if (scheme != null && (scheme.startsWith("http") || scheme.startsWith("https"))) {
+                existing.add(uri.toString());
+            }
+        }
+        return existing;
     }
 
     private void enableButtonAndShowLoading() {
@@ -302,7 +344,13 @@ public class HProductFormFragment extends Fragment {
         prod.setImageUrls(new ArrayList<>(urls));
         prod.setTags(new ArrayList<>(tags));
         prod.setUpdatedAt(new Date());
-        if (editingProductId == null) prod.setCreatedAt(new Date());
+
+        // preserve createdAt if it has value
+        if (currentProduct != null && currentProduct.getCreatedAt() != null) {
+            prod.setCreatedAt(currentProduct.getCreatedAt());
+        } else {
+            prod.setCreatedAt(new Date());
+        }
 
         // Check if the product id is provided to decide add or edit operation
         LiveData<Boolean> action = editingProductId == null
@@ -310,14 +358,15 @@ public class HProductFormFragment extends Fragment {
                 : viewModel.updateProduct(prodId, prod);
         action.observe(getViewLifecycleOwner(), success -> {
             Toast.makeText(requireContext(),
-                    success ? (editingProductId == null ? "Product added" : "Product updated")
-                            : "Operation failed",
+                    success ? (editingProductId == null ? "Đã thêm thành công" : "Đã cập nhật thành công")
+                            : "Đã có lỗi xảy ra",
                     Toast.LENGTH_SHORT).show();
 
             // Enable save button after operation
             binding.btnSave.setEnabled(true);
 
-            if (Boolean.TRUE.equals(success)) {
+            // Navigate back to product list after successful add/edit
+            if (success) {
                 NavHostFragment.findNavController(this).navigateUp();
             }
         });

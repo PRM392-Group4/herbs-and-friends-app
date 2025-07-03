@@ -3,10 +3,13 @@ package com.group4.herbs_and_friends_app.ui.manage;
 import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_MANAGE;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -134,19 +137,42 @@ public class HProductManageFragment extends ProductFilterBaseFragment<HProductMa
 
     @Override
     public void onProductEditClick(String productId) {
-
+        NavHostFragment.findNavController(HProductManageFragment.this).navigate(
+                HProductManageFragmentDirections.productListToProductForm(productId)
+        );
     }
 
     @Override
     public void onProductDeleteClick(String productId, String productName) {
+        // Show dialog box and wait for user confirmation then delete product
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Xóa sản phẩm")
+                .setMessage("Bạn có chắc muốn xóa '" + productName + "'?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    getConcreteViewModel()
+                            .deleteProduct(productId)
+                            .observe(getViewLifecycleOwner(), success -> {
+                                if (Boolean.TRUE.equals(success)) {
+                                    // re-load the list so the item disappears
+                                    if (params != null) setParamsLiveToVM(viewModel, params);
+                                } else {
+                                    Toast.makeText(requireContext(),
+                                            "Xóa thất bại",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
+
 
     // ================================
     // === Navigation for Add Product
     // ================================
     private void navigateToAddProduct() {
         NavHostFragment.findNavController(HProductManageFragment.this).navigate(
-            HProductManageFragmentDirections.productListToProductForm()
+            HProductManageFragmentDirections.productListToProductForm(null)
         );
     }
 

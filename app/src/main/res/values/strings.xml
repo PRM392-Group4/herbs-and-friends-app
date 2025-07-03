@@ -46,4 +46,7 @@
     <string name="btn_add_product_content_desc">Add New Product</string>
     <string name="in_stock_placeholder_txt">In Stock: %d</string>
     <string name="action_bar_title_placeholder_txt">Thêm Cây</string>
+    <string name="updated_at_placeholder_txt">Updated: 07/03/2025</string>
+    <string name="updated_text">Updated: %s</string>
+    <string name="date_format">dd/MM/yyyy</string>
 </resources>

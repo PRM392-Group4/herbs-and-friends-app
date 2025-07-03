@@ -21,7 +21,10 @@ import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.databinding.ItemProductBinding;
 import com.group4.herbs_and_friends_app.databinding.ItemProductManageBinding;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Product> productList;
@@ -76,42 +79,51 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void initializeProductManageViewHolder(ProductManageViewHolder holder, Product product) {
-        ProductManageViewHolder manageHolder = holder;
         Glide.with(context)
                 .load(product.getThumbnail())
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
-                .into(manageHolder.image);
-        manageHolder.name.setText(product.getName());
-        manageHolder.price.setText(product.getPriceDisplay());
-        manageHolder.shortDescription.setText(product.getDescription());
-        manageHolder.inStock.setText(context.getString(R.string.in_stock_placeholder_txt, product.getInStock()));
+                .into(holder.image);
+        holder.name.setText(product.getName());
+        holder.price.setText(product.getPriceDisplay());
+        holder.shortDescription.setText(product.getDescription());
+        holder.inStock.setText(context.getString(R.string.in_stock_placeholder_txt, product.getInStock()));
+
+        // Format date
+        Date updated = product.getUpdatedAt();
+        if (updated != null) {
+            String formatted = new SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
+                    .format(updated);
+            holder.updatedAt.setText(String.format(context.getString(R.string.updated_text), formatted));
+            holder.updatedAt.setVisibility(View.VISIBLE);
+        } else {
+            holder.updatedAt.setVisibility(View.GONE);
+        }
 
         // Set listeners for manage actions
-        manageHolder.btnEdit.setOnClickListener(v -> listener.onProductEditClick(product.getId()));
-        manageHolder.btnDelete.setOnClickListener(v -> listener.onProductDeleteClick(product.getId(), product.getName()));
+        holder.btnEdit.setOnClickListener(v -> listener.onProductEditClick(product.getId()));
+        holder.btnDelete.setOnClickListener(v -> listener.onProductDeleteClick(product.getId(), product.getName()));
     }
 
     private void initializeProductListingViewHolder(ProductListingViewHolder holder, Product product) {
-        ProductListingViewHolder listingHolder = holder;
         Glide.with(context)
                 .load(product.getThumbnail())
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
-                .into(listingHolder.image);
-        listingHolder.name.setText(product.getName());
-        listingHolder.price.setText(product.getPriceDisplay());
+                .into(holder.image);
+        holder.name.setText(product.getName());
+        holder.price.setText(product.getPriceDisplay());
 
         List<String> tags = product.getTags();
         if (tags != null && !tags.isEmpty()) {
-            listingHolder.tag.setText(tags.get(0));
-            listingHolder.tag.setVisibility(View.VISIBLE);
+            holder.tag.setText(tags.get(0));
+            holder.tag.setVisibility(View.VISIBLE);
         } else {
-            listingHolder.tag.setVisibility(View.INVISIBLE);
+            holder.tag.setVisibility(View.INVISIBLE);
         }
 
         // Set listeners for details actions
-        listingHolder.btnDetail.setOnClickListener(v -> listener.onProductDetailCLick(product.getId()));
+        holder.btnDetail.setOnClickListener(v -> listener.onProductDetailCLick(product.getId()));
     }
 
     @Override
@@ -138,9 +150,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // --- ViewHolder for Admin Product Management ---
     public static class ProductManageViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView image;
-        TextView name, price, shortDescription, inStock;
+        TextView name, price, shortDescription, inStock, updatedAt;
         MaterialButton btnEdit, btnDelete;
-        Chip tag;
 
         public ProductManageViewHolder(@NonNull ItemProductManageBinding binding) {
             super(binding.getRoot());
@@ -149,6 +160,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             price = binding.productPrice;
             shortDescription = binding.productShortDescription;
             inStock = binding.productInStock;
+            updatedAt = binding.productUpdatedAt;
             btnEdit = binding.btnEditProduct;
             btnDelete = binding.btnDeleteProduct;
         }

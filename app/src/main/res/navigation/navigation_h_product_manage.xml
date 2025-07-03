@@ -16,6 +16,10 @@
         android:id="@+id/productFormFragment"
         android:name="com.group4.herbs_and_friends_app.ui.manage.HProductFormFragment"
         android:label="Product Form">
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="true"/>
         <action
             android:id="@+id/productForm_to_productList"
             app:destination="@id/productManageFragment" />
