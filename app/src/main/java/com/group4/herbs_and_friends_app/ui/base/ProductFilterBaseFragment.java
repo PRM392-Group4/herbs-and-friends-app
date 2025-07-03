@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app.ui.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -76,6 +77,21 @@ public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fra
 
         actionbarBinding.btnBack.setOnClickListener(v -> getNavController().popBackStack());
 
+        actionbarBinding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Replace end icon of search bar upon text input changes
+                if(s != null && !s.toString().trim().isEmpty()) {
+                    actionbarBinding.tilSearch.setEndIconDrawable(R.drawable.ic_cancel);
+                } else actionbarBinding.tilSearch.setEndIconDrawable(R.drawable.ic_search);
+            }
+        });
+
         actionbarBinding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
@@ -88,7 +104,16 @@ public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fra
         });
 
         actionbarBinding.tilSearch.setEndIconOnClickListener(v -> {
-            performSearch();
+            Editable editable = actionbarBinding.etSearch.getText();
+            if (editable != null && !editable.toString().trim().isEmpty()) {
+                // Clear and reload all products
+                actionbarBinding.etSearch.setText("");
+                if(params == null) params = new Params();
+                params.setSearch(null);
+                setParamsLiveToVM(viewModel, params); // Reload with no search
+            } else {
+                performSearch();
+            }
             hideKeyboard(actionbarBinding.etSearch);
         });
     }
