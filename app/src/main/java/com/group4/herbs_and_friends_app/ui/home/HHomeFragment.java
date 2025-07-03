@@ -1,5 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.home;
 
+import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,7 +34,7 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HHomeFragment extends Fragment {
+public class HHomeFragment extends Fragment implements ProductAdapter.ProductActionListener {
 
     // ================================
     // === Fields
@@ -168,12 +170,7 @@ public class HHomeFragment extends Fragment {
         int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
         binding.homeProductRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
 
-        productAdapter = new ProductAdapter(requireContext(), productId -> {
-            // Set productId into arguments and navigate to product detail fragment
-            NavHostFragment.findNavController(this).navigate(
-                    HHomeFragmentDirections.homeToProductDetail(productId)
-            );
-        });
+        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_LISTING);
 
         binding.homeProductRv.setAdapter(productAdapter);
     }
@@ -186,5 +183,23 @@ public class HHomeFragment extends Fragment {
         hHomeVM.getAllProductsLive().observe(getViewLifecycleOwner(), products -> {
             productAdapter.setProductList(products);
         });
+    }
+
+    @Override
+    public void onProductDetailCLick(String productId) {
+        // Set productId into arguments and navigate to product detail fragment
+        NavHostFragment.findNavController(HHomeFragment.this).navigate(
+                HHomeFragmentDirections.homeToProductDetail(productId)
+        );
+    }
+
+    @Override
+    public void onProductEditClick(String productId) {
+
+    }
+
+    @Override
+    public void onProductDeleteClick(String productId, String productName) {
+
     }
 }

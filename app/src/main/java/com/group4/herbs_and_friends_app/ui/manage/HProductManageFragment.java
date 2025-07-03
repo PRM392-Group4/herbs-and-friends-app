@@ -1,57 +1,37 @@
-package com.group4.herbs_and_friends_app.ui.home;
+package com.group4.herbs_and_friends_app.ui.manage;
 
-import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
+import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_MANAGE;
 
-import android.content.Context;
 import android.os.Bundle;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.Editable;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.PopupMenu;
-
 import com.google.android.material.button.MaterialButton;
-import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Category;
 import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
-import com.group4.herbs_and_friends_app.data.model.enums.SortOptions;
-import com.group4.herbs_and_friends_app.databinding.FragmentHHomeProductListBinding;
+import com.group4.herbs_and_friends_app.databinding.FragmentHProductManageBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHFilterSheetBinding;
 import com.group4.herbs_and_friends_app.ui.base.ProductFilterBaseFragment;
-import com.group4.herbs_and_friends_app.ui.home.adapter.CategoryAdapter;
 import com.group4.herbs_and_friends_app.ui.home.adapter.ProductAdapter;
-import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
-public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM> implements ProductAdapter.ProductActionListener {
-    private FragmentHHomeProductListBinding binding;
+public class HProductManageFragment extends ProductFilterBaseFragment<HProductManageVM> implements ProductAdapter.ProductActionListener {
+    private FragmentHProductManageBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentHHomeProductListBinding.inflate(inflater, container, false);
+        binding = FragmentHProductManageBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -59,6 +39,9 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupProductAdapter();
+
+        // Specific to manage fragment: Add Product FAB listener
+        binding.btnAddProduct.setOnClickListener(v -> navigateToAddProduct());
     }
 
     @Override
@@ -67,13 +50,13 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
         binding = null;
     }
 
-    // ================================================
-    //    Abstract Method Implementations from Base
-    // ================================================
+    // =======================================
+    // === Abstract Method Implementations
+    // =======================================
     // Provide the specific UI elements from this fragment's binding
     @Override
     protected RecyclerView getProductRecyclerView() {
-        return binding.productRv;
+        return binding.productManageRv;
     }
 
     @Override
@@ -88,7 +71,7 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
 
     @Override
     protected ViewHActionbarBinding getActionBarBinding() {
-        return binding.includeActionbarProductList;
+        return binding.includeActionbarProductManage;
     }
 
     @Override
@@ -98,28 +81,28 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
 
     // Provide the specific ViewModel instance for this fragment
     @Override
-    protected HHomeVM getConcreteViewModel() {
-        return new ViewModelProvider(requireActivity()).get(HHomeVM.class);
+    protected HProductManageVM getConcreteViewModel() {
+        return new ViewModelProvider(requireActivity()).get(HProductManageVM.class);
     }
 
-    // Provide how to get/set params and data from HHomeVM
+    // Provide how to get/set params and data from HProductManageVM
     @Override
-    protected LiveData<Params> getParamsLiveFromVM(HHomeVM vm) {
+    protected LiveData<Params> getParamsLiveFromVM(HProductManageVM vm) {
         return vm.getParamsLive();
     }
 
     @Override
-    protected void setParamsLiveToVM(HHomeVM vm, Params params) {
+    protected void setParamsLiveToVM(HProductManageVM vm, Params params) {
         vm.setParamsLive(params);
     }
 
     @Override
-    protected LiveData<List<Product>> getProductsWithParamsLiveFromVM(HHomeVM vm) {
+    protected LiveData<List<Product>> getProductsWithParamsLiveFromVM(HProductManageVM vm) {
         return vm.getProductsWithParamsLive();
     }
 
     @Override
-    protected LiveData<List<Category>> getAllCategoriesLiveFromVM(HHomeVM vm) {
+    protected LiveData<List<Category>> getAllCategoriesLiveFromVM(HProductManageVM vm) {
         return vm.getAllCategoriesLive();
     }
 
@@ -130,36 +113,36 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
     }
 
     // ================================
-    //      Product Adapter Setup
+    // === Specific Product Adapter Setup for this Fragment (LinearLayoutManager and specific listener type)
     // ================================
     @Override
     protected void setupProductAdapter() {
-        getProductRecyclerView().setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
-        getProductRecyclerView().addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
+        getProductRecyclerView().setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // productAdapter field is inherited from base
-        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_LISTING);
+        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_MANAGE);
         getProductRecyclerView().setAdapter(productAdapter);
     }
 
-    // =========================================
-    //      ProductActionListener Callbacks
-    // =========================================
+    // ================================
+    // === ProductActionListener Callbacks (specific to this fragment's actions)
+    // ================================
     @Override
     public void onProductDetailCLick(String productId) {
-        NavHostFragment.findNavController(this).navigate(
-            HHomeProductListFragmentDirections.productListToProductDetail(productId)
-        );
     }
 
     @Override
     public void onProductEditClick(String productId) {
-        // Not applicable for customer list, implementation remains empty
+
     }
 
     @Override
     public void onProductDeleteClick(String productId, String productName) {
-        // Not applicable for customer list, implementation remains empty
+    }
+
+    // ================================
+    // === Navigation for Add Product
+    // ================================
+    private void navigateToAddProduct() {
     }
 }

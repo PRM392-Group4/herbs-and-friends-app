@@ -20,6 +20,11 @@
         android:label="Notification" />
 
     <fragment
+        android:id="@+id/productManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageFragment"
+        android:label="Manage" />
+
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
         android:label="Profile" />

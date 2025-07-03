@@ -11,6 +11,7 @@ import com.group4.herbs_and_friends_app.data.model.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ProductRepository {
@@ -105,5 +106,91 @@ public class ProductRepository {
         }
 
         return filteredList;
+    }
+
+    // Add a new product
+    public LiveData<Boolean> addProduct(Product product) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        // Set timestamps
+        Date now = new Date();
+        product.setCreatedAt(now);
+        product.setUpdatedAt(now);
+
+        products.add(product)
+                .addOnSuccessListener(documentReference -> {
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
+
+        return result;
+    }
+
+    // Update an existing product
+    public LiveData<Boolean> updateProduct(String productId, Product product) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        // Update timestamp
+        product.setUpdatedAt(new Date());
+
+        products.document(productId).set(product)
+                .addOnSuccessListener(aVoid -> {
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
+
+        return result;
+    }
+
+    // Update specific fields of a product
+    public LiveData<Boolean> updateProductFields(String productId, java.util.Map<String, Object> updates) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        // Add updated timestamp to the updates
+        updates.put("updatedAt", new Date());
+
+        products.document(productId).update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
+
+        return result;
+    }
+
+    // Delete a product
+    public LiveData<Boolean> deleteProduct(String productId) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        products.document(productId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
+
+        return result;
+    }
+
+    // Check if product exists
+    public LiveData<Boolean> productExists(String productId) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        products.document(productId).get()
+                .addOnSuccessListener(doc -> {
+                    result.setValue(doc.exists());
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
+
+        return result;
     }
 }

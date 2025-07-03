@@ -25,6 +25,7 @@
     <string name="btn_quantity_minus">−</string>
     <string name="btn_quantity_add">+</string>
     <string name="product_quantity_placeholder_txt">1</string>
+    <string name="product_item_stock_placeholder_txt">In Stock: 1</string>
     <string name="quantity_label">Số lượng</string>
     <string name="product_not_found">Không tìm thấy sản phẩm</string>
     <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
@@ -40,4 +41,8 @@
     <string name="sort_price_desc">Giá giảm dần</string>
     <string name="item_filter_checkbox_placeholder_txt">Filter option</string>
     <string name="btn_product_filter_set">Bộ lọc</string>
+    <string name="btn_edit_text">Edit</string>
+    <string name="btn_delete_text">Delete</string>
+    <string name="btn_add_product_content_desc">Add New Product</string>
+    <string name="in_stock_placeholder_txt">In Stock: %d</string>
 </resources>
