@@ -1,7 +1,16 @@
-package com.group4.herbs_and_friends_app.ui.auth.register;
+package com.group4.herbs_and_friends_app.ui.auth.reset;
+
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,44 +20,42 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
-import com.group4.herbs_and_friends_app.databinding.FragmentHRegisterBinding;
+import com.group4.herbs_and_friends_app.databinding.FragmentHResetBinding;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HRegisterFragment extends Fragment {
+public class HResetFragment extends Fragment {
 
-    private FragmentHRegisterBinding binding;
-    private HRegisterViewModel hRegisterViewModel;
+    // ================================
+    // === Fields
+    // ================================
+
+    private FragmentHResetBinding binding;
+    private HResetViewModel hResetViewModel;
 
     @Inject
     FirebaseFirestore firestore;
 
+    // ================================
+    // === Lifecycle
+    // ================================
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentHRegisterBinding.inflate(inflater, container, false);
+        binding = FragmentHResetBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hRegisterViewModel = new ViewModelProvider(this).get(HRegisterViewModel.class);
-
-        NavController navController = NavHostFragment.findNavController(this);
+        hResetViewModel = new ViewModelProvider(this).get(HResetViewModel.class);
 
         EditText etEmail = binding.etEmail;
 
@@ -82,36 +89,41 @@ public class HRegisterFragment extends Fragment {
             return false;
         });
 
-        binding.btnSignUp.setOnClickListener(v -> {
-            String email = binding.etEmail.getText().toString().trim();
-            String password = binding.etPassword.getText().toString().trim();
-            String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
 
-            hRegisterViewModel.registerUser(email, password, confirmPassword,
+        binding.btnNReset.setOnClickListener(v -> {
+            String email = binding.etEmail.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(requireContext(), "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            hResetViewModel.resetPassword(
+                    email,
                     () -> {
-                        Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        navController.navigate(R.id.action_HRegisterFragment_to_profileFragment);
+                        Toast.makeText(requireContext(), "Hãy kiểm tra email của bạn", Toast.LENGTH_LONG).show();
+                        NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_HResetFragment_to_HLoginFragment);
                     },
-                    () -> Toast.makeText(requireContext(), "Lỗi khi đăng ký. Vui lòng thử lại!", Toast.LENGTH_SHORT).show(),
-                    () -> Toast.makeText(requireContext(), "Email đã tồn tại. Vui lòng đăng nhập!", Toast.LENGTH_SHORT).show(),
-                    () -> Toast.makeText(requireContext(), "Mật khẩu không hợp lệ hoặc không khớp!", Toast.LENGTH_SHORT).show()
+                    () -> Toast.makeText(requireContext(), "Email không tồn tại trong hệ thống", Toast.LENGTH_SHORT).show(),
+                    () -> Toast.makeText(requireContext(), "Có lỗi xảy ra. Vui lòng thử lại", Toast.LENGTH_SHORT).show()
             );
         });
 
-        binding.btnGoogleSignIn.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HRegisterFragment_to_HLoginFragment);
+        binding.btnReturn.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_HResetFragment_to_HLoginFragment);
         });
 
-        binding.tvLogin.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HRegisterFragment_to_HLoginFragment);
-        });
     }
 
-
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
-
+    // ================================
+    // === Methods
+    // ================================
+    // Add UI interactions, listeners, or LiveData observers here
 }

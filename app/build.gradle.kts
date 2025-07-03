@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.group4.herbs_and_friends_app"
-        minSdk = 35
+        minSdk = 24
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -37,6 +37,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    packagingOptions {
+        resources {
+            excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/LICENSE-notice.md")
+            excludes.add("META-INF/NOTICE.md")
+        }
+    }
 }
 
 dependencies {
@@ -54,6 +61,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
+    implementation ("com.google.firebase:firebase-auth:22.1.2")
     implementation("com.google.firebase:firebase-storage")
 
     // Glide (Java image loading)
@@ -62,6 +71,12 @@ dependencies {
 
     // GSON
     implementation("com.google.code.gson:gson:2.13.1")
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
+
 
     implementation(libs.appcompat)
     implementation(libs.material)

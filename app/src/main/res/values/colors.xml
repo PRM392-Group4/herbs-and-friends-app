@@ -33,6 +33,9 @@
     <color name="h_purple_light">#F5E6FC</color>
     <color name="h_blue_light">#D5DFFD</color>
     <color name="h_skyblue_light">#CFE8FC</color>
+    <color name="h_newsvine">#80D9FDE5</color>
+    <color name="h_kermit">#97DBAE</color>
+    <color name="h_carrot">#EE6457</color>
     <color name="h_red">#FC0303</color>
 
 </resources>
