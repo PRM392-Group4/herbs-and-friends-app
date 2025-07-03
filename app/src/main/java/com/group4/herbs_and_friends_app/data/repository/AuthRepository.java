@@ -10,15 +10,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
-import com.group4.herbs_and_friends_app.data.enums.LoginMethod;
+import com.group4.herbs_and_friends_app.data.model.enums.LoginMethod;
 import com.group4.herbs_and_friends_app.data.mail.GmailSender;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
 import com.group4.herbs_and_friends_app.di.ResourceManager;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.function.Consumer;

@@ -1,7 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.auth.login;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -35,15 +33,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
-import com.group4.herbs_and_friends_app.data.enums.LoginMethod;
+import com.group4.herbs_and_friends_app.data.model.enums.LoginMethod;
 import com.group4.herbs_and_friends_app.databinding.FragmentHLoginBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
