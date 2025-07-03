@@ -111,6 +111,7 @@ public class Product {
 
     // Return the first URL string in imageUrls to use as product thumbnail
     public String getThumbnail() {
+        if (imageUrls == null || imageUrls.isEmpty()) return null;
         return imageUrls.get(0);
     }
 }

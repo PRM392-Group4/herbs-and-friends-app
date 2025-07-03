@@ -2,6 +2,7 @@ package com.group4.herbs_and_friends_app.ui.manage;
 
 import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_MANAGE;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,9 +113,9 @@ public class HProductManageFragment extends ProductFilterBaseFragment<HProductMa
         return NavHostFragment.findNavController(this);
     }
 
-    // ================================
-    // === Specific Product Adapter Setup for this Fragment (LinearLayoutManager and specific listener type)
-    // ================================
+    // ======================================================
+    // === Specific Product Adapter Setup for this Fragment
+    // ======================================================
     @Override
     protected void setupProductAdapter() {
         getProductRecyclerView().setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -124,9 +125,9 @@ public class HProductManageFragment extends ProductFilterBaseFragment<HProductMa
         getProductRecyclerView().setAdapter(productAdapter);
     }
 
-    // ================================
-    // === ProductActionListener Callbacks (specific to this fragment's actions)
-    // ================================
+    // =====================================
+    // === ProductActionListener Callbacks
+    // =====================================
     @Override
     public void onProductDetailCLick(String productId) {
     }
@@ -144,5 +145,18 @@ public class HProductManageFragment extends ProductFilterBaseFragment<HProductMa
     // === Navigation for Add Product
     // ================================
     private void navigateToAddProduct() {
+        NavHostFragment.findNavController(HProductManageFragment.this).navigate(
+            HProductManageFragmentDirections.productListToProductForm()
+        );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // force a fresh load of products
+        if (params != null) {
+            setParamsLiveToVM(viewModel, params);
+        }
     }
 }

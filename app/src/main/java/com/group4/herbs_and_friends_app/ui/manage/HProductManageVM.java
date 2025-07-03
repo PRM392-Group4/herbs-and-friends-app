@@ -1,5 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.manage;
 
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -90,5 +92,9 @@ public class HProductManageVM extends ViewModel {
 
     public LiveData<Boolean> deleteProduct(String productId) {
         return productRepo.deleteProduct(productId);
+    }
+
+    public LiveData<List<String>> uploadImages(String prodId, List<Uri> uris) {
+        return productRepo.uploadImages(prodId, uris);
     }
 }

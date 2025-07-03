@@ -1,11 +1,16 @@
 package com.group4.herbs_and_friends_app.data.repository;
 
+import android.net.Uri;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
 
@@ -13,19 +18,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductRepository {
 
-    private FirebaseFirestore firestore;
-    private CollectionReference products;
+    private final FirebaseFirestore firestore;
+    private final CollectionReference products;
+    private final FirebaseStorage storage;
+    private final StorageReference storageRef;
 
-    public ProductRepository(FirebaseFirestore firestore) {
+    public ProductRepository(FirebaseFirestore firestore,
+                             FirebaseStorage storage) {
         this.firestore = firestore;
-        getCollectionReference();
-    }
-
-    public void getCollectionReference() {
-        products = firestore.collection("products");
+        this.products  = firestore.collection("products");
+        this.storage = storage;
+        this.storageRef = storage.getReference().child("products")
+                .child("images");
     }
 
     public LiveData<List<Product>> getAllProducts() {
@@ -117,13 +125,16 @@ public class ProductRepository {
         product.setCreatedAt(now);
         product.setUpdatedAt(now);
 
-        products.add(product)
-                .addOnSuccessListener(documentReference -> {
-                    result.setValue(true);
-                })
-                .addOnFailureListener(e -> {
-                    result.setValue(false);
-                });
+        // Set the product to preserve the generated id
+        products
+            .document(product.getId())
+            .set(product)
+            .addOnSuccessListener(aVoid -> {
+                result.setValue(true);
+            })
+            .addOnFailureListener(e -> {
+                result.setValue(false);
+            });
 
         return result;
     }
@@ -192,5 +203,37 @@ public class ProductRepository {
                 });
 
         return result;
+    }
+
+
+    // Upload images to firebase storage then returns a
+    // LiveData which emits the list of download-URLs when done.
+    public LiveData<List<String>> uploadImages(String prodId, List<Uri> uris) {
+        MutableLiveData<List<String>> live = new MutableLiveData<>();
+        List<String> urls = new ArrayList<>();
+        if (uris.isEmpty()) {
+            live.setValue(urls);
+            return live;
+        }
+
+        for (Uri uri : uris) {
+            String fileName = UUID.randomUUID().toString();
+            StorageReference ref = storageRef.child(prodId).child(fileName);
+            ref.putFile(uri)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) throw task.getException();
+                    return ref.getDownloadUrl();
+                })
+                .addOnSuccessListener(downloadUri -> {
+                    urls.add(downloadUri.toString());
+                    if (urls.size() == uris.size()) {
+                        live.setValue(urls);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("Upload Images", "Failed to upload images");
+                });
+        }
+        return live;
     }
 }
