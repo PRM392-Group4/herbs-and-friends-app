@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_bottom_notification"
         android:title="Thông báo" />
     <item
+        android:id="@+id/productManageFragment"
+        android:icon="@drawable/ic_bottom_nav_product_manage"
+        android:title="Quản lý" />
+    <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_bottom_profile"
         android:title="Cá nhân" />

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeContainerFragment"
         android:label="Home" />
 
     <fragment
@@ -19,9 +19,79 @@
         android:name="com.group4.herbs_and_friends_app.ui.notification.HNotificationFragment"
         android:label="Notification" />
 
+    <!-- Profile (đổi id thành profileFragment như bạn yêu cầu) -->
+    <fragment
+        android:id="@+id/productManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageContainerFragment"
+        android:label="Manage" />
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
-        android:label="Profile" />
+        android:label="Profile">
+
+        <!-- Chuyển đến Login -->
+        <action
+            android:id="@+id/action_profileFragment_to_HLoginFragment"
+            app:destination="@id/HLoginFragment" />
+    </fragment>
+
+    <!-- Login -->
+    <fragment
+        android:id="@+id/HLoginFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.login.HLoginFragment"
+        android:label="Login">
+
+        <!-- Đến Profile sau khi login -->
+        <action
+            android:id="@+id/action_HLoginFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Đến Register -->
+        <action
+            android:id="@+id/action_HLoginFragment_to_HRegisterFragment"
+            app:destination="@id/HRegisterFragment" />
+
+        <!-- Đến Reset -->
+        <action
+            android:id="@+id/action_HLoginFragment_to_HResetFragment"
+            app:destination="@id/HResetFragment" />
+    </fragment>
+
+    <!-- Register -->
+    <fragment
+        android:id="@+id/HRegisterFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.register.HRegisterFragment"
+        android:label="Register">
+
+        <!-- Đến Profile sau khi đăng ký -->
+        <action
+            android:id="@+id/action_HRegisterFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Đến Login -->
+        <action
+            android:id="@+id/action_HRegisterFragment_to_HLoginFragment"
+            app:destination="@id/HLoginFragment" />
+    </fragment>
+
+    <!-- Reset -->
+    <fragment
+        android:id="@+id/HResetFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.reset.HResetFragment"
+        android:label="Reset">
+
+        <!-- Đến Login sau khi đăng ký -->
+        <action
+            android:id="@+id/action_HResetFragment_to_HLoginFragment"
+            app:destination="@id/HLoginFragment"
+            app:popUpTo="@id/HLoginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
 
 </navigation>

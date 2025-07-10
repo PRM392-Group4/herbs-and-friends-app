@@ -2,4 +2,51 @@
     <string name="app_name">herbs-and-friends-app</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home fragment -->
+    <string name="home_category_title">Phân loại</string>
+    <string name="product_list_title">Sản phẩm</string>
+    <string name="home_product_see_more">Xem thêm</string>
+    <string name="product_search_hint">Bạn đang tìm loại cây nào?</string>
+
+    <string name="home_category_placeholder_txt">Category</string>
+
+    <string name="btn_product_detail">Chi tiết</string>
+    <string name="product_name_placeholder_txt">Product name</string>
+    <string name="product_price_placeholder_txt">100.000 ₫</string>
+    <string name="btn_sort_placeholder_txt">Giá mặc định</string>
+    <string name="btn_filter_placeholder_txt">Tất cả</string>
+    <string name="product_tag_placeholder_txt">Tag</string>
+
+    <string name="product_description_placeholder_txt">The standard Lorem Ipsum passage, used since the 1500s. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</string>
+    <string name="btn_add_to_cart">Thêm vào giỏ hàng</string>
+    <string name="btn_fast_checkout">Mua ngay</string>
+    <string name="product_stock_placeholder_txt">Kho:</string>
+    <string name="btn_quantity_minus">−</string>
+    <string name="btn_quantity_add">+</string>
+    <string name="product_quantity_placeholder_txt">1</string>
+    <string name="product_item_stock_placeholder_txt">In Stock: 1</string>
+    <string name="quantity_label">Số lượng</string>
+    <string name="product_not_found">Không tìm thấy sản phẩm</string>
+    <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
+
+    <string name="filter_sheet_title_placeholder_txt">Lọc theo phân loại</string>
+    <string name="btn_clear_filter">Thiết lập lại</string>
+    <string name="btn_apply_filter">Áp dụng</string>
+
+    <string name="all_cate_id">all</string>
+    <string name="all_cate_name">Tất cả</string>
+    <string name="sort_price_default">Giá mặc định</string>
+    <string name="sort_price_asc">Giá tăng dần</string>
+    <string name="sort_price_desc">Giá giảm dần</string>
+    <string name="item_filter_checkbox_placeholder_txt">Filter option</string>
+    <string name="btn_product_filter_set">Bộ lọc</string>
+    <string name="btn_edit_text">Edit</string>
+    <string name="btn_delete_text">Delete</string>
+    <string name="btn_add_product_content_desc">Add New Product</string>
+    <string name="in_stock_placeholder_txt">In Stock: %d</string>
+    <string name="action_bar_title_placeholder_txt">Thêm Cây</string>
+    <string name="updated_at_placeholder_txt">Updated: 07/03/2025</string>
+    <string name="updated_text">Updated: %s</string>
+    <string name="date_format">dd/MM/yyyy</string>
 </resources>
