@@ -21,7 +21,6 @@ public class HCartRecycleViewAdapter extends ListAdapter<CartItem, HCartViewHold
 
     private final IViewHolderListeners listeners;
 
-
     // ===========================
     // === Constructors
     // ===========================
@@ -30,7 +29,7 @@ public class HCartRecycleViewAdapter extends ListAdapter<CartItem, HCartViewHold
         super(DIFF_CALLBACK);
         this.listeners = listeners;
     }
-    
+
     // ===========================
     // === Methods
     // ===========================

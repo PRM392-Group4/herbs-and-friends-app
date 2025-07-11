@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.group4.herbs_and_friends_app.databinding.FragmentHCartBinding;
+import com.group4.herbs_and_friends_app.ui.cart.adapter.HCartRecycleViewAdapter;
+import com.group4.herbs_and_friends_app.ui.cart.viewholder.IViewHolderListeners;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -22,6 +24,7 @@ public class HCartFragment extends Fragment {
     // ================================
 
     private FragmentHCartBinding binding;
+    private HCartRecycleViewAdapter hCartRecycleViewAdapter;
     private HCartVM hCartVM;
 
     // ================================
@@ -38,9 +41,14 @@ public class HCartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Setup View Model
         hCartVM = new ViewModelProvider(this).get(HCartVM.class);
 
-        // TODO: Observe LiveData and bind UI here
+        // Setup Adapters
+        setupAdapterAndRecyclerView();
+
+
     }
 
     @Override
@@ -53,7 +61,16 @@ public class HCartFragment extends Fragment {
     // === Methods
     // ================================
 
+    public void setupAdapterAndRecyclerView() {
+        hCartRecycleViewAdapter = new HCartRecycleViewAdapter(new IViewHolderListeners() {
 
-    // Add custom methods for interaction
+            @Override
+            public void onItemModifyQuantity(String cartItemId, int quantity) {
+                hCartVM.modifyQuantity(cartItemId, quantity);
+            }
+        });
+        binding.rvCart.setAdapter(hCartRecycleViewAdapter);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.cart;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.group4.herbs_and_friends_app.data.model.CartItem;
@@ -20,7 +21,9 @@ public class HCartVM extends ViewModel {
     // =================================
 
     private final CartRepository cartRepository;
-    private LiveData<List<CartItem>> cartItems;
+    private final LiveData<List<CartItem>> cartItemsLive;
+    private final LiveData<Boolean> modifyQuantityLive;
+    private final LiveData<Long> totalPriceLive;
 
     // =================================
     // === Constructors
@@ -29,7 +32,11 @@ public class HCartVM extends ViewModel {
     @Inject
     public HCartVM(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
-        this.cartItems = this.cartRepository.getCartItems();
+        this.cartItemsLive = this.cartRepository.getLiveCartItems();
+        this.totalPriceLive = this.cartRepository.get
+        modifyQuantityLive = new MutableLiveData<>(false);
+
+
     }
 
     // =================================
@@ -37,10 +44,12 @@ public class HCartVM extends ViewModel {
     // =================================
 
     public LiveData<List<CartItem>> getCartItems() {
-        return cartItems;
+        return cartItemsLive;
     }
 
-    public void modifyQuantity(String productId, int delta) {
-        cartRepository.updateQuantity(productId, delta);
+    public LiveData<Boolean> modifyQuantity(String productId, int delta) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>(false);
+
+
     }
 }
