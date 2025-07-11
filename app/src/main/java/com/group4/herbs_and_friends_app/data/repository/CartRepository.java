@@ -115,7 +115,7 @@ public class CartRepository {
         cartItemsRef
                 .document(productId)
                 .update("quantity", FieldValue.increment(delta))
-                .addOnSuccessListener(aVoid -> result.postValue(true))
+                .addOnSuccessListener(x -> result.postValue(true))
                 .addOnFailureListener(e -> result.postValue(false));
         return result;
     }
