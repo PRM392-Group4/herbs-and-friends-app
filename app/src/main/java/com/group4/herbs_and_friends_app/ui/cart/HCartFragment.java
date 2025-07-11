@@ -126,10 +126,9 @@ public class HCartFragment extends Fragment {
      */
     private void setupAdapterAndRecyclerView() {
         hCartRecycleViewAdapter = new HCartRecycleViewAdapter(new IViewHolderListeners() {
-
             @Override
-            public void onItemModifyQuantity(String cartItemId, int quantity) {
-                hCartVM.modifyQuantity(cartItemId, quantity).observe(getViewLifecycleOwner(), success -> {
+            public void onItemModifyQuantity(String cartItemId, int currQuantity, int quantityChange) {
+                hCartVM.modifyQuantity(cartItemId, currQuantity, quantityChange).observe(getViewLifecycleOwner(), success -> {
                     if (success) {
                         Toast.makeText(getContext(), "Cập nhập số lượng", Toast.LENGTH_SHORT).show();
                     }

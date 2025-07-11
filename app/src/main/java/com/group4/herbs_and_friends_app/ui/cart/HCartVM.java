@@ -71,8 +71,12 @@ public class HCartVM extends ViewModel {
      * @param delta
      * @return
      */
-    public LiveData<Boolean> modifyQuantity(String productId, int delta) {
-        return cartRepository.updateQuantity(productId, delta);
+    public LiveData<Boolean> modifyQuantity(String productId, int currentQty, int delta) {
+        if (currentQty + delta <= 0) {
+            return cartRepository.removeItem(productId);
+        } else {
+            return cartRepository.updateQuantity(productId, delta);
+        }
     }
 
     /**
@@ -86,6 +90,8 @@ public class HCartVM extends ViewModel {
         LiveData<Product> productLive = productRepository.getProductById(productId);
 
         return Transformations.switchMap(productLive, product -> {
+
+            // If don't have any item, emit false
             if (product == null) {
                 MutableLiveData<Boolean> failed = new MutableLiveData<>();
                 failed.setValue(false);
