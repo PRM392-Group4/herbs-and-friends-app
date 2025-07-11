@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app.data.model;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class CartItem {
 
@@ -34,6 +35,23 @@ public class CartItem {
         this.imageUrl = imageUrl;
         this.quantity = quantity;
     }
+
+    // =====================================
+    // === Methods
+    // =====================================
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return price == cartItem.price && quantity == cartItem.quantity && Objects.equals(productId, cartItem.productId) && Objects.equals(name, cartItem.name) && Objects.equals(imageUrl, cartItem.imageUrl) && Objects.equals(addedAt, cartItem.addedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, name, price, imageUrl, quantity, addedAt);
+    }
+
 
     // =====================================
     // === Getters & Setters
