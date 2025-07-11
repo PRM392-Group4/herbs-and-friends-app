@@ -1,13 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.cart.HCartFragment">
 
-    <TextView
+    <!-- Custom action bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/cl_rvWrapper"
+        android:layout_height="0dp"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_cart_summary"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <include
+            android:id="@+id/include_actionbar_cart"
+            layout="@layout/view_h_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/tv_cart_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cl_rvWrapper" />
+
+        <TextView
+            android:id="@+id/tv_cart_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:text="@string/cart_title"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/rv_cart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/include_actionbar_cart"
+
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/cl_rvWrapper"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_cart_title"
+            app:layout_constraintVertical_bias="0.0"></androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <!-- Cart summary + Checkout button -->
+    <LinearLayout
+        android:id="@+id/ll_cart_summary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/h_on_primary"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
+        android:weightSum="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Tạm tính -->
+        <TextView
+            android:id="@+id/tv_subtotalLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Tạm tính:"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Total Price -->
+        <TextView
+            android:id="@+id/tv_subtotalPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:breakStrategy="balanced"
+            android:text="123,423 đ"
+            android:textColor="@color/h_primary"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Checkout -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_checkout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:paddingVertical="12dp"
+            android:text="Mua hàng"
+            android:textAllCaps="true"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_cart_checkout"
+            app:iconGravity="textEnd"
+            app:iconSize="24sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

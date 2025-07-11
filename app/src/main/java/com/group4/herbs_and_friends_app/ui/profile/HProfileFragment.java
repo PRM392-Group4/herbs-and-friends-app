@@ -25,11 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
-import com.group4.herbs_and_friends_app.data.firebase.FirebaseService;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileBinding;
-import com.group4.herbs_and_friends_app.ui.auth.login.HLoginFragment;
 
 import java.util.Date;
 import java.util.HashMap;
