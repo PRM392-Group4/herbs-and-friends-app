@@ -52,6 +52,8 @@ public class HCartFragment extends Fragment {
     // ================================
     // === Methods
     // ================================
+
+
     // Add custom methods for interaction
 
 }

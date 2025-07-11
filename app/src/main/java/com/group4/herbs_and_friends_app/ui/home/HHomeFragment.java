@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app.ui.home;
 import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.KeyEvent;
@@ -142,10 +143,13 @@ public class HHomeFragment extends Fragment implements ProductAdapter.ProductAct
 
                 // Include child categories
                 if(category.getChildCategories() != null) {
-                    List<String> childIds = category.getChildCategories()
-                            .stream()
-                            .map(Category::getId)
-                            .toList();
+                    List<String> childIds = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        childIds = category.getChildCategories()
+                                .stream()
+                                .map(Category::getId)
+                                .toList();
+                    }
                     categoryIds.addAll(childIds);
                 }
 

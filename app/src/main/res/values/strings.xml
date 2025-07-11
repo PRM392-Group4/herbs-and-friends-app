@@ -54,4 +54,7 @@
     <string name="default_client_id">524169331415-u7t94uk1obmmclnrei5t028k8hci2hg4.apps.googleusercontent.com</string>
     <string name="gmail_sender_email">tuyenchau24424@gmail.com</string>
     <string name="gmail_app_password">tibl thra hdwc cdtp</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Giỏ hàng</string>
 </resources>

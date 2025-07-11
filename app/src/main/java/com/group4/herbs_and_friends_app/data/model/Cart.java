@@ -7,6 +7,25 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * carts/{userId}
+ * - createdAt: Timestamp
+ * - updatedAt: Timestamp
+ * carts/{userId}/items
+ * - 0:
+ * - productId: string
+ * - name: string
+ * - price: number
+ * - imageUrl: string
+ * - quantity: number
+ * - addedAt: Timestamp
+ * - 1: CartItem
+ * - 2: CartItem
+ * - 3: CartItem
+ * - 4: CartItem
+ * - .....
+ */
 public class Cart {
 
     // ==============================
@@ -14,7 +33,7 @@ public class Cart {
     // ==============================
 
     @DocumentId
-    private String id; // user id
+    private String cartId; // literally, using userId behind the scene
 
     private List<CartItem> items;
 
@@ -31,8 +50,8 @@ public class Cart {
     // === Getters / Setters
     // ==============================
 
-    public String getId() {
-        return id;
+    public String getCartId() {
+        return cartId;
     }
 
     public List<CartItem> getItems() {
