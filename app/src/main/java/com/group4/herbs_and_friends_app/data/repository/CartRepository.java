@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,25 +22,34 @@ public class CartRepository {
     // === Fields
     // ==============================
 
-    private final FirebaseFirestore firestore;
-    private final FirebaseAuth auth;
-    private final CollectionReference cartItemsRef;
-    private final DocumentReference cartRef;
+    private FirebaseFirestore firestore;
+    private FirebaseAuth auth;
+    private CollectionReference cartItemsRef = null;
+    private DocumentReference cartRef = null;
 
     // ==============================
     // === Constructors
     // ==============================
 
-    public CartRepository(FirebaseFirestore firestore, FirebaseAuth auth) {
+    public CartRepository(FirebaseFirestore firestore,
+                          FirebaseAuth firebaseAuth) {
         this.firestore = firestore;
-        this.auth = auth;
-        cartItemsRef = firestore
-                .collection("carts")
-                .document(auth.getUid())
-                .collection("items");
-        cartRef = firestore
-                .collection("carts")
-                .document(auth.getUid());
+        this.auth = firebaseAuth;
+
+        // Get uid for specific cart
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        // If no uid, which mean not loggin, then return null
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            cartItemsRef = firestore
+                    .collection("carts")
+                    .document(uid)
+                    .collection("items");
+            cartRef = firestore
+                    .collection("carts")
+                    .document(uid);
+        }
     }
 
     // ==============================
