@@ -6,6 +6,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.cart.HCartFragment">
 
+    <!-- View for not sign-in -->
+    <LinearLayout
+        android:id="@+id/llNotLoggedIn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/ll_cart_summary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvEmptyCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xin hãy đăng nhập bạn nhé"
+            android:textColor="@color/h_primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
     <!-- Custom action bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +46,6 @@
             layout="@layout/view_h_actionbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/tv_cart_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/cl_rvWrapper" />
@@ -51,7 +75,7 @@
             app:layout_constraintVertical_bias="0.0"></androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
+
     <!-- Cart summary + Checkout button -->
     <LinearLayout
         android:id="@+id/ll_cart_summary"

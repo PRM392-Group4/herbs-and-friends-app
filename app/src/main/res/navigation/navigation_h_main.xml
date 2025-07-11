@@ -12,7 +12,7 @@
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
-        android:label="Cart" />
+        android:label="Cart"></fragment>
 
     <fragment
         android:id="@+id/notificationFragment"
@@ -48,7 +48,7 @@
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
-
+        
         <!-- Đến Register -->
         <action
             android:id="@+id/action_HLoginFragment_to_HRegisterFragment"

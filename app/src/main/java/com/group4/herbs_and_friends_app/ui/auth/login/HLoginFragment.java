@@ -181,8 +181,7 @@ public class HLoginFragment extends Fragment {
     }
 
     private void goToHome() {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_HLoginFragment_to_profileFragment);
+        NavHostFragment.findNavController(this).popBackStack();
     }
 
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
