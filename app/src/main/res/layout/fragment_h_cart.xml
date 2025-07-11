@@ -85,7 +85,7 @@
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
+        android:paddingHorizontal="20dp"
         android:paddingVertical="20dp"
         android:weightSum="10"
         app:layout_constraintBottom_toBottomOf="parent"
