@@ -10,11 +10,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.group4.herbs_and_friends_app.data.model.CartItem;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartRepository {
 
@@ -125,8 +128,32 @@ public class CartRepository {
         cartItemsRef
                 .document(item.getProductId())
                 .set(item)
-                .addOnSuccessListener(aVoid -> result.postValue(true))
+                .addOnSuccessListener(aVoid ->
+                {
+                    // Recalculate & write totalPrice everytime the cart changes
+                    // or adding new field for it
+                    long delta = item.getPrice() * item.getQuantity();
+
+                    cartRef.get().addOnSuccessListener(cartSnap ->
+                            {
+                                // already has totalPrice → increment it
+                                if (cartSnap.exists() && cartSnap.contains("totalPrice")) {
+                                    cartRef.update("totalPrice", FieldValue.increment(delta))
+                                            .addOnSuccessListener(x -> result.postValue(true))
+                                            .addOnFailureListener(e -> result.postValue(false));
+                                } else {
+                                    // no totalPrice yet → set it for the first time
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("totalPrice", delta);
+                                    cartRef.set(data, SetOptions.merge())
+                                            .addOnSuccessListener(x -> result.postValue(true))
+                                            .addOnFailureListener(e -> result.postValue(false));
+                                }
+                            })
+                            .addOnFailureListener(e -> result.postValue(false));
+                })
                 .addOnFailureListener(e -> result.postValue(false));
+
         return result;
     }
 
