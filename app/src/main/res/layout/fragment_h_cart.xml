@@ -83,52 +83,57 @@
         android:layout_height="wrap_content"
         android:background="@color/h_on_primary"
         android:elevation="10dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="20dp"
         android:paddingVertical="20dp"
-        android:weightSum="10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Tạm tính -->
-        <TextView
-            android:id="@+id/tv_subtotalLabel"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Tạm tính:"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-        <!-- Total Price -->
-        <TextView
-            android:id="@+id/tv_subtotalPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:breakStrategy="balanced"
-            android:text="123,423 đ"
-            android:textColor="@color/h_primary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_subtotalLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tạm tính:"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Total Price -->
+            <TextView
+                android:id="@+id/tv_subtotalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:breakStrategy="balanced"
+                android:text="123,423 đ"
+                android:textColor="@color/h_primary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <!-- Checkout -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_checkout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:paddingVertical="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:maxLines="1"
             android:text="Mua hàng"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:textAllCaps="true"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_cart_checkout"
             app:iconGravity="textEnd"
-            app:iconSize="16sp" />
+            app:iconSize="24sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
