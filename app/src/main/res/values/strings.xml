@@ -57,4 +57,7 @@
 
     <!-- Cart -->
     <string name="cart_title">Giỏ hàng</string>
+    <string name="cart_viewholder_decrease_the_quantity">Decrease the quantity</string>
+    <string name="cart_viewholder_increase_the_quantity">Increase the quantity</string>
+    <string name="cart_viewholder_product_image">Product Image</string>
 </resources>
