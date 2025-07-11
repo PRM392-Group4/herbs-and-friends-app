@@ -138,7 +138,7 @@ public class HCartFragment extends Fragment {
         });
 
         binding.rvCart.setAdapter(hCartRecycleViewAdapter);
-        binding.rvCart.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, true));
+        binding.rvCart.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
     }
 
     /**

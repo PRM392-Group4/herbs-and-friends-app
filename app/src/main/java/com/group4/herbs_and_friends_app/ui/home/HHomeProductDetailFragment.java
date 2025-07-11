@@ -1,16 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.home;
 
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,6 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.CarouselSnapHelper;
@@ -27,6 +26,7 @@ import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeProductDetailBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
+import com.group4.herbs_and_friends_app.ui.cart.HCartVM;
 import com.group4.herbs_and_friends_app.ui.home.adapter.CarouselAdapter;
 
 import java.util.List;
@@ -41,6 +41,7 @@ public class HHomeProductDetailFragment extends Fragment {
     // ================================
     private FragmentHHomeProductDetailBinding binding;
     private HHomeVM hHomeVM;
+    private HCartVM hCartVM;
     private CarouselAdapter carouselAdapter;
     private String productId;
     private int currentStock;
@@ -61,6 +62,7 @@ public class HHomeProductDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
+        hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
 
         setActionBar();
         setCarouselAdapter();
@@ -68,9 +70,12 @@ public class HHomeProductDetailFragment extends Fragment {
         productId = HHomeProductDetailFragmentArgs.fromBundle(getArguments()).getProductId();
         fetchData(productId);
 
+        // Setup Add To Cart button
         binding.btnAddToCart.setOnClickListener(v -> {
-            //TODO: Add product to cart
+
         });
+
+        setupAddToCartButton();
 
         binding.btnFastCheckout.setOnClickListener(v -> {
             //TODO: Handle fast checkout
@@ -86,6 +91,18 @@ public class HHomeProductDetailFragment extends Fragment {
     // ================================
     // === Methods
     // ================================
+
+    private void setupAddToCartButton() {
+        binding.btnAddToCart.setOnClickListener(v -> {
+            hCartVM.addOrUpdateItemToCart(productId, quantity).observe(getViewLifecycleOwner(), success -> {
+                if (success) {
+                    Toast.makeText(requireContext(), "Item added to cart", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
 
     private void setActionBar() {
         ViewHActionbarBinding actionbarBinding = binding.includeActionbarProductDetail;

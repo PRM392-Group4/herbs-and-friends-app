@@ -1,10 +1,12 @@
 package com.group4.herbs_and_friends_app.ui.cart;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.group4.herbs_and_friends_app.data.model.CartItem;
+import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 
@@ -22,34 +24,25 @@ public class HCartVM extends ViewModel {
     // =================================
 
     private CartRepository cartRepository;
-    private ProductRepository productRepository;
     private LiveData<List<CartItem>> cartItemsLive;
     private LiveData<Long> totalPriceLive;
-
-    private final LiveData<Boolean> isCartEmpty;
+    private ProductRepository productRepository;
 
     // =================================
     // === Constructors
     // =================================
 
     @Inject
-    public HCartVM(CartRepository cartRepository) {
+    public HCartVM(CartRepository cartRepository, ProductRepository productRepository) {
         this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
         this.cartItemsLive = this.cartRepository.getLiveCartItems();
         this.totalPriceLive = this.cartRepository.getLiveTotalPrice();
-
-        this.isCartEmpty = Transformations.map(cartItemsLive, list -> {
-            return list.isEmpty() || list == null;
-        });
     }
 
     // =================================
     // === Methods
     // =================================
-
-    public LiveData<Boolean> getIsCartEmptyLive() {
-        return isCartEmpty;
-    }
 
     /**
      * Get live cart items
@@ -80,5 +73,35 @@ public class HCartVM extends ViewModel {
      */
     public LiveData<Boolean> modifyQuantity(String productId, int delta) {
         return cartRepository.updateQuantity(productId, delta);
+    }
+
+    /**
+     * Add or update the item to cart
+     *
+     * @param productId
+     * @param quantity
+     * @return
+     */
+    public LiveData<Boolean> addOrUpdateItemToCart(String productId, int quantity) {
+        LiveData<Product> productLive = productRepository.getProductById(productId);
+
+        return Transformations.switchMap(productLive, product -> {
+            if (product == null) {
+                MutableLiveData<Boolean> failed = new MutableLiveData<>();
+                failed.setValue(false);
+                return failed;
+            }
+
+            // build cart item and hand it off
+            CartItem item = new CartItem(
+                    productId,
+                    product.getName(),
+                    product.getPrice(),
+                    product.getThumbnail(),
+                    quantity
+            );
+
+            return cartRepository.addOrUpdateItemToCart(item);
+        });
     }
 }
