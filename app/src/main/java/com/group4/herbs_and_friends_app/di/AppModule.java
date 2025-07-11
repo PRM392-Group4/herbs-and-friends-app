@@ -2,13 +2,11 @@ package com.group4.herbs_and_friends_app.di;
 
 import android.content.Context;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
+import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 
@@ -56,6 +54,12 @@ public class AppModule {
     @Singleton
     public ProductRepository provideProductRepository(FirebaseFirestore firestore, FirebaseStorage storage) {
         return new ProductRepository(firestore, storage);
+    }
+
+    @Provides
+    @Singleton
+    public CartRepository provideCartRepository(FirebaseFirestore firestore, FirebaseAuth firebaseAuth) {
+        return new CartRepository(firestore, firebaseAuth);
     }
 
     @Provides

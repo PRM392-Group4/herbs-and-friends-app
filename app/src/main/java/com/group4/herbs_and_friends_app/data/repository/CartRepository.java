@@ -13,9 +13,6 @@ import com.group4.herbs_and_friends_app.data.model.CartItem;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Singleton;
-
-@Singleton
 public class CartRepository {
 
     // ==============================
