@@ -33,10 +33,8 @@ public class HCartVM extends ViewModel {
     public HCartVM(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
         this.cartItemsLive = this.cartRepository.getLiveCartItems();
-        this.totalPriceLive = this.cartRepository.get
+        this.totalPriceLive = this.
         modifyQuantityLive = new MutableLiveData<>(false);
-
-
     }
 
     // =================================

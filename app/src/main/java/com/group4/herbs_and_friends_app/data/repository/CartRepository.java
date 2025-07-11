@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,7 +23,8 @@ public class CartRepository {
 
     private final FirebaseFirestore firestore;
     private final FirebaseAuth auth;
-    private final CollectionReference itemsRef;
+    private final CollectionReference cartItemsRef;
+    private final DocumentReference cartRef;
 
     // ==============================
     // === Constructors
@@ -31,10 +33,13 @@ public class CartRepository {
     public CartRepository(FirebaseFirestore firestore, FirebaseAuth auth) {
         this.firestore = firestore;
         this.auth = auth;
-        itemsRef = firestore
+        cartItemsRef = firestore
                 .collection("carts")
                 .document(auth.getUid())
                 .collection("items");
+        cartRef = firestore
+                .collection("carts")
+                .document(auth.getUid());
     }
 
     // ==============================
@@ -44,18 +49,48 @@ public class CartRepository {
     /**
      * Get live cart items
      *
-     * @return
+     * @return live data cart items object
      */
     public LiveData<List<CartItem>> getLiveCartItems() {
         MutableLiveData<List<CartItem>> live = new MutableLiveData<>();
-        itemsRef.addSnapshotListener((snap, error) ->
+
+        // Observing real time changes in cart items with single source of truth
+        cartItemsRef.addSnapshotListener((snap, error) ->
         {
             if (error != null || snap == null) {
                 live.postValue(Collections.emptyList());
                 return;
             }
             live.postValue(snap.toObjects(CartItem.class));
+
+            // Recalculate & write totalPrice everytime the cart changes
+            long sum = 0L;
+            for (CartItem item : snap.toObjects(CartItem.class)) {
+                sum += item.getPrice() * item.getQuantity();
+            }
+            cartRef.update("totalPrice", sum);
         });
+        return live;
+    }
+
+    /**
+     * Get live total price
+     *
+     * @return live data total price object
+     */
+    public LiveData<Long> getLiveTotalPrice() {
+        MutableLiveData<Long> live = new MutableLiveData<>(0L);
+        cartRef.addSnapshotListener((snap, err) -> {
+            if (err != null || snap == null || !snap.exists()) {
+                live.postValue(0L);
+                return;
+            }
+
+            // get snap from firebase
+            Long snapTp = snap.getLong("totalPrice");
+            live.postValue(snapTp != null ? snapTp.longValue() : 0L);
+        });
+
         return live;
     }
 
@@ -64,7 +99,7 @@ public class CartRepository {
      */
     public LiveData<Boolean> updateQuantity(String productId, int delta) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        itemsRef
+        cartItemsRef
                 .document(productId)
                 .update("quantity", FieldValue.increment(delta))
                 .addOnSuccessListener(aVoid -> result.postValue(true))
@@ -77,7 +112,7 @@ public class CartRepository {
      */
     public LiveData<Boolean> addOrUpdateItemToCart(CartItem item) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        itemsRef
+        cartItemsRef
                 .document(item.getProductId())
                 .set(item)
                 .addOnSuccessListener(aVoid -> result.postValue(true))
@@ -90,7 +125,7 @@ public class CartRepository {
      */
     public LiveData<Boolean> removeItem(String productId) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        itemsRef
+        cartItemsRef
                 .document(productId)
                 .delete()
                 .addOnSuccessListener(aVoid -> result.postValue(true))
@@ -103,7 +138,7 @@ public class CartRepository {
      */
     public LiveData<Boolean> clearCart() {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        itemsRef
+        cartItemsRef
                 .get()
                 .addOnSuccessListener(query -> {
                     WriteBatch batch = firestore.batch();
