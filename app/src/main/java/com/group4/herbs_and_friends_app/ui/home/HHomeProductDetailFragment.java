@@ -96,9 +96,9 @@ public class HHomeProductDetailFragment extends Fragment {
         binding.btnAddToCart.setOnClickListener(v -> {
             hCartVM.addOrUpdateItemToCart(productId, quantity).observe(getViewLifecycleOwner(), success -> {
                 if (success) {
-                    Toast.makeText(requireContext(), "Item added to cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(requireContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Thêm vào giỏ hàng thất bại", Toast.LENGTH_SHORT).show();
                 }
             });
         });

@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/tvName"
-            android:text="Nguyễn Văn A"
+            android:text="Hãy đăng nhập vào tài khoản"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
@@ -47,7 +47,6 @@
 
         <TextView
             android:id="@+id/tvEmail"
-            android:text="example@gmail.com"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
             android:layout_marginTop="4dp"
@@ -63,8 +62,8 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hãy đăng nhập nào !!!"
-                android:backgroundTint="@color/h_kermit"
+                android:text="Đăng nhập"
+                android:backgroundTint="@color/h_primary"
                 android:visibility="visible"/>
 
             <Button
@@ -123,7 +122,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="50sp"
-                        android:text="Tên người nhận"
                         android:textColor="#000000"
                         android:textSize="14sp" />
 
@@ -131,7 +129,6 @@
                         android:id="@+id/tvAdPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0999111777"
                         android:textColor="@color/h_gray" />
                 </LinearLayout>
 
@@ -140,15 +137,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Nhà Văn hóa Sinh viên, Lưu Hữu Phước Tân Lập, Dĩ An, Bình Dương"
                     android:textColor="#555555"
                     android:textSize="13sp" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_edit" />
         </LinearLayout>
     </LinearLayout>
 
