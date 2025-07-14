@@ -32,6 +32,7 @@ import com.group4.herbs_and_friends_app.ui.home.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fragment {
     // Common Fields
@@ -147,7 +148,7 @@ public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fra
                     selectedCategoryIds.addAll(category.getChildCategories()
                             .stream()
                             .map(Category::getId)
-                            .toList());
+                            .collect(Collectors.toList()));
                 }
             } else {
                 selectedCategoryIds.remove(category.getId());
@@ -156,7 +157,7 @@ public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fra
                     selectedCategoryIds.removeAll(category.getChildCategories()
                             .stream()
                             .map(Category::getId)
-                            .toList());
+                            .collect(Collectors.toList()));
                 }
             }
         });

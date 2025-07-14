@@ -61,4 +61,10 @@
     <string name="cart_viewholder_increase_the_quantity">Increase the quantity</string>
     <string name="cart_viewholder_product_image">Product Image</string>
     <string name="cart_btn_go_to_login">Đăng nhập</string>
+
+    <!-- Management -->
+    <string-array name="manage_type_options">
+        <item>Quản lý cây</item>
+        <item>Quản lý đơn hàng</item>
+    </string-array>
 </resources>

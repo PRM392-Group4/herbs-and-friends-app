@@ -11,7 +11,11 @@
         <action
             android:id="@+id/productList_to_productForm"
             app:destination="@id/productFormFragment" />
+        <action
+            android:id="@+id/action_productManage_to_orderManage"
+            app:destination="@id/orderManageFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/productFormFragment"
         android:name="com.group4.herbs_and_friends_app.ui.manage.HProductFormFragment"
@@ -24,4 +28,26 @@
             android:id="@+id/productForm_to_productList"
             app:destination="@id/productManageFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/orderManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.manage.HOrderManageFragment"
+        android:label="Order Manage">
+        <action
+            android:id="@+id/action_orderManage_to_orderDetail"
+            app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_orderManage_to_productManage"
+            app:destination="@id/productManageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
+        android:label="Order Detail">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

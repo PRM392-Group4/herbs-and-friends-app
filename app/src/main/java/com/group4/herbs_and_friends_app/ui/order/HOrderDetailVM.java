@@ -33,34 +33,17 @@ public class HOrderDetailVM extends ViewModel {
         });
     }
 
-    // =================================
-    // === Public Methods
-    // =================================
-
-    /**
-     * Set the order ID to load order details
-     */
     public void setOrderId(String orderId) {
         orderIdLive.setValue(orderId);
     }
-
-    /**
-     * Get live order data with items
-     */
     public LiveData<Order> getOrderLive() {
         return orderLive;
     }
 
-    /**
-     * Update order status
-     */
     public LiveData<Boolean> updateOrderStatus(String orderId, String newStatus) {
         return orderRepository.updateOrderStatus(orderId, newStatus);
     }
 
-    /**
-     * Cancel order (set status to cancelled)
-     */
     public LiveData<Boolean> cancelOrder(String orderId) {
         return orderRepository.updateOrderStatus(orderId, "Cancelled");
     }

@@ -195,4 +195,27 @@ public class OrderRepository {
         
         return result;
     }
+
+    /**
+     * Get all orders (for admin/management purposes)
+     * This loads all orders from all users with their items and coupons
+     */
+    public LiveData<List<Order>> getAllOrders() {
+        MutableLiveData<List<Order>> result = new MutableLiveData<>();
+        
+        ordersRef.get()
+                .addOnSuccessListener(query -> {
+                    List<Order> orders = query.toObjects(Order.class);
+                    sortOrdersByDate(orders);
+                    
+                    // Load items and coupons for all orders
+                    loadItemsForAllOrders(orders, result);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("OrderRepository", "Failed to load all orders", e);
+                    result.setValue(Collections.emptyList());
+                });
+        
+        return result;
+    }
 }

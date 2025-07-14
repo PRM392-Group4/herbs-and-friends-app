@@ -31,6 +31,7 @@ import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -148,7 +149,7 @@ public class HHomeFragment extends Fragment implements ProductAdapter.ProductAct
                         childIds = category.getChildCategories()
                                 .stream()
                                 .map(Category::getId)
-                                .toList();
+                                .collect(Collectors.toList());
                     }
                     categoryIds.addAll(childIds);
                 }
