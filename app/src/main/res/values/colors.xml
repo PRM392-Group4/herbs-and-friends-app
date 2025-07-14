@@ -38,4 +38,11 @@
     <color name="h_carrot">#EE6457</color>
     <color name="h_red">#FC0303</color>
 
+    <!-- Text Colors -->
+    <color name="h_text_primary">#1C1C1C</color>
+    <color name="h_text_secondary">#8F8F8F</color>
+    
+    <!-- Additional UI Colors -->
+    <color name="h_gray_light">#F5F5F5</color>
+
 </resources>

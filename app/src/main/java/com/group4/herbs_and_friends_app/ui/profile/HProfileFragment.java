@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
@@ -28,6 +30,8 @@ import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileBinding;
+import com.group4.herbs_and_friends_app.ui.order.OrderHistoryClickHandler;
+import com.group4.herbs_and_friends_app.ui.profile.adapter.OrderHistoryAdapter;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +58,8 @@ public class HProfileFragment extends Fragment {
     FirebaseFirestore firestore;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    
+    private OrderHistoryAdapter orderHistoryAdapter;
 
     // ================================
     // === Lifecycle
@@ -85,6 +91,9 @@ public class HProfileFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Thông tin cá nhân"));
         tabLayout.addTab(tabLayout.newTab().setText("Lịch sử mua hàng"));
 
+        // Set up order history RecyclerView
+        setupOrderHistoryRecyclerView(layoutHistory);
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -95,6 +104,8 @@ public class HProfileFragment extends Fragment {
                 } else {
                     layoutProfile.setVisibility(View.GONE);
                     layoutHistory.setVisibility(View.VISIBLE);
+                    // Load order history when tab is selected
+                    loadOrderHistory();
                 }
             }
 
@@ -149,6 +160,28 @@ public class HProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setupOrderHistoryRecyclerView(View layoutHistory) {
+        RecyclerView recyclerView = layoutHistory.findViewById(R.id.recyclerViewOrderHistory);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        
+        orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), order -> {
+            // Navigate to order detail when clicked
+            OrderHistoryClickHandler.navigateToOrderDetailsFromProfile(this, order.getId());
+        });
+        
+        recyclerView.setAdapter(orderHistoryAdapter);
+    }
+
+    private void loadOrderHistory() {
+        if (currentUser != null) {
+            hProfileVM.getUserOrders().observe(getViewLifecycleOwner(), orders -> {
+                if (orders != null && orderHistoryAdapter != null) {
+                    orderHistoryAdapter.setOrders(orders);
+                }
+            });
+        }
     }
 
     private void showEditDialog() {

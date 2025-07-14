@@ -7,12 +7,15 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeContainerFragment"
-        android:label="Home" />
+        android:label="Home">
+
+    </fragment>
 
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
-        android:label="Cart"></fragment>
+        android:label="Cart">
+    </fragment>
 
     <fragment
         android:id="@+id/notificationFragment"
@@ -34,6 +37,11 @@
         <action
             android:id="@+id/action_profileFragment_to_HLoginFragment"
             app:destination="@id/HLoginFragment" />
+
+        <!-- Navigate to Order Detail -->
+        <action
+            android:id="@+id/action_profileFragment_to_HOrderDetailFragment"
+            app:destination="@id/HOrderDetailFragment" />
     </fragment>
 
     <!-- Login -->
@@ -91,6 +99,18 @@
             app:destination="@id/HLoginFragment"
             app:popUpTo="@id/HLoginFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Order Detail -->
+    <fragment
+        android:id="@+id/HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
+        android:label="Order Detail">
+        
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+            
     </fragment>
 
 
