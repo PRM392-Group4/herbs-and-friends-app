@@ -6,10 +6,10 @@ public enum ShippingMethod {
     EXPRESS("Express", "Nhanh (1-3 ngày)", 20000),;
 
     private final String value;
-    private final double price;
+    private final long price;
     private final String displayName;
 
-    ShippingMethod(String value, String displayName, double price) {
+    ShippingMethod(String value, String displayName, long price) {
         this.value = value;
         this.displayName = displayName;
         this.price = price;

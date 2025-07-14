@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.data.model.enums;
 
 public enum OrderStatus {
+    UNPAID("Unpaid", "Chờ thanh toán"),
     PENDING("Pending", "Chờ xác nhận"),
     CONFIRMED("Confirmed", "Đã xác nhận"),
     SHIPPING("Shipping", "Đang giao"),
