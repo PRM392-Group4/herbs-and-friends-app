@@ -10,15 +10,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Edit your profile"
+        android:text="Cập nhật hồ sơ"
         android:textSize="25dp"
-        android:textColor="@color/h_kermit"
+        android:textColor="@color/h_primary"
         android:textStyle="bold"
         android:layout_marginBottom="30dp"/>
 
     <EditText
         android:id="@+id/edtName"
-        android:hint="Name"
+        android:hint="Tên"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
@@ -27,7 +27,7 @@
 
     <EditText
         android:id="@+id/edtPhone"
-        android:hint="Phone"
+        android:hint="Số điện thoại"
         android:inputType="phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/edtPassword"
-        android:hint="New password (leave blank if not changed)"
+        android:hint="Đổi mật khẩu"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
 
     <EditText
         android:id="@+id/edtAddress"
-        android:hint="Address"
+        android:hint="Địa chỉ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"

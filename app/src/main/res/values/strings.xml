@@ -25,7 +25,7 @@
     <string name="btn_quantity_minus">−</string>
     <string name="btn_quantity_add">+</string>
     <string name="product_quantity_placeholder_txt">1</string>
-    <string name="product_item_stock_placeholder_txt">In Stock: 1</string>
+    <string name="product_item_stock_placeholder_txt">Kho: 1</string>
     <string name="quantity_label">Số lượng</string>
     <string name="product_not_found">Không tìm thấy sản phẩm</string>
     <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
@@ -41,13 +41,13 @@
     <string name="sort_price_desc">Giá giảm dần</string>
     <string name="item_filter_checkbox_placeholder_txt">Filter option</string>
     <string name="btn_product_filter_set">Bộ lọc</string>
-    <string name="btn_edit_text">Edit</string>
-    <string name="btn_delete_text">Delete</string>
+    <string name="btn_edit_text">Sửa</string>
+    <string name="btn_delete_text">Xóa</string>
     <string name="btn_add_product_content_desc">Add New Product</string>
-    <string name="in_stock_placeholder_txt">In Stock: %d</string>
+    <string name="in_stock_placeholder_txt">Kho: %d</string>
     <string name="action_bar_title_placeholder_txt">Thêm Cây</string>
-    <string name="updated_at_placeholder_txt">Updated: 07/03/2025</string>
-    <string name="updated_text">Updated: %s</string>
+    <string name="updated_at_placeholder_txt">Cập nhật: 07/03/2025</string>
+    <string name="updated_text">Cập nhật: %s</string>
     <string name="date_format">dd/MM/yyyy</string>
 
     <!-- Authentication -->
