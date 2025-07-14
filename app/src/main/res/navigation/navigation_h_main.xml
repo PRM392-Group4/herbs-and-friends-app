@@ -22,7 +22,6 @@
         android:name="com.group4.herbs_and_friends_app.ui.notification.HNotificationFragment"
         android:label="Notification" />
 
-    <!-- Profile (đổi id thành profileFragment như bạn yêu cầu) -->
     <fragment
         android:id="@+id/productManageFragment"
         android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageContainerFragment"
@@ -33,7 +32,6 @@
         android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
         android:label="Profile">
 
-        <!-- Chuyển đến Login -->
         <action
             android:id="@+id/action_profileFragment_to_HLoginFragment"
             app:destination="@id/HLoginFragment" />
