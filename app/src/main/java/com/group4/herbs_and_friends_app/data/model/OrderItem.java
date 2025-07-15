@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 public class OrderItem {
@@ -53,6 +54,7 @@ public class OrderItem {
     }
 
     // Helper methods for display
+    @Exclude
     public String getUnitPriceDisplay() {
         return DisplayFormat.toMoneyDisplayString(unitPrice);
     }

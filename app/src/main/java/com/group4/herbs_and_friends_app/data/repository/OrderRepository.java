@@ -2,6 +2,7 @@ package com.group4.herbs_and_friends_app.data.repository;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,7 +21,9 @@ import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -158,6 +161,27 @@ public class OrderRepository {
         }
     }
 
+    public LiveData<List<Coupon>> loadCoupons(){
+        MutableLiveData<List<Coupon>> couponsLiveData = new MutableLiveData<>();
+        firestore.collection("coupons").addSnapshotListener((querySnapshot, e) -> {
+            if (e != null) {
+                couponsLiveData.setValue(null);
+                return;
+            }
+
+            List<Coupon> items = new ArrayList<>();
+            for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                Coupon item = doc.toObject(Coupon.class);
+//                if (item!=null && item.getExpiryDate().after(new Date())){
+                    item.setId(doc.getId());
+                    items.add(item);
+//                }
+            }
+            couponsLiveData.setValue(items);
+        });
+        return couponsLiveData;
+    }
+
     private void sortOrdersByDate(List<Order> orders) {
         orders.sort((o1, o2) -> {
             if (o1.getPlacedAt() == null && o2.getPlacedAt() == null) return 0;
@@ -216,6 +240,30 @@ public class OrderRepository {
                     result.setValue(Collections.emptyList());
                 });
         
+        return result;
+    }
+
+    public LiveData<Boolean> createOrder(@NonNull Order order) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        DocumentReference orderDoc = ordersRef.document();
+
+        order.setPlacedAt(new Date());
+
+        orderDoc.set(order)
+                .addOnSuccessListener(unused -> {
+                    CollectionReference itemsRef = orderDoc.collection("items");
+                    WriteBatch batch = firestore.batch();
+                    for (OrderItem item : order.getItems()) {
+                        DocumentReference itemDoc = itemsRef.document();
+                        batch.set(itemDoc, item);
+                    }
+                    batch.commit().addOnCompleteListener(aVoid -> {
+                        result.setValue(true);
+                    });
+                })
+                .addOnFailureListener(aVoid -> {
+                    result.setValue(false);
+                });
         return result;
     }
 }
