@@ -21,6 +21,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.CarouselSnapHelper;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
@@ -46,6 +48,7 @@ public class HHomeProductDetailFragment extends Fragment {
     private String productId;
     private int currentStock;
     private int quantity;
+    private boolean loggedIn = false;
 
     // ================================
     // === Lifecycle
@@ -61,8 +64,11 @@ public class HHomeProductDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Perform check to see if user is logged in
+        checkLoggedIn();
+
         hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
-        hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
+        if(loggedIn) hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
 
         setActionBar();
         setCarouselAdapter();
@@ -71,10 +77,6 @@ public class HHomeProductDetailFragment extends Fragment {
         fetchData(productId);
 
         // Setup Add To Cart button
-        binding.btnAddToCart.setOnClickListener(v -> {
-
-        });
-
         setupAddToCartButton();
 
         binding.btnFastCheckout.setOnClickListener(v -> {
@@ -91,6 +93,20 @@ public class HHomeProductDetailFragment extends Fragment {
     // ================================
     // === Methods
     // ================================
+
+    private void checkLoggedIn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            loggedIn = true;
+        } else {
+            binding.quantityLabel.setVisibility(View.GONE);
+            binding.quantitySelector.setVisibility(View.GONE);
+            binding.btnAddToCart.setVisibility(View.GONE);
+            binding.btnFastCheckout.setVisibility(View.GONE);
+            binding.productOutOfStock.setText("Hãy đăng nhập để mua sản phẩm");
+            binding.productOutOfStock.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void setupAddToCartButton() {
         binding.btnAddToCart.setOnClickListener(v -> {
