@@ -43,35 +43,22 @@
 
         <include
             android:id="@+id/include_actionbar_cart"
-            layout="@layout/view_h_actionbar"
+            layout="@layout/view_h_actionbar_without_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/cl_rvWrapper" />
 
-        <TextView
-            android:id="@+id/tv_cart_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:text="@string/cart_title"
-            android:textSize="23sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/rv_cart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/include_actionbar_cart"
-
-            />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cart"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@id/cl_rvWrapper"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_cart_title"
+            app:layout_constraintTop_toBottomOf="@id/include_actionbar_cart"
             app:layout_constraintVertical_bias="0.0"></androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
