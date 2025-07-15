@@ -83,6 +83,9 @@ public class HCartFragment extends Fragment {
         binding.llCartSummary.setVisibility(loggedIn ? View.VISIBLE : View.INVISIBLE);
         binding.btnCheckout.setEnabled(loggedIn);
 
+        // Setup Action Bar
+        setupActionBar();
+
         // If not loggin, binding event fro btn go to login
         if (!loggedIn) {
             return;
@@ -91,9 +94,6 @@ public class HCartFragment extends Fragment {
         // Setup View Model
         hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
 
-//        // Setup Action Bar
-//        setupActionBar();
-//
         // Setup Adapters
         setupAdapterAndRecyclerView();
 //
@@ -153,5 +153,13 @@ public class HCartFragment extends Fragment {
                     HCartFragmentDirections.fromCartToCheckoutNavigation()
             );;
         });
+    }
+
+    /**
+     *  Setup action bar with title only
+     */
+    private void setupActionBar() {
+        binding.includeActionbarCart.actionBarTitle.setText("Giỏ hàng");
+        binding.includeActionbarCart.btnBack.setVisibility(View.GONE);
     }
 }
