@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -43,7 +45,7 @@ public class HCheckoutFragment extends Fragment {
     private OrderItemAdapter adapter;
     private HCheckoutVM checkoutVM;
     private FirebaseUser currentUser;
-    private CartItem fastCheckoutItem;
+    private String orderId;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -74,7 +76,7 @@ public class HCheckoutFragment extends Fragment {
             int quantity = args.getInt("fastCheckoutItem_quantity");
             Long unitPrice = args.getLong("fastCheckoutItem_unitPrice");
             CartItem item = new CartItem(id, name, unitPrice, img, quantity);
-            fastCheckoutItem = item;
+
             if (item != null) {
                 checkoutVM.setFastCheckoutItem(item);
             }
@@ -87,7 +89,13 @@ public class HCheckoutFragment extends Fragment {
         setPriceDisplay();
         setShippingMethodAction();
         setPaymentMethodAction();
-        binding.btnCheckout.setOnClickListener(v -> placeOrder());
+        binding.btnCheckout.setOnClickListener(v -> {
+            if (checkoutVM.getOrderCreated()!= null && checkoutVM.getOrderCreated().getValue()){
+                //Payment
+                return;
+            }
+            placeOrder();
+        });
     }
 
     private void setActionBar() {
@@ -106,7 +114,7 @@ public class HCheckoutFragment extends Fragment {
         checkoutVM.getOrderItems().observe(getViewLifecycleOwner(), items -> {
             if (!checkoutVM.getIsFastCheckout().getValue() && items != null && !items.isEmpty()) {
                 adapter.submitList(new ArrayList<>(items));
-            } else if (checkoutVM.getIsFastCheckout().getValue()){
+            } else if (checkoutVM.getIsFastCheckout().getValue()) {
                 adapter.submitList(checkoutVM.getFastCheckoutItem().getValue());
             }
         });
@@ -166,7 +174,7 @@ public class HCheckoutFragment extends Fragment {
         // Create Order object
         Order order = new Order();
         order.setUserId(currentUser.getUid());
-        order.setStatus(paymentMethod == PaymentMethod.MOMO?
+        order.setStatus(paymentMethod == PaymentMethod.MOMO ?
                 OrderStatus.UNPAID.getValue() : OrderStatus.PENDING.getValue());
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
@@ -181,15 +189,15 @@ public class HCheckoutFragment extends Fragment {
         order.setUserId(currentUser.getUid());
         order.setItems(checkoutVM.getOrderProducts());
 
-            // Create order and observe result
-            checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
-                if (success) {
-                    Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
+        // Create order and observe result
+        checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
+            if (checkoutVM.getOrderCreated().getValue() && success!=null) {
+                Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
 //                    NavHostFragment.findNavController(this).navigate(R.id.action_checkout_to_order_confirmation);
-                } else {
-                    Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
-                }
-            });
+            } else {
+                Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -211,4 +219,5 @@ public class HCheckoutFragment extends Fragment {
             bottomSheet.show(getParentFragmentManager(), "HCouponSelectBottomSheet");
         });
     }
+
 }

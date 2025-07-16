@@ -239,8 +239,8 @@ public class OrderRepository {
         return result;
     }
 
-    public LiveData<Boolean> createOrder(@NonNull Order order) {
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
+    public LiveData<String> createOrder(@NonNull Order order) {
+        MutableLiveData<String> result = new MutableLiveData<>(null);
         DocumentReference orderDoc = ordersRef.document();
 
         order.setPlacedAt(new Date());
@@ -250,15 +250,15 @@ public class OrderRepository {
                     CollectionReference itemsRef = orderDoc.collection("items");
                     WriteBatch batch = firestore.batch();
                     for (OrderItem item : order.getItems()) {
-                        DocumentReference itemDoc = itemsRef.document();
+                        DocumentReference itemDoc = itemsRef.document(item.getProductId());
                         batch.set(itemDoc, item);
                     }
                     batch.commit().addOnCompleteListener(aVoid -> {
-                        result.setValue(true);
+                        result.setValue(orderDoc.getId());
                     });
                 })
                 .addOnFailureListener(aVoid -> {
-                    result.setValue(false);
+                    result.setValue(null);
                 });
         return result;
     }

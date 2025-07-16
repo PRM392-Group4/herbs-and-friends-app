@@ -5,4 +5,3 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.56.2" apply false
 
 }
-
