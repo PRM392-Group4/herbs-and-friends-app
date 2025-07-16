@@ -65,13 +65,8 @@ public class HOrderManageFragment extends Fragment implements OrderManageAdapter
 
     private void setupActionBar() {
         ViewHActionbarWithoutSearchBinding actionbarBinding = binding.includeActionbarOrderManage;
+        actionbarBinding.btnBack.setVisibility(View.GONE);
         actionbarBinding.actionBarTitle.setText("Quản lý đơn hàng");
-
-        // Navigate back
-        actionbarBinding.btnBack.setOnClickListener(v -> {
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigateUp();
-        });
     }
 
     private void setupManageSpinner() {
