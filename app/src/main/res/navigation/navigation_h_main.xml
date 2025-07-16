@@ -10,6 +10,10 @@
         android:name="com.group4.herbs_and_friends_app.ui.home.HHomeContainerFragment"
         android:label="Home">
 
+        <!-- Đến Admin -->
+        <action
+            android:id="@+id/action_homeFragment_to_HAdminFragment"
+            app:destination="@id/HAdminFragment" />
     </fragment>
 
     <fragment
@@ -37,6 +41,7 @@
         android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
         android:label="Profile">
 
+        <!-- Đến Login -->
         <action
             android:id="@+id/action_profileFragment_to_HLoginFragment"
             app:destination="@id/HLoginFragment" />
@@ -58,6 +63,13 @@
             android:id="@+id/action_HLoginFragment_to_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Đến Admin sau khi login -->
+        <action
+            android:id="@+id/action_HLoginFragment_to_HAdminFragment"
+            app:destination="@id/HAdminFragment"
+            app:popUpTo="@id/HAdminFragment"
             app:popUpToInclusive="true" />
         
         <!-- Đến Register -->
@@ -121,5 +133,15 @@
         android:label="fragment_h_checkout"
         />
 
+    <!-- Admin -->
+    <fragment
+        android:id="@+id/HAdminFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin.HAdminFragment"
+        android:label="Admin">
 
+        <!-- Đến Login -->
+        <action
+            android:id="@+id/action_HAdminFragment_to_HLoginFragment"
+            app:destination="@id/HLoginFragment" />
+    </fragment>
 </navigation>

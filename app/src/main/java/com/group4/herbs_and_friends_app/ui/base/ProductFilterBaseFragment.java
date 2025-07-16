@@ -76,6 +76,9 @@ public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fra
     protected void setActionBar() {
         ViewHActionbarBinding actionbarBinding = getActionBarBinding();
 
+        if(actionbarBinding.getRoot().getId() == R.id.include_actionbar_product_manage)
+            actionbarBinding.btnBack.setVisibility(View.GONE);
+
         actionbarBinding.btnBack.setOnClickListener(v -> getNavController().popBackStack());
 
         actionbarBinding.etSearch.addTextChangedListener(new TextWatcher() {
