@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
+import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileBinding;
 import com.group4.herbs_and_friends_app.ui.order.OrderHistoryClickHandler;
 import com.group4.herbs_and_friends_app.ui.profile.adapter.OrderHistoryAdapter;
@@ -56,6 +57,9 @@ public class HProfileFragment extends Fragment {
 
     @Inject
     FirebaseFirestore firestore;
+
+    @Inject
+    AuthRepository authRepository;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     
@@ -258,34 +262,25 @@ public class HProfileFragment extends Fragment {
                 });
     }
 
-
     private void reloadUserInfo() {
-        if (currentUser == null) return;
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            authRepository.getUserByUid(uid, user -> {
+                TextView tvName = getView().findViewById(R.id.tvName);
+                TextView tvEmail = getView().findViewById(R.id.tvEmail);
+                TextView tvAdName = getView().findViewById(R.id.tvAdName);
+                TextView tvAdPhone = getView().findViewById(R.id.tvAdPhone);
+                TextView tvAddress = getView().findViewById(R.id.tvAddress);
 
-        String uid = currentUser.getUid();
-
-        firestore.collection("users")
-                .document(uid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if (user != null && getView() != null) {
-                            TextView tvName = getView().findViewById(R.id.tvName);
-                            TextView tvEmail = getView().findViewById(R.id.tvEmail);
-                            TextView tvAdName = getView().findViewById(R.id.tvAdName);
-                            TextView tvAdPhone = getView().findViewById(R.id.tvAdPhone);
-                            TextView tvAddress = getView().findViewById(R.id.tvAddress);
-
-                            tvName.setText(user.getName());
-                            tvEmail.setText(user.getEmail());
-                            tvAdName.setText(user.getName());
-                            tvAdPhone.setText(user.getPhone());
-                            tvAddress.setText(user.getAddress());
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("RELOAD", "Không thể reload thông tin", e));
+                tvName.setText(user.getName());
+                tvEmail.setText(user.getEmail());
+                tvAdName.setText(user.getName());
+                tvAdPhone.setText(user.getPhone());
+                tvAddress.setText(user.getAddress());
+            }, () -> {
+                Log.e("PROFILE", "Không thể lấy thông tin user");
+            });
+        }
     }
 
     private void applyProfileUpdates(String uid, Map<String, Object> updates) {

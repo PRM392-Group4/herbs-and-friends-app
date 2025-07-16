@@ -2,8 +2,11 @@ package com.group4.herbs_and_friends_app.ui.auth.login;
 
 import androidx.lifecycle.ViewModel;
 
+import com.group4.herbs_and_friends_app.data.model.User;
 import com.group4.herbs_and_friends_app.data.model.enums.LoginMethod;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
+
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -22,6 +25,10 @@ public class HLoginViewModel extends ViewModel {
     public void login(LoginMethod method, String emailOrIdToken, String passwordOrNull,
                       Runnable onSuccess, Runnable onInvalid, Runnable onError) {
         authRepository.login(method, emailOrIdToken, passwordOrNull, onSuccess, onInvalid, onError);
+    }
+
+    public void fetchUser(String uid, Consumer<User> onUserLoaded, Runnable onFailure) {
+        authRepository.getUserByUid(uid, onUserLoaded, onFailure);
     }
 
 }

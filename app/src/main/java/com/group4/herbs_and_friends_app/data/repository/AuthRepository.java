@@ -152,6 +152,7 @@ public class AuthRepository {
         newUser.setCreatedAt(new Date());
         newUser.setUpdateAt(new Date());
         newUser.setPassword(hashedPassword);
+        newUser.setRole("customer");
 
         if (sendPasswordEmail) {
             sendPasswordEmail(email, name != null ? name : "User", plainPassword);
@@ -283,5 +284,21 @@ public class AuthRepository {
                 });
     }
 
+    public void getUserByUid(String uid, Consumer<User> onUserLoaded, Runnable onFailure) {
+        firestore.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (snapshot.exists()) {
+                        User user = snapshot.toObject(User.class);
+                        onUserLoaded.accept(user);
+                    } else {
+                        onFailure.run();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("USER", "Failed to fetch user", e);
+                    onFailure.run();
+                });
+    }
 
 }

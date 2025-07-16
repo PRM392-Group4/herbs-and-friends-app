@@ -19,6 +19,7 @@ public class User {
     private String address;
     private Date createdAt;
     private Date updateAt;
+    private String role;
 
     public User() {
     }
@@ -82,5 +83,13 @@ public class User {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
