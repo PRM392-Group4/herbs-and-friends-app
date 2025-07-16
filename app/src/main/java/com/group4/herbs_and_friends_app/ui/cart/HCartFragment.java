@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +18,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.databinding.FragmentHCartBinding;
 import com.group4.herbs_and_friends_app.ui.cart.adapter.HCartRecycleViewAdapter;
 import com.group4.herbs_and_friends_app.ui.cart.viewholder.IViewHolderListeners;
+import com.group4.herbs_and_friends_app.ui.checkout.HCheckoutFragment;
+import com.group4.herbs_and_friends_app.ui.manage.HProductManageFragment;
+import com.group4.herbs_and_friends_app.ui.manage.HProductManageFragmentDirections;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -145,7 +149,14 @@ public class HCartFragment extends Fragment {
      */
     private void setupButtonCheckout() {
         binding.btnCheckout.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Qua trang thanh toán", Toast.LENGTH_SHORT).show();
+            if (hCartVM.getCartItemsLive().getValue().isEmpty()){
+                Toast.makeText(getContext(), "Giỏ hàng đang trống.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                NavHostFragment.findNavController(HCartFragment.this).navigate(
+                        HCartFragmentDirections.fromCartToCheckoutNavigation()
+                );
+            }
         });
     }
 

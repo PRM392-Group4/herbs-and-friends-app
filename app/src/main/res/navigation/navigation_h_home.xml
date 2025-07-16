@@ -39,10 +39,18 @@
             android:name="productId"
             app:argType="string"
             app:nullable="false"/>
-
         <action
             android:id="@+id/productDetail_to_productList"
             app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/productDetailToCheckout"
+            app:destination="@id/HCheckoutFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.checkout.HCheckoutFragment"
+        android:label="fragment_h_checkout"
+        />
 
 </navigation>

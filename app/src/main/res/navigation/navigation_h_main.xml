@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/herb_navigation_main"
     app:startDestination="@id/homeFragment">
 
@@ -15,6 +16,10 @@
         android:id="@+id/cartFragment"
         android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
         android:label="Cart">
+
+        <action
+            android:id="@+id/fromCartToCheckoutNavigation"
+            app:destination="@id/HCheckoutFragment" />
     </fragment>
 
     <fragment
@@ -104,12 +109,17 @@
         android:id="@+id/HOrderDetailFragment"
         android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
         android:label="Order Detail">
-        
+
         <argument
             android:name="orderId"
             app:argType="string" />
-            
+
     </fragment>
+    <fragment
+        android:id="@+id/HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.checkout.HCheckoutFragment"
+        android:label="fragment_h_checkout"
+        />
 
 
 </navigation>
