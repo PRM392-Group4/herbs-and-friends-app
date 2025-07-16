@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.model.User;
 import com.group4.herbs_and_friends_app.data.model.enums.LoginMethod;
 import com.group4.herbs_and_friends_app.databinding.FragmentHLoginBinding;
 
@@ -114,10 +115,18 @@ public class HLoginFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            goToHome();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            hLoginViewModel.fetchUser(currentUser.getUid(),
+                    user -> {
+                        Log.d("FIREBASE_USER", "Tải user thành công: " + user.getEmail() + ", role = " + user.getRole());
+                        goToHomeWithRole(user);
+                    },
+                    () -> Log.e("FIREBASE_USER", "Không tìm thấy user trong Firestore")
+            );
             return;
         }
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_client_id)) // Client ID từ Firebase
@@ -180,10 +189,18 @@ public class HLoginFragment extends Fragment {
         googleSignInLauncher.launch(signInIntent);
     }
 
-    private void goToHome() {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_HLoginFragment_to_profileFragment);
+    private void goToHomeWithRole(User user) {
+        NavController navController = NavHostFragment.findNavController(this);
+
+        if ("admin".equalsIgnoreCase(user.getRole())) {
+            Log.d("ROLE_CHECK", "Chuyển đến admin fragment");
+            navController.navigate(R.id.action_HLoginFragment_to_HAdminFragment);
+        } else {
+            Log.d("ROLE_CHECK", "Chuyển đến profile fragment");
+            navController.navigate(R.id.action_HLoginFragment_to_profileFragment);
+        }
     }
+
 
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -200,7 +217,15 @@ public class HLoginFragment extends Fragment {
                                 currentUser.linkWithCredential(googleCredential)
                                         .addOnSuccessListener(authResult -> {
                                             Toast.makeText(requireContext(), "Liên kết Google thành công", Toast.LENGTH_SHORT).show();
-                                            goToHome();
+
+                                            FirebaseUser currentUserAfterLink = FirebaseAuth.getInstance().getCurrentUser();
+                                            if (currentUserAfterLink != null) {
+                                                hLoginViewModel.fetchUser(currentUserAfterLink.getUid(),
+                                                        this::goToHomeWithRole,
+                                                        () -> Toast.makeText(requireContext(), "Không tìm thấy người dùng sau khi liên kết", Toast.LENGTH_SHORT).show()
+                                                );
+                                            }
+
                                         })
                                         .addOnFailureListener(e -> {
                                             if (e instanceof FirebaseAuthUserCollisionException) {
@@ -225,8 +250,13 @@ public class HLoginFragment extends Fragment {
     private void loginAsUser(LoginMethod method, String key, @Nullable String optionalPassword) {
         hLoginViewModel.login(method, key, optionalPassword,
                 () -> {
-                    Toast.makeText(requireContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                    goToHome();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        hLoginViewModel.fetchUser(currentUser.getUid(),
+                                this::goToHomeWithRole,
+                                () -> Toast.makeText(requireContext(), "Không tìm thấy người dùng", Toast.LENGTH_SHORT).show()
+                        );
+                    }
                 },
                 () -> Toast.makeText(requireContext(), "Sai thông tin hoặc tài khoản không tồn tại", Toast.LENGTH_SHORT).show(),
                 () -> Toast.makeText(requireContext(), "Lỗi hệ thống, thử lại sau!", Toast.LENGTH_SHORT).show()
