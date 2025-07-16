@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     // === Methods
     // ================================
 
+    /**
+     * Setup the Nav Host system
+     */
     public void setupNavHostFragment() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(binding.herbNavHostFragment.getId());
@@ -69,5 +72,37 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    /**
+     * Setup the Nav Host system if current user is admin
+     */
+    public void onLoginAsAdmin() {
+        navController.setGraph(R.navigation.navigation_h_admin_main, null);
+
+        // clear the current menu and inflate new navigation
+        binding.herbBottomNavigation.getMenu().clear();
+        binding.herbBottomNavigation.inflateMenu(R.menu.view_h_admin_bottom_nav_menu);
+
+        NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
+
+        // redirect to dashboard fragment
+        navController.navigate(R.id.dashboardFragment);
+    }
+
+    /**
+     * Setup the Nav Host system if current user is customer
+     */
+    public void onLoginAsCustomer() {
+        navController.setGraph(R.navigation.navigation_h_main, null);
+
+        // clear the current menu and inflate new navigation
+        binding.herbBottomNavigation.getMenu().clear();
+        binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
+
+        NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
+
+        // redirect to profile fragment
+        navController.navigate(R.id.profileFragment);
     }
 }

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.product_management.HProductManagementFragment">
+    tools:context=".ui.admin_side.product_management.HProductManagementFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:text="Tôi cần được cứu rỗi" />
 
 </FrameLayout>
