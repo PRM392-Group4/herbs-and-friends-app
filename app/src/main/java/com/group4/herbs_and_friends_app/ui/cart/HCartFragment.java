@@ -149,9 +149,14 @@ public class HCartFragment extends Fragment {
      */
     private void setupButtonCheckout() {
         binding.btnCheckout.setOnClickListener(v -> {
-            NavHostFragment.findNavController(HCartFragment.this).navigate(
-                    HCartFragmentDirections.fromCartToCheckoutNavigation()
-            );;
+            if (hCartVM.getCartItemsLive().getValue().isEmpty()){
+                Toast.makeText(getContext(), "Giỏ hàng đang trống.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                NavHostFragment.findNavController(HCartFragment.this).navigate(
+                        HCartFragmentDirections.fromCartToCheckoutNavigation()
+                );
+            }
         });
     }
 

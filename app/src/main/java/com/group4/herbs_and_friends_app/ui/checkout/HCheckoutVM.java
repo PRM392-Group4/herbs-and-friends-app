@@ -1,5 +1,6 @@
 package com.group4.herbs_and_friends_app.ui.checkout;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -32,6 +33,8 @@ public class HCheckoutVM extends ViewModel {
     private final CartRepository cartRepo;
     // ========== LiveData for Order Data ==========
     private final LiveData<List<CartItem>> orderItems;
+    private final MutableLiveData<List<CartItem>> fastCheckoutItem =
+            new MutableLiveData<>(new ArrayList<CartItem>());
     private final LiveData<List<Coupon>> couponsList;
     private final MediatorLiveData<Long> totalPrice = new MediatorLiveData<>(0L);
     private final LiveData<Long> subTotal;
@@ -46,6 +49,7 @@ public class HCheckoutVM extends ViewModel {
     private final MutableLiveData<String> address = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> orderCreated = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
 
     @Inject
     public HCheckoutVM(OrderRepository repository, CartRepository cartRepo) {
@@ -63,12 +67,23 @@ public class HCheckoutVM extends ViewModel {
     }
 
     // ========== Getters for UI ==========
+
+
+    public LiveData<List<CartItem>> getFastCheckoutItem() {
+        return fastCheckoutItem;
+    }
+
     public LiveData<List<CartItem>> getOrderItems() {
         return orderItems;
     }
 
     public LiveData<Long> getSubTotal() {
-        return this.subTotal;
+        return !fastCheckoutItem.getValue().isEmpty() ? calculateFastCheckoutSubTotal() :
+                this.subTotal;
+    }
+
+    public LiveData<Boolean> getIsFastCheckout() {
+        return isFastCheckout;
     }
 
     public LiveData<Long> getTotalPrice() {
@@ -112,6 +127,17 @@ public class HCheckoutVM extends ViewModel {
     }
 
     // ========== Setters (used by Fragment binding) ==========
+    public void setFastCheckoutItem(CartItem item) {
+        List<CartItem> currentItems = fastCheckoutItem.getValue();
+        if (currentItems == null) {
+            currentItems = new ArrayList<>();
+        }
+        currentItems.clear(); // Clear previous items for fast checkout
+        currentItems.add(item);
+        fastCheckoutItem.setValue(currentItems);
+        isFastCheckout.setValue(true);
+        calculateTotal();
+    }
     public void setShippingMethod(ShippingMethod value) {
         shippingMethod.setValue(value);
         shippingFee.setValue(value.getPrice());
@@ -138,10 +164,21 @@ public class HCheckoutVM extends ViewModel {
 
     // ========== Total Calculation ==========
     private void calculateTotal() {
-        long sub = subTotal.getValue() != null ? subTotal.getValue() : 0L;
-        long fee = shippingFee.getValue() != null ? shippingFee.getValue() : 0L;
-        long discount = discountPrice.getValue() != null ? discountPrice.getValue() : 0L;
+        long sub = getSubTotal().getValue() != null ? getSubTotal().getValue() : 0L;
+        long fee = getShippingFee().getValue() != null ? getShippingFee().getValue() : 0L;
+        long discount = getDiscountPrice().getValue() != null ? getDiscountPrice().getValue() : 0L;
         totalPrice.setValue(sub + fee - discount);
+    }
+
+    private LiveData<Long> calculateFastCheckoutSubTotal() {
+        MutableLiveData<Long> fastSubTotal = new MutableLiveData<>(0L);
+        CartItem item = fastCheckoutItem.getValue().get(0);
+        if (item != null) {
+            long total = 0;
+            total += item.getPrice() * item.getQuantity();
+            fastSubTotal.setValue(total);
+        }
+        return fastSubTotal;
     }
 
     // ========== Trigger Order Creation ==========
@@ -150,14 +187,16 @@ public class HCheckoutVM extends ViewModel {
         // Save order to Firestore
         repository.createOrder(order).observeForever(success -> {
             if (success) {
-                cartRepo.clearCart().observeForever(clearSuccess -> {
-                    if (clearSuccess) {
-                        Log.d("HCheckoutVM", "Cart cleared successfully");
-                    } else {
-                        Log.e("HCheckoutVM", "Failed to clear cart");
-                        errorMessage.setValue("Failed to clear cart");
-                    }
-                });
+                if (!isFastCheckout.getValue()){
+                    cartRepo.clearCart().observeForever(clearSuccess -> {
+                        if (clearSuccess) {
+                            Log.d("HCheckoutVM", "Cart cleared successfully");
+                        } else {
+                            Log.e("HCheckoutVM", "Failed to clear cart");
+                            errorMessage.setValue("Failed to clear cart");
+                        }
+                    });
+                }
                 orderCreated.setValue(true);
                 result.setValue(true);
             } else {
@@ -169,7 +208,8 @@ public class HCheckoutVM extends ViewModel {
     }
 
     public List<OrderItem> getOrderProducts(){
-        return fromCartToOrderItem(orderItems.getValue());
+        return fromCartToOrderItem(isFastCheckout.getValue()? fastCheckoutItem.getValue():
+                orderItems.getValue());
     }
 
     private static List<OrderItem> fromCartToOrderItem(List<CartItem> items) {

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.carousel.CarouselLayoutManager;
@@ -50,6 +51,8 @@ public class HHomeProductDetailFragment extends Fragment {
     private int quantity;
     private boolean loggedIn = false;
 
+    private Product currentProduct;
+
     // ================================
     // === Lifecycle
     // ================================
@@ -81,6 +84,45 @@ public class HHomeProductDetailFragment extends Fragment {
 
         binding.btnFastCheckout.setOnClickListener(v -> {
             //TODO: Handle fast checkout
+            if (!loggedIn) {
+                Toast.makeText(requireContext(), "Hãy đăng nhập trước bạn nhé.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (currentStock == 0) {
+                Toast.makeText(requireContext(), "Sản phẩm đã hết hàng", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (quantity <= 0) {
+                Toast.makeText(requireContext(), "Số lượng không hợp lệ.", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (quantity > currentStock){
+                Toast.makeText(requireContext(), "Số lượng vượt quá hàng tồn kho.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (productId == null) {
+                Toast.makeText(requireContext(), "Có lỗi xảy ra, thử lại sau",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Pass data via Bundle
+            Bundle bundle = new Bundle();
+            if (currentProduct != null ){
+                bundle.putString("fastCheckoutItem_id", productId);
+                bundle.putString("fastCheckoutItem_name", currentProduct.getName());
+                bundle.putInt("fastCheckoutItem_quantity", quantity);
+                bundle.putLong("fastCheckoutItem_unitPrice", currentProduct.getPrice());
+                bundle.putString("fastCheckoutItem_imageUrl", currentProduct.getImageUrls().get(0));
+            }
+
+            // Navigate to HCheckoutFragment
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.productDetailToCheckout, bundle);
         });
     }
 
@@ -180,6 +222,7 @@ public class HHomeProductDetailFragment extends Fragment {
     private void fetchData(String productId) {
         hHomeVM.getSelectedProductLive(productId).observe(getViewLifecycleOwner(), product -> {
             if(product != null) {
+                currentProduct = product;
                 populateData(product);
             } else {
                 productNotFoundView();

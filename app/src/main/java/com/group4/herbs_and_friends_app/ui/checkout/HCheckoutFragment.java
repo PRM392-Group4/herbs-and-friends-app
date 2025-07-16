@@ -22,6 +22,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.model.CartItem;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
@@ -46,6 +47,7 @@ public class HCheckoutFragment extends Fragment {
     private OrderItemAdapter adapter;
     private HCheckoutVM checkoutVM;
     private FirebaseUser currentUser;
+    private CartItem fastCheckoutItem;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -67,6 +69,19 @@ public class HCheckoutFragment extends Fragment {
         if (currentUser == null) {
             Toast.makeText(getContext(), "Please log in to proceed with checkout", Toast.LENGTH_SHORT).show();
             return;
+        }
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("fastCheckoutItem_id")) {
+            String id = String.valueOf(args.getString("fastCheckoutItem_id"));
+            String name = String.valueOf(args.getString("fastCheckoutItem_name"));
+            String img = String.valueOf(args.getString("fastCheckoutItem_imageUrl"));
+            int quantity = args.getInt("fastCheckoutItem_quantity");
+            Long unitPrice = args.getLong("fastCheckoutItem_unitPrice");
+            CartItem item = new CartItem(id, name, unitPrice, img, quantity);
+            fastCheckoutItem = item;
+            if (item != null) {
+                checkoutVM.setFastCheckoutItem(item);
+            }
         }
 
         setActionBar();
@@ -93,8 +108,10 @@ public class HCheckoutFragment extends Fragment {
 
     private void setupObserverOrderItems() {
         checkoutVM.getOrderItems().observe(getViewLifecycleOwner(), items -> {
-            if (items != null && !items.isEmpty()) {
+            if (!checkoutVM.getIsFastCheckout().getValue() && items != null && !items.isEmpty()) {
                 adapter.submitList(new ArrayList<>(items));
+            } else if (checkoutVM.getIsFastCheckout().getValue()){
+                adapter.submitList(checkoutVM.getFastCheckoutItem().getValue());
             }
         });
     }
@@ -167,7 +184,6 @@ public class HCheckoutFragment extends Fragment {
         String address = binding.textReceiverAddress.getText().toString().trim();
         String recipientName = binding.textReceiverName.getText().toString().trim();
         String recipientPhone = binding.textReceiverPhone.getText().toString().trim();
-        List<OrderItem> cartItems = checkoutVM.getOrderProducts();
         ShippingMethod shippingMethod = checkoutVM.getShippingMethod().getValue();
         PaymentMethod paymentMethod = checkoutVM.getPaymentMethod().getValue();
         Coupon coupon = checkoutVM.getCoupon().getValue();
