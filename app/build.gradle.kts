@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
 }
 
+
 android {
     namespace = "com.group4.herbs_and_friends_app"
     compileSdk = 35
@@ -37,6 +38,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+
     packagingOptions {
         resources {
             excludes.add("META-INF/LICENSE.md")

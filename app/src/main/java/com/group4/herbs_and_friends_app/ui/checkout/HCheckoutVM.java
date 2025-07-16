@@ -47,7 +47,7 @@ public class HCheckoutVM extends ViewModel {
             new MutableLiveData<>(PaymentMethod.MOMO);
     private final MutableLiveData<Coupon> coupon = new MutableLiveData<>(null);
     private final MutableLiveData<String> address = new MutableLiveData<>("");
-    private final MutableLiveData<Boolean> orderCreated = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> orderCreated = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
 
@@ -138,6 +138,7 @@ public class HCheckoutVM extends ViewModel {
         isFastCheckout.setValue(true);
         calculateTotal();
     }
+
     public void setShippingMethod(ShippingMethod value) {
         shippingMethod.setValue(value);
         shippingFee.setValue(value.getPrice());
@@ -182,12 +183,12 @@ public class HCheckoutVM extends ViewModel {
     }
 
     // ========== Trigger Order Creation ==========
-    public LiveData<Boolean> createOrder(Order order) {
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
+    public LiveData<String> createOrder(Order order) {
+        MutableLiveData<String> result = new MutableLiveData<>();
         // Save order to Firestore
         repository.createOrder(order).observeForever(success -> {
-            if (success) {
-                if (!isFastCheckout.getValue()){
+            if (success!=null) {
+                if (!isFastCheckout.getValue()) {
                     cartRepo.clearCart().observeForever(clearSuccess -> {
                         if (clearSuccess) {
                             Log.d("HCheckoutVM", "Cart cleared successfully");
@@ -198,7 +199,7 @@ public class HCheckoutVM extends ViewModel {
                     });
                 }
                 orderCreated.setValue(true);
-                result.setValue(true);
+                result.setValue(success);
             } else {
                 orderCreated.setValue(false);
             }
@@ -207,9 +208,14 @@ public class HCheckoutVM extends ViewModel {
         return result;
     }
 
-    public List<OrderItem> getOrderProducts(){
-        return fromCartToOrderItem(isFastCheckout.getValue()? fastCheckoutItem.getValue():
+    public List<OrderItem> getOrderProducts() {
+        return fromCartToOrderItem(isFastCheckout.getValue() ? fastCheckoutItem.getValue() :
                 orderItems.getValue());
+    }
+
+    public int getTotalItems() {
+        return isFastCheckout.getValue() ? fastCheckoutItem.getValue().get(0).getQuantity() :
+                orderItems.getValue().size();
     }
 
     private static List<OrderItem> fromCartToOrderItem(List<CartItem> items) {
