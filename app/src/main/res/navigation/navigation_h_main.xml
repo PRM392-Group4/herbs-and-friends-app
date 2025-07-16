@@ -119,7 +119,7 @@
         android:id="@+id/HCheckoutFragment"
         android:name="com.group4.herbs_and_friends_app.ui.checkout.HCheckoutFragment"
         android:label="fragment_h_checkout"
-        tools:layout="@layout/fragment_h_checkout" />
+        />
 
 
 </navigation>

@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -58,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
+
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                int destinationId = destination.getId();
+                if (destinationId == R.id.HCheckoutFragment) {
+                    binding.herbBottomNavigation.setVisibility(View.GONE);
+                } else {
+                    binding.herbBottomNavigation.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 }
