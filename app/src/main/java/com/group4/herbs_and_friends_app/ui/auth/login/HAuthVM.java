@@ -53,7 +53,7 @@ public class HAuthVM extends ViewModel {
      *
      * @return LiveData of the next destination
      */
-    public LiveData<User> getNextDestination() {
+    public LiveData<User> getNextDestinationLive() {
         return nextDestination;
     }
 
@@ -63,6 +63,14 @@ public class HAuthVM extends ViewModel {
      * @param uid User ID
      */
     public void fetchUserAndEmitNextDestination(String uid) {
+
+        // If null, meaning logout
+        if (uid == null) {
+            nextDestination.postValue(null);
+            return;
+        }
+
+        // Otherwise, fetch the user and emit to the next destination
         authRepository.getUserByUid(uid,
                 user -> nextDestination.postValue(user),
                 () -> Log.e("HAuthVM", "User not found in Firestore"));

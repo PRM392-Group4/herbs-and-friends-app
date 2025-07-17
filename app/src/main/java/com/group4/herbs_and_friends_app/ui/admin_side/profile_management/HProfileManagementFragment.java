@@ -10,27 +10,50 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.databinding.FragmentHProfileManagementBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HProfileManagementFragment extends Fragment {
 
-    private HProfileManagementVM mViewModel;
+    // ================================
+    // === Fields
+    // ================================
+    private FragmentHProfileManagementBinding binding;
+    private HProfileManagementVM hProfileManagementVM;
 
+    // ================================
+    // === Lifecycle
+    // ================================
     public static HProfileManagementFragment newInstance() {
         return new HProfileManagementFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_profile_management, container, false);
+        binding = FragmentHProfileManagementBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HProfileManagementVM.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hProfileManagementVM = new ViewModelProvider(this).get(HProfileManagementVM.class);
+        // TODO: Observe LiveData from viewModel and bind to UI components
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ================================
+    // === Methods
+    // ================================
+    // Add additional private/helper methods here
 }

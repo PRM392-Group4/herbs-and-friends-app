@@ -269,7 +269,7 @@ public class HLoginFragment extends Fragment {
      * Observe destination after login
      */
     private void setupObserveDestionationAfterLogin() {
-        hAuthVM.getNextDestination().observe(getViewLifecycleOwner(), user -> {
+        hAuthVM.getNextDestinationLive().observe(getViewLifecycleOwner(), user -> {
             if (user == null) return;
 
             MainActivity mainActivity = (MainActivity) requireActivity();

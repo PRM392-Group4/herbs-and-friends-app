@@ -10,27 +10,47 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.databinding.FragmentHOrderManagementBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HOrderManagementFragment extends Fragment {
 
-    private HOrderManagementVM mViewModel;
+    // ================================
+    // === Fields
+    // ================================
 
-    public static HOrderManagementFragment newInstance() {
-        return new HOrderManagementFragment();
-    }
+    private FragmentHOrderManagementBinding binding;
+    private HOrderManagementVM hOrderManagementVM;
+
+    // ================================
+    // === Lifecycle
+    // ================================
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_order_management, container, false);
+        binding = FragmentHOrderManagementBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HOrderManagementVM.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hOrderManagementVM = new ViewModelProvider(this).get(HOrderManagementVM.class);
+        // TODO: observe ViewModel LiveData and bind to UI
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    // ================================
+    // === Methods
+    // ================================
 }
