@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.customer_side.manage.HProductManageContainerFragment">
+    tools:context=".ui.admin_side.product_management.HProductManagementContainerFragment">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/product_manage_nav_host_fragment"
+        android:id="@+id/product_management_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:navGraph="@navigation/navigation_h_product_manage"
         app:defaultNavHost="false"
-        tools:layout="@layout/fragment_h_product_manage" />
+        tools:layout="@layout/fragment_h_product_management" />
 
 </FrameLayout>

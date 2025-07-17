@@ -1,4 +1,4 @@
-package com.group4.herbs_and_friends_app.ui.customer_side.manage;
+package com.group4.herbs_and_friends_app.ui.admin_side.product_management;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,7 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class HProductFormFragment extends Fragment {
     private FragmentHProductFormBinding binding;
-    private HProductManageVM viewModel;
+    private HProductManagementVM viewModel;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private final ArrayList<Uri> imageUris = new ArrayList<>();
     private final List<String> tags = new ArrayList<>();
@@ -62,7 +62,7 @@ public class HProductFormFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize ViewModel
-        viewModel = new ViewModelProvider(requireActivity()).get(HProductManageVM.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(HProductManagementVM.class);
 
         setupActionBar();
         setupCategorySpinner();

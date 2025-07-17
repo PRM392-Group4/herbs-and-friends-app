@@ -1,4 +1,4 @@
-package com.group4.herbs_and_friends_app.ui.base;
+package com.group4.herbs_and_friends_app.ui.base.product;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -28,15 +28,14 @@ import com.group4.herbs_and_friends_app.data.model.enums.SortOptions;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHFilterSheetBinding;
 import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.CategoryAdapter;
-import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class ProductFilterBaseFragment<P extends ViewModel> extends Fragment {
+public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fragment {
     // Common Fields
-    protected ProductAdapter productAdapter;
+    protected BaseProductAdapter productAdapter;
     protected CategoryAdapter categoryAdapter;
     protected Params params;
     protected List<String> selectedCategoryIds = new ArrayList<>();

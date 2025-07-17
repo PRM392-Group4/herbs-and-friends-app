@@ -1,7 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.home;
 
-import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +22,8 @@ import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeProductListBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHFilterSheetBinding;
-import com.group4.herbs_and_friends_app.ui.base.ProductFilterBaseFragment;
-import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductAdapter;
+import com.group4.herbs_and_friends_app.ui.base.product.BaseProductFilterFragment;
+import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductListingAdapter;
 import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
 
 import java.util.List;
@@ -33,7 +31,7 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM> implements ProductAdapter.ProductActionListener {
+public class HHomeProductListFragment extends BaseProductFilterFragment<HHomeVM> implements ProductListingAdapter.ProductActionListener {
     private FragmentHHomeProductListBinding binding;
 
     @Override
@@ -127,7 +125,7 @@ public class HHomeProductListFragment extends ProductFilterBaseFragment<HHomeVM>
         getProductRecyclerView().addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
 
         // productAdapter field is inherited from base
-        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_LISTING);
+        productAdapter = new ProductListingAdapter(requireContext(), this);
         getProductRecyclerView().setAdapter(productAdapter);
     }
 

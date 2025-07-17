@@ -15,7 +15,7 @@
 
     <!-- Sản phẩm -->
     <item
-        android:id="@+id/productsFragment"
+        android:id="@+id/productManageFragment"
         android:icon="@drawable/ic_admin_bottom_nav_products"
         android:title="Sản phẩm" />
 
