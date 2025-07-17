@@ -18,9 +18,9 @@
 
     <!-- Sản phẩm -->
     <fragment
-        android:id="@+id/productsFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductManagementFragment"
-        android:label="Sản phẩm" />
+        android:id="@+id/productManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductManagementContainerFragment"
+        android:label="Manage" />
 
     <!-- Ưu đãi -->
     <fragment
