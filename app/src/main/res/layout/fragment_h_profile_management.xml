@@ -3,11 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.admin_side.profile_management.HProfileManagementFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.admin_side.profile_management.HProfileManagementFragment"
+    android:padding="20dp">
 
-    <TextView
+    <ImageView
+        android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Tôi cần được cứu rỗi" />
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner_admin"
+        android:background="@drawable/banner_rounded"
+        android:clipToOutline="true"
+        android:layout_marginTop="30dp"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/banner_overlay"
+        android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="140dp"
+            android:background="@drawable/bt_rounded"
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Hãy đăng nhập vào tài khoản"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="15sp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/h_carrot"
+            android:text="Đăng xuất"/>
+
+    </LinearLayout>
 </FrameLayout>
