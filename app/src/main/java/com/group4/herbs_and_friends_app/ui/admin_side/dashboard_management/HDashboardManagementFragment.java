@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,10 +35,6 @@ public class HDashboardManagementFragment extends Fragment {
 
     private HDashboardManagementVM hDashboardManagementVM;
     private FragmentHDashboardManagementBinding binding;
-    private HAuthVM hAuthVM;
-
-    @Inject
-    public AuthRepository authRepository;
 
     private FirebaseAuth firebaseAuth;
 
@@ -56,23 +53,17 @@ public class HDashboardManagementFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        hAuthVM = new ViewModelProvider(requireActivity()).get(HAuthVM.class);
         hDashboardManagementVM = new ViewModelProvider(this).get(HDashboardManagementVM.class);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (currentUser != null) {
             String uid = currentUser.getUid();
-            authRepository.getUserByUid(uid, user -> {
+            hDashboardManagementVM.fetchUser(uid, user -> {
                 binding.tvName.setText(user.getName());
             }, () -> {
                 Log.e("ADMIN", "Không tìm thấy user trong Firestore");
             });
         }
-
-        binding.ivLogout.setOnClickListener(v -> {
-            firebaseAuth.signOut();
-            hAuthVM.fetchUserAndEmitNextDestination(null);
-        });
     }
 }

@@ -49,17 +49,11 @@ public class HProfileFragment extends Fragment {
 
     private FragmentHProfileBinding binding;
 
-    @Inject
-    public FirebaseFirestore firebaseFirestore;
-    private HProfileVM hProfileVM;
+    private FirebaseUser currentUser;
 
     @Inject
     FirebaseFirestore firestore;
-
-    @Inject
-    AuthRepository authRepository;
-
-    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private HProfileVM hProfileVM;
     
     private OrderHistoryAdapter orderHistoryAdapter;
 
@@ -78,17 +72,11 @@ public class HProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         hProfileVM = new ViewModelProvider(this).get(HProfileVM.class);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         TabLayout tabLayout = binding.tabLayout;
         View layoutProfile = view.findViewById(R.id.layoutProfile);
         View layoutHistory = view.findViewById(R.id.layoutHistory);
-        Button btnLogin = view.findViewById(R.id.btnLogin);
-        Button btnLogout = view.findViewById(R.id.btnLogout);
-        TextView tvName = view.findViewById(R.id.tvName);
-        TextView tvEmail = view.findViewById(R.id.tvEmail);
-        TextView tvAdName = view.findViewById(R.id.tvAdName);
-        TextView tvAdPhone = view.findViewById(R.id.tvAdPhone);
-        TextView tvAddress = view.findViewById(R.id.tvAddress);
 
         tabLayout.addTab(tabLayout.newTab().setText("Thông tin cá nhân"));
         tabLayout.addTab(tabLayout.newTab().setText("Lịch sử mua hàng"));
@@ -115,45 +103,36 @@ public class HProfileFragment extends Fragment {
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        btnLogin.setOnClickListener(v ->{
+        binding.layoutProfile.btnLogin.setOnClickListener(v ->{
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_profileFragment_to_HLoginFragment);
             Log.d("btnLogin", "Go to Login");
         });
 
-        btnLogout.setOnClickListener(v -> {
+        binding.layoutProfile.btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_profileFragment_to_HLoginFragment);
         });
 
+        binding.layoutProfile.imgEdit.setOnClickListener(v -> showEditDialog());
+
+        // Load user info
         if (currentUser != null) {
             String uid = currentUser.getUid();
+            hProfileVM.fetchUser(uid, user -> {
+                binding.layoutProfile.tvName.setText(user.getName());
+                binding.layoutProfile.tvEmail.setText(user.getEmail());
+                binding.layoutProfile.tvAdName.setText(user.getName());
+                binding.layoutProfile.tvAdPhone.setText(user.getPhone());
+                binding.layoutProfile.tvAddress.setText(user.getAddress());
 
-            firebaseFirestore.collection("users")
-                    .document(uid)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            User user = documentSnapshot.toObject(User.class);
-                            if (user != null) {
-                                tvName.setText(user.getName());
-                                tvEmail.setText(user.getEmail());
-                                tvAdName.setText(user.getName());
-                                tvAdPhone.setText(user.getPhone());
-                                tvAddress.setText(user.getAddress());
-
-                                btnLogin.setVisibility(View.GONE);
-                                btnLogout.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e -> Log.e("PROFILE", "Không thể lấy thông tin user", e));
+                binding.layoutProfile.btnLogin.setVisibility(View.GONE);
+                binding.layoutProfile.btnLogout.setVisibility(View.VISIBLE);
+            }, () -> {
+                Log.e("PROFILE", "Không thể lấy thông tin user");
+            });
         }
-
-        ImageView imgEdit = view.findViewById(R.id.imgEdit);
-
-        imgEdit.setOnClickListener(v -> showEditDialog());
 
     }
 
@@ -188,105 +167,66 @@ public class HProfileFragment extends Fragment {
 
     private void showEditDialog() {
         if (currentUser == null) return;
-
         String uid = currentUser.getUid();
 
-        firestore.collection("users")
-                .document(uid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (!documentSnapshot.exists()) return;
+        hProfileVM.fetchUser(uid, user -> {
+            LayoutInflater inflater = LayoutInflater.from(requireContext());
+            View dialogView = inflater.inflate(R.layout.dialog_edit_profile, null);
 
-                    User user = documentSnapshot.toObject(User.class);
-                    if (user == null) return;
+            EditText edtName = dialogView.findViewById(R.id.edtName);
+            EditText edtPhone = dialogView.findViewById(R.id.edtPhone);
+            EditText edtPassword = dialogView.findViewById(R.id.edtPassword);
+            EditText edtAddress = dialogView.findViewById(R.id.edtAddress);
 
-                    LayoutInflater inflater = LayoutInflater.from(requireContext());
-                    View dialogView = inflater.inflate(R.layout.dialog_edit_profile, null);
+            edtName.setText(user.getName());
+            edtPhone.setText(user.getPhone());
+            edtAddress.setText(user.getAddress());
 
-                    EditText edtName = dialogView.findViewById(R.id.edtName);
-                    EditText edtPhone = dialogView.findViewById(R.id.edtPhone);
-                    EditText edtPassword = dialogView.findViewById(R.id.edtPassword);
-                    EditText edtAddress = dialogView.findViewById(R.id.edtAddress);
+            new AlertDialog.Builder(requireContext())
+                    .setView(dialogView)
+                    .setPositiveButton("Lưu", (dialog, which) -> {
+                        String newName = edtName.getText().toString().trim();
+                        String newPhone = edtPhone.getText().toString().trim();
+                        String newPassword = edtPassword.getText().toString().trim();
+                        String newAddress = edtAddress.getText().toString().trim();
 
-                    edtName.setText(user.getName());
-                    edtPhone.setText(user.getPhone());
-                    edtAddress.setText(user.getAddress());
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("name", newName);
+                        updates.put("phone", newPhone);
+                        updates.put("address", newAddress);
+                        updates.put("updateAt", new Date());
 
-                    new AlertDialog.Builder(requireContext())
-                            .setView(dialogView)
-                            .setPositiveButton("Lưu", (dialog, which) -> {
-                                String newName = edtName.getText().toString().trim();
-                                String newPhone = edtPhone.getText().toString().trim();
-                                String newPassword = edtPassword.getText().toString().trim();
-                                String newAddress = edtAddress.getText().toString().trim();
+                        if (!newPassword.isEmpty()) {
+                            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            if (firebaseUser != null) {
+                                firebaseUser.updatePassword(newPassword)
+                                        .addOnSuccessListener(unused -> {
+                                            updates.put("password", PasswordUtils.hashPassword(newPassword));
+                                            applyProfileUpdates(uid, updates);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(requireContext(), "Lỗi cập nhật mật khẩu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Log.e("EDIT", "Failed to update password", e);
+                                        });
+                            }
+                        } else {
+                            applyProfileUpdates(uid, updates);
+                        }
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
 
-                                Map<String, Object> updates = new HashMap<>();
-                                updates.put("name", newName);
-                                updates.put("phone", newPhone);
-                                updates.put("address", newAddress);
-                                updates.put("updateAt", new Date());
-
-                                if (!newPassword.isEmpty()) {
-                                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                    if (firebaseUser != null) {
-                                        firebaseUser.updatePassword(newPassword)
-                                                .addOnSuccessListener(unused -> {
-                                                    Log.d("EDIT", "Password updated in FirebaseAuth");
-
-                                                    // vẫn lưu hash mật khẩu trong Firestore
-                                                    updates.put("password", PasswordUtils.hashPassword(newPassword));
-
-                                                    applyProfileUpdates(uid, updates);
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(requireContext(), "Lỗi cập nhật mật khẩu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    Log.e("EDIT", "Failed to update password", e);
-                                                });
-                                    } else {
-                                        Toast.makeText(requireContext(), "Không thể cập nhật mật khẩu: chưa đăng nhập", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    applyProfileUpdates(uid, updates);
-                                }
-
-                            })
-                            .setNegativeButton("Hủy", null)
-                            .show();
-
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "Lỗi khi tải dữ liệu người dùng", Toast.LENGTH_SHORT).show();
-                    Log.e("EDIT", "Failed to get user data", e);
-                });
-    }
-
-    private void reloadUserInfo() {
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            authRepository.getUserByUid(uid, user -> {
-                TextView tvName = getView().findViewById(R.id.tvName);
-                TextView tvEmail = getView().findViewById(R.id.tvEmail);
-                TextView tvAdName = getView().findViewById(R.id.tvAdName);
-                TextView tvAdPhone = getView().findViewById(R.id.tvAdPhone);
-                TextView tvAddress = getView().findViewById(R.id.tvAddress);
-
-                tvName.setText(user.getName());
-                tvEmail.setText(user.getEmail());
-                tvAdName.setText(user.getName());
-                tvAdPhone.setText(user.getPhone());
-                tvAddress.setText(user.getAddress());
-            }, () -> {
-                Log.e("PROFILE", "Không thể lấy thông tin user");
-            });
-        }
+        }, () -> {
+            Toast.makeText(requireContext(), "Lỗi khi tải dữ liệu người dùng", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void applyProfileUpdates(String uid, Map<String, Object> updates) {
-        firestore
-                .collection("users")
+        firestore.collection("users")
                 .document(uid)
                 .update(updates)
                 .addOnSuccessListener(aVoid -> {
+                    Log.d("UPDATE", "Cập nhật thành công: " + updates);
                     Toast.makeText(requireContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                     reloadUserInfo();
                 })
@@ -296,5 +236,20 @@ public class HProfileFragment extends Fragment {
                 });
     }
 
+    private void reloadUserInfo() {
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            hProfileVM.fetchUser(uid, user -> {
+                if (binding == null) return;
 
+                binding.layoutProfile.tvName.setText(user.getName());
+                binding.layoutProfile.tvEmail.setText(user.getEmail());
+                binding.layoutProfile.tvAdName.setText(user.getName());
+                binding.layoutProfile.tvAdPhone.setText(user.getPhone());
+                binding.layoutProfile.tvAddress.setText(user.getAddress());
+            }, () -> {
+                Log.e("PROFILE", "Không thể reload thông tin user");
+            });
+        }
+    }
 }
