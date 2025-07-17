@@ -26,7 +26,7 @@ import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.databinding.FragmentHHomeBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.HomeCategoryAdapter;
-import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductAdapter;
+import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductListingAdapter;
 import com.group4.herbs_and_friends_app.utils.GridRowSpacingDecoration;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HHomeFragment extends Fragment implements ProductAdapter.ProductActionListener {
+public class HHomeFragment extends Fragment implements ProductListingAdapter.ProductActionListener {
 
     // ================================
     // === Fields
@@ -44,7 +44,7 @@ public class HHomeFragment extends Fragment implements ProductAdapter.ProductAct
     private FragmentHHomeBinding binding;
     private HHomeVM hHomeVM;
     private HomeCategoryAdapter categoryAdapter;
-    private ProductAdapter productAdapter;
+    private ProductListingAdapter productAdapter;
 
     // ================================
     // === Lifecycle
@@ -175,7 +175,7 @@ public class HHomeFragment extends Fragment implements ProductAdapter.ProductAct
         int rowSpacing = getResources().getDimensionPixelSize(R.dimen.grid_row_spacing);
         binding.homeProductRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 2));
 
-        productAdapter = new ProductAdapter(requireContext(), this, VIEW_TYPE_LISTING);
+        productAdapter = new ProductListingAdapter(requireContext(), this);
 
         binding.homeProductRv.setAdapter(productAdapter);
     }

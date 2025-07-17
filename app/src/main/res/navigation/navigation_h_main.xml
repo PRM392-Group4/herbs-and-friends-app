@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/productManageFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.customer_side.manage.HProductManageContainerFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductManagementContainerFragment"
         android:label="Manage" />
 
     <fragment
