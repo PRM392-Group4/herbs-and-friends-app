@@ -1,7 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.home;
 
-import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_LISTING;
-
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;

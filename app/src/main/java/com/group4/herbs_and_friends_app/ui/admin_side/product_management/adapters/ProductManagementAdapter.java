@@ -1,7 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.admin_side.product_management.adapters;
 
-import static com.group4.herbs_and_friends_app.utils.AppCts.VIEW_TYPE_MANAGE;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
