@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import com.group4.herbs_and_friends_app.R;
+
 import javax.annotation.Nullable;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
