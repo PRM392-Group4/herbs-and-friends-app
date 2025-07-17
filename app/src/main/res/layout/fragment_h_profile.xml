@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".ui.profile.HProfileFragment">
+    tools:context=".ui.customer_side.profile.HProfileFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

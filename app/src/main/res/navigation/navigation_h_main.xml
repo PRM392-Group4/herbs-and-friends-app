@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/herb_navigation_main"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeContainerFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeContainerFragment"
         android:label="Home">
-
-        <!-- Đến Admin -->
-        <action
-            android:id="@+id/action_homeFragment_to_HAdminFragment"
-            app:destination="@id/HAdminFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.cart.HCartFragment"
         android:label="Cart">
 
         <action
@@ -28,17 +22,17 @@
 
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.notification.HNotificationFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.notification.HNotificationFragment"
         android:label="Notification" />
 
     <fragment
         android:id="@+id/productManageFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageContainerFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.manage.HProductManageContainerFragment"
         android:label="Manage" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragment"
         android:label="Profile">
 
         <!-- Đến Login -->
@@ -63,13 +57,6 @@
             android:id="@+id/action_HLoginFragment_to_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
-
-        <!-- Đến Admin sau khi login -->
-        <action
-            android:id="@+id/action_HLoginFragment_to_HAdminFragment"
-            app:destination="@id/HAdminFragment"
-            app:popUpTo="@id/HAdminFragment"
             app:popUpToInclusive="true" />
         
         <!-- Đến Register -->
@@ -119,7 +106,7 @@
     <!-- Order Detail -->
     <fragment
         android:id="@+id/HOrderDetailFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
         android:label="Order Detail">
 
         <argument
@@ -129,19 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/HCheckoutFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.checkout.HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
         android:label="fragment_h_checkout"
         />
-
-    <!-- Admin -->
-    <fragment
-        android:id="@+id/HAdminFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.admin.HAdminFragment"
-        android:label="Admin">
-
-        <!-- Đến Login -->
-        <action
-            android:id="@+id/action_HAdminFragment_to_HLoginFragment"
-            app:destination="@id/HLoginFragment" />
-    </fragment>
 </navigation>

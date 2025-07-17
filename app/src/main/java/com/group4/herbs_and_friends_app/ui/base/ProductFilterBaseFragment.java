@@ -27,8 +27,8 @@ import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.data.model.enums.SortOptions;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHFilterSheetBinding;
-import com.group4.herbs_and_friends_app.ui.home.adapter.CategoryAdapter;
-import com.group4.herbs_and_friends_app.ui.home.adapter.ProductAdapter;
+import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.CategoryAdapter;
+import com.group4.herbs_and_friends_app.ui.customer_side.home.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
