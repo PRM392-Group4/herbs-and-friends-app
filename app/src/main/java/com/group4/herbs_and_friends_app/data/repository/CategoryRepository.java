@@ -10,7 +10,6 @@ import com.group4.herbs_and_friends_app.data.model.Category;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 

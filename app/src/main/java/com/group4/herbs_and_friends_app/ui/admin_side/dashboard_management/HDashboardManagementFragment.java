@@ -22,19 +22,8 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * THE CODE BELOW IS WRONG, I COPY FROM admin fragment cuz i'm lazy
- * - please fix the logic
- * <p>
- * PLEASE REFACTOR THE CODE, DO NOT INJECT REPOSITORY INTO THE FRAGMENT
- * - FRAGMENT includes only VIEW MODEL for DATA BINDING (View layer in Clean Architecture)
- * - VIEW MODEL includes only REPOSITORY for interacting with data (Service layer in Clean Architecture)
- * - REPOSITORY includes only FIREBASE and other 3rd stuffs for handling logic (Repository layer in Clean Architecture)
- * <p>
- * HATE me if you want, idc, but
- * - Build a better person for your future career
- * - or you are fired
- * <p>
- * Study Study and Study more (Mr. Uncle Ho)
+ * THE CODE BELOW IS CUMBERSOME, I COPY FROM admin fragment cuz i'm lazy
+ * - please fix the logic and make the code cleaner and more readable
  */
 @AndroidEntryPoint
 public class HDashboardManagementFragment extends Fragment {
