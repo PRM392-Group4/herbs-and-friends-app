@@ -8,6 +8,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
+import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 
@@ -73,6 +74,12 @@ public class AppModule {
     @Singleton
     public OrderRepository provideOrderRepository(FirebaseFirestore firestore, FirebaseAuth firebaseAuth) {
         return new OrderRepository(firestore, firebaseAuth);
+    }
+
+    @Provides
+    @Singleton
+    public CouponRepository provideCouponRepository(FirebaseFirestore firestore) {
+        return new CouponRepository(firestore);
     }
 
     // =========================

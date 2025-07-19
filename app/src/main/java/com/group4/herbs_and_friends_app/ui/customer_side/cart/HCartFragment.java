@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.cart;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,6 +157,7 @@ public class HCartFragment extends Fragment {
             }
         });
     }
+
 
     /**
      *  Setup action bar with title only

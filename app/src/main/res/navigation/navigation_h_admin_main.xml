@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_h_admin_main"
     app:startDestination="@id/dashboardFragment">
 
@@ -24,9 +25,9 @@
 
     <!-- Ưu đãi -->
     <fragment
-        android:id="@+id/couponsFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponManagementFragment"
-        android:label="Ưu đãi" />
+        android:id="@+id/couponManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponManagementContainerFragment"
+        android:label="fragment_h_coupon_management"/>
 
     <!-- Cá nhân -->
     <fragment

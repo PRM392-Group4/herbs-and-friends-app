@@ -68,7 +68,7 @@
         <item>Quản lý đơn hàng</item>
     </string-array>
 
-<!--    Checkout-->
+    <!--    Checkout-->
     <string name="checkout_title">Xác nhận đơn hàng</string>
     <string name="checkout_title_product">Sản phẩm</string>
     <string name="checkout_title_delivery_method">Phương thức nhận hàng</string>
