@@ -12,7 +12,7 @@
         android:layout_height="64dp"
         android:contentDescription="@string/cart_viewholder_product_image"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_default_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

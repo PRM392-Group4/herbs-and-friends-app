@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeMainFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeFragment"
         android:label="Home Main" >
 
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/productListFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductListFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeProductListFragment"
         android:label="Product List" >
 
         <action
@@ -32,17 +32,25 @@
 
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeProductDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeProductDetailFragment"
         android:label="Product Detail" >
 
         <argument
             android:name="productId"
             app:argType="string"
             app:nullable="false"/>
-
         <action
             android:id="@+id/productDetail_to_productList"
             app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/productDetailToCheckout"
+            app:destination="@id/HCheckoutFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
+        android:label="fragment_h_checkout"
+        />
 
 </navigation>

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/productManageFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductManagementFragment"
         android:label="Product List Manage">
         <action
             android:id="@+id/productList_to_productForm"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/productFormFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductFormFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductFormFragment"
         android:label="Product Form">
         <argument
             android:name="productId"
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/orderManageFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.manage.HOrderManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.manage.HOrderManageFragment"
         android:label="Order Manage">
         <action
             android:id="@+id/action_orderManage_to_orderDetail"
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/orderDetailFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
         android:label="Order Detail">
         <argument
             android:name="orderId"

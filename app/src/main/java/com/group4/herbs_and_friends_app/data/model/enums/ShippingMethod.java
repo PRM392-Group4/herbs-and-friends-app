@@ -15,7 +15,7 @@ public enum ShippingMethod {
         this.price = price;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
