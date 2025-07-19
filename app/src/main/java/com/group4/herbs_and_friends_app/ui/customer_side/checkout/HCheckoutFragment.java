@@ -4,11 +4,9 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.R;
@@ -30,12 +27,12 @@ import com.group4.herbs_and_friends_app.data.model.enums.PaymentMethod;
 import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.databinding.FragmentHCheckoutBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchBinding;
+import com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters.HCouponSelectionAdapter;
 import com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter.OrderItemAdapter;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -114,29 +111,6 @@ public class HCheckoutFragment extends Fragment {
             }
         });
     }
-
-
-//    private void setCoupons() {
-//        checkoutVM.getCouponsList().observe(getViewLifecycleOwner(), coupons -> {
-//            if (coupons != null && !coupons.isEmpty()) {
-//                List<String> displayList = new ArrayList<>();
-//                for (Coupon coupon : coupons) {
-//                    displayList.add(coupon.getCode() + " - " + coupon.getName());
-//                }
-//                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//                        getContext(),
-//                        android.R.layout.simple_dropdown_item_1line,
-//                        displayList
-//                );
-//                MaterialAutoCompleteTextView dropdown = binding.editCoupon;
-//                dropdown.setAdapter(adapter);
-//                dropdown.setOnItemClickListener((parent, view, position, id) -> {
-//                    Coupon selected = coupons.get(position);
-//                    checkoutVM.setCoupon(selected);
-//                });
-//            }
-//        });
-//    }
 
     private void setShippingMethodAction() {
         binding.radioGroupShipping.setOnCheckedChangeListener((group, checkedId) -> {
@@ -222,18 +196,17 @@ public class HCheckoutFragment extends Fragment {
     /**
      * Setup button select coupon
      */
+
     private void setupButtonSelectCoupon() {
         binding.btnApplyCoupon.setOnClickListener(v -> {
+
             HCouponSelectBottomSheet bottomSheet = new HCouponSelectBottomSheet();
-            bottomSheet.setOnCouponSelectedListener(selectedCoupon -> {
-                binding.etCouponCode.setText(selectedCoupon.getCode());
-                checkoutVM.setCoupon(selectedCoupon);
-//                Log.i("HCouponSelectBottomSheet", "setupButtonSelectCoupon: " + result.getValue());
-//                if (result.getValue() != null && result.getValue()) {
-//                    Toast.makeText(getContext(), "Áp dụng thành công", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(getContext(), "Áp dụng thất bại", Toast.LENGTH_SHORT).show();
-//                }
+            bottomSheet.setOnCouponSelectedListener(new HCouponSelectionAdapter.IOnCouponSelectedListener() {
+                @Override
+                public void onCouponSelected(Coupon coupon) {
+                    binding.etCouponCode.setText(coupon.getCode());
+                    checkoutVM.setCoupon(coupon);
+                }
             });
             bottomSheet.show(getParentFragmentManager(), "HCouponSelectBottomSheet");
         });

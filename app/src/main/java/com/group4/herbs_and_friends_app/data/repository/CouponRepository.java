@@ -8,9 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
+import com.group4.herbs_and_friends_app.data.model.CouponParams;
+import com.group4.herbs_and_friends_app.data.model.Coupon;
+import com.group4.herbs_and_friends_app.data.model.Product;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +44,26 @@ public class CouponRepository {
         return couponListLive;
     }
 
-    // TODO: add get coupons by criteria: e.g get active, get non-expired, get near expired, get new coupons, sort by expiry date, etc
+    public LiveData<List<Coupon>> getCouponWithCriteria(CouponParams params) {
+        MutableLiveData<List<Coupon>> couponListLive = new MutableLiveData<>();
+        Query query = coupons;
+
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Coupon> couponList = querySnapshot.toObjects(Coupon.class);
+
+                    // Apply search
+                    if(params.getSearch() != null && !params.getSearch().isEmpty()) {
+                        List<Coupon> filteredList = filterBySearch(couponList, params.getSearch());
+                        couponListLive.setValue(filteredList);
+                    } else couponListLive.setValue(couponList);
+                })
+                .addOnFailureListener(e -> {
+                    couponListLive.setValue(Collections.emptyList());
+                });
+
+        return couponListLive;
+    }
 
     public LiveData<Coupon> getCouponById(String couponId) {
         MutableLiveData<Coupon> couponLive = new MutableLiveData<>();
@@ -86,5 +110,16 @@ public class CouponRepository {
                 .addOnFailureListener(e -> isDeleteSuccess.setValue(false));
 
         return isDeleteSuccess;
+    }
+
+    private List<Coupon> filterBySearch(List<Coupon> couponList, String search) {
+        List<Coupon> filteredList = new ArrayList<>();
+
+        for (Coupon coupon : couponList) {
+            boolean nameMatch = coupon.getName().toLowerCase().contains(search.toLowerCase());
+            if (nameMatch) filteredList.add(coupon);
+        }
+
+        return filteredList;
     }
 }

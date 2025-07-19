@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.group4.herbs_and_friends_app.databinding.BottomSheetHCouponSelectBinding;
-import com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter.HCouponSelectAdapter;
+import com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters.HCouponSelectionAdapter;
 
 import java.util.ArrayList;
 
@@ -22,11 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HCouponSelectBottomSheet extends BottomSheetDialogFragment {
 
     private BottomSheetHCouponSelectBinding binding;
-    private HCouponSelectAdapter adapter;
+    private HCouponSelectionAdapter adapter;
     private HCouponSelectVM viewModel;
-    private IOnCouponSelectedListener listener;
+    private HCouponSelectionAdapter.IOnCouponSelectedListener listener;
 
-    public void setOnCouponSelectedListener(IOnCouponSelectedListener listener) {
+    public void setOnCouponSelectedListener(HCouponSelectionAdapter.IOnCouponSelectedListener listener) {
         this.listener = listener;
     }
 
@@ -43,7 +43,7 @@ public class HCouponSelectBottomSheet extends BottomSheetDialogFragment {
 
         viewModel = new ViewModelProvider(this).get(HCouponSelectVM.class);
 
-        adapter = new HCouponSelectAdapter(new ArrayList<>(), coupon -> {
+        adapter = new HCouponSelectionAdapter(new ArrayList<>(), coupon -> {
             if (listener != null) {
                 listener.onCouponSelected(coupon);
             }

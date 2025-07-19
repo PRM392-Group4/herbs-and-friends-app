@@ -1,4 +1,4 @@
-package com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter;
+package com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,29 +8,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class HCouponSelectAdapter extends RecyclerView.Adapter<HCouponSelectAdapter.CouponViewHolder> {
-
-    public interface OnCouponClickListener {
-        void onCouponClick(Coupon coupon);
-    }
+public class HCouponManagementAdapter extends RecyclerView.Adapter<HCouponManagementAdapter.CouponViewHolder> {
 
     private List<Coupon> couponList;
-    private final OnCouponClickListener listener;
+    private final ICouponActionListener listener;
 
-    public HCouponSelectAdapter(List<Coupon> couponList, OnCouponClickListener listener) {
-        this.couponList = couponList;
+    public HCouponManagementAdapter(List<Coupon> couponList, ICouponActionListener listener) {
+        this.couponList = couponList != null ? couponList : new ArrayList<>();
         this.listener = listener;
     }
 
     public void setCouponList(List<Coupon> couponList) {
-        this.couponList = couponList;
+        this.couponList = couponList != null ? couponList : new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -49,11 +47,17 @@ public class HCouponSelectAdapter extends RecyclerView.Adapter<HCouponSelectAdap
 
     @Override
     public int getItemCount() {
-        return couponList != null ? couponList.size() : 0;
+        return couponList.size();
+    }
+
+    public interface ICouponActionListener {
+        void onCouponEditClick(String couponId);
+        void onCouponDeleteClick(String couponId, String couponName);
     }
 
     static class CouponViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvCode, tvDiscount, tvValidity;
+        MaterialButton btnEdit, btnDelete;
 
         public CouponViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,17 +65,21 @@ public class HCouponSelectAdapter extends RecyclerView.Adapter<HCouponSelectAdap
             tvCode = itemView.findViewById(R.id.tv_coupon_code);
             tvDiscount = itemView.findViewById(R.id.tv_coupon_discount);
             tvValidity = itemView.findViewById(R.id.tv_coupon_validity);
+            btnEdit = itemView.findViewById(R.id.btn_edit_coupon);
+            btnDelete = itemView.findViewById(R.id.btn_delete_coupon);
         }
 
-        public void bind(Coupon coupon, OnCouponClickListener listener) {
+        public void bind(Coupon coupon, ICouponActionListener listener) {
             tvName.setText(coupon.getName());
             tvCode.setText("Mã: " + coupon.getCode());
-            tvDiscount.setText(String.format(Locale.getDefault(), "-%.0f%%", coupon.getDiscount()));
+            tvDiscount.setText(String.format(Locale.getDefault(), "-%.0f%%", coupon.getDiscount() * 100));
+            
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String validity = "Hiệu lực: " + sdf.format(coupon.getEffectiveDate()) + " - " + sdf.format(coupon.getExpiryDate());
             tvValidity.setText(validity);
 
-            itemView.setOnClickListener(v -> listener.onCouponClick(coupon));
+            btnEdit.setOnClickListener(v -> listener.onCouponEditClick(coupon.getId()));
+            btnDelete.setOnClickListener(v -> listener.onCouponDeleteClick(coupon.getId(), coupon.getName()));
         }
     }
-}
+} 
