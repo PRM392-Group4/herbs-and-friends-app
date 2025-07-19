@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,7 @@ public class HCheckoutFragment extends Fragment {
         setActionBar();
         setOrderProductView();
         setupObserverOrderItems();
-        setCoupons();
+        setupButtonSelectCoupon();
         setPriceDisplay();
         setShippingMethodAction();
         setPaymentMethodAction();
@@ -114,27 +115,28 @@ public class HCheckoutFragment extends Fragment {
         });
     }
 
-    private void setCoupons() {
-        checkoutVM.getCouponsList().observe(getViewLifecycleOwner(), coupons -> {
-            if (coupons != null && !coupons.isEmpty()) {
-                List<String> displayList = new ArrayList<>();
-                for (Coupon coupon : coupons) {
-                    displayList.add(coupon.getCode() + " - " + coupon.getName());
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        getContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        displayList
-                );
-                MaterialAutoCompleteTextView dropdown = binding.editCoupon;
-                dropdown.setAdapter(adapter);
-                dropdown.setOnItemClickListener((parent, view, position, id) -> {
-                    Coupon selected = coupons.get(position);
-                    checkoutVM.setCoupon(selected);
-                });
-            }
-        });
-    }
+
+//    private void setCoupons() {
+//        checkoutVM.getCouponsList().observe(getViewLifecycleOwner(), coupons -> {
+//            if (coupons != null && !coupons.isEmpty()) {
+//                List<String> displayList = new ArrayList<>();
+//                for (Coupon coupon : coupons) {
+//                    displayList.add(coupon.getCode() + " - " + coupon.getName());
+//                }
+//                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+//                        getContext(),
+//                        android.R.layout.simple_dropdown_item_1line,
+//                        displayList
+//                );
+//                MaterialAutoCompleteTextView dropdown = binding.editCoupon;
+//                dropdown.setAdapter(adapter);
+//                dropdown.setOnItemClickListener((parent, view, position, id) -> {
+//                    Coupon selected = coupons.get(position);
+//                    checkoutVM.setCoupon(selected);
+//                });
+//            }
+//        });
+//    }
 
     private void setShippingMethodAction() {
         binding.radioGroupShipping.setOnCheckedChangeListener((group, checkedId) -> {
@@ -195,7 +197,7 @@ public class HCheckoutFragment extends Fragment {
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
         order.setShippingMethod(shippingMethod != null ? shippingMethod.getValue() : ShippingMethod.STANDARD.getValue());
-        order.setCouponId(binding.editCoupon.getText().toString());
+        order.setCouponId(binding.etCouponCode.getText().toString());
 //        order.setCoupon(coupon != null ? FirebaseFirestore.getInstance().collection("coupons").document(coupon.getId()) : null);
         order.setPlacedAt(new Date());
         order.setNote(binding.editNote.getText().toString()); // Optional, not in UI
@@ -215,5 +217,25 @@ public class HCheckoutFragment extends Fragment {
                 }
             });
 
+    }
+
+    /**
+     * Setup button select coupon
+     */
+    private void setupButtonSelectCoupon() {
+        binding.btnApplyCoupon.setOnClickListener(v -> {
+            HCouponSelectBottomSheet bottomSheet = new HCouponSelectBottomSheet();
+            bottomSheet.setOnCouponSelectedListener(selectedCoupon -> {
+                binding.etCouponCode.setText(selectedCoupon.getCode());
+                checkoutVM.setCoupon(selectedCoupon);
+//                Log.i("HCouponSelectBottomSheet", "setupButtonSelectCoupon: " + result.getValue());
+//                if (result.getValue() != null && result.getValue()) {
+//                    Toast.makeText(getContext(), "Áp dụng thành công", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getContext(), "Áp dụng thất bại", Toast.LENGTH_SHORT).show();
+//                }
+            });
+            bottomSheet.show(getParentFragmentManager(), "HCouponSelectBottomSheet");
+        });
     }
 }
