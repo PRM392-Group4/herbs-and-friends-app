@@ -21,7 +21,7 @@
 
     <!-- Ưu đãi -->
     <item
-        android:id="@+id/couponsFragment"
+        android:id="@+id/couponManageFragment"
         android:icon="@drawable/ic_admin_bottom_nav_coupons"
         android:title="Ưu đãi" />
 

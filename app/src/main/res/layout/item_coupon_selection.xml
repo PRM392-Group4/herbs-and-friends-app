@@ -1,0 +1,54 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_coupon_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coupon Name"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/h_primary"/>
+
+        <TextView
+            android:id="@+id/tv_coupon_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CODE123"
+            android:textStyle="italic"
+            android:textColor="@color/h_secondary"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_coupon_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-20%"
+            android:textStyle="bold"
+            android:textColor="@color/h_primary"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_coupon_validity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valid: 01/01/2024 - 31/12/2024"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView> 
