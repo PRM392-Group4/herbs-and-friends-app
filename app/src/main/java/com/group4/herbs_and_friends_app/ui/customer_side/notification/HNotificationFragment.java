@@ -9,6 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
+import com.group4.herbs_and_friends_app.ui.notification.adapter.HNotificationAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.group4.herbs_and_friends_app.databinding.FragmentHNotificationBinding;
 
@@ -17,16 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class HNotificationFragment extends Fragment {
 
-    // ================================
-    // === Fields
-    // ================================
-
     private FragmentHNotificationBinding binding;
     private HNotificationVM hNotificationVM;
-
-    // ================================
-    // === Lifecycle
-    // ================================
+    private HNotificationAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -38,9 +38,16 @@ public class HNotificationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter = new HNotificationAdapter(new ArrayList<>());
+        binding.rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvNotifications.setAdapter(adapter);
         hNotificationVM = new ViewModelProvider(this).get(HNotificationVM.class);
+    }
 
-        // TODO: Observe ViewModel data and bind UI here
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupInit();
     }
 
     @Override
@@ -49,8 +56,20 @@ public class HNotificationFragment extends Fragment {
         binding = null;
     }
 
-    // ================================
-    // === Methods
-    // ================================
-    // Add any custom UI logic here
+    /**
+     * Centralized setup method, called in onResume
+     */
+    private void setupInit() {
+        setupObserverNotifications();
+        // Add more setup methods here if needed (e.g., action bar)
+    }
+
+    /**
+     * Observe notifications LiveData
+     */
+    private void setupObserverNotifications() {
+        hNotificationVM.getNotificationsLiveData().observe(getViewLifecycleOwner(), notifications -> {
+            adapter.setNotifications(notifications != null ? notifications : new ArrayList<>());
+        });
+    }
 }
