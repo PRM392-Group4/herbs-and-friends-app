@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.mail.GmailSender;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
@@ -64,6 +65,7 @@ public class AuthRepository {
                                                         onInvalidCredentialsOrFailure,
                                                         true,
                                                         null);
+
                                             } else {
                                                 onSuccess.run();
                                             }

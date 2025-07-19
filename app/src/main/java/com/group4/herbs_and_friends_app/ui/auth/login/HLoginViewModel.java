@@ -2,6 +2,8 @@ package com.group4.herbs_and_friends_app.ui.auth.login;
 
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.model.enums.LoginMethod;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 
@@ -13,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class HLoginViewModel extends ViewModel {
 
     private final AuthRepository authRepository;
-
     @Inject
     public HLoginViewModel(AuthRepository authRepository) {
         this.authRepository = authRepository;
@@ -22,6 +23,7 @@ public class HLoginViewModel extends ViewModel {
     public void login(LoginMethod method, String emailOrIdToken, String passwordOrNull,
                       Runnable onSuccess, Runnable onInvalid, Runnable onError) {
         authRepository.login(method, emailOrIdToken, passwordOrNull, onSuccess, onInvalid, onError);
+
     }
 
 }

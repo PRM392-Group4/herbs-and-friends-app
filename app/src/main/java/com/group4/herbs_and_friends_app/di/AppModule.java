@@ -1,10 +1,15 @@
 package com.group4.herbs_and_friends_app.di;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
+import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
@@ -26,6 +31,12 @@ public class AppModule {
     // =========================
     // === Firebase Services
     // =========================
+
+    @Provides
+    @Singleton
+    public FirebaseDatabase provideNotificationDatabaseReference() {
+        return  FirebaseDatabase.getInstance("https://modern-environs-437216-m4-default-rtdb.asia-southeast1.firebasedatabase.app");
+    }
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
@@ -82,5 +93,21 @@ public class AppModule {
     @Singleton
     public ResourceManager provideResourceManager(@ApplicationContext Context context) {
         return new ResourceManager(context);
+    }
+
+    // =========================
+    // === Communication
+    // =========================
+
+    @Provides
+    @Singleton
+    public NotificationPublisher provideNotificationPublisher(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
+        return new NotificationPublisher(firebaseRealtimeInstance, firebaseAuthInstance);
+    }
+
+    @Provides
+    @Singleton
+    public NotificationConsumer provideNotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
+        return new NotificationConsumer(firebaseRealtimeInstance, firebaseAuthInstance);
     }
 }
