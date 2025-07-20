@@ -4,11 +4,6 @@ import com.google.firebase.firestore.DocumentId;
 
 import java.util.Date;
 
-import com.google.firebase.firestore.DocumentId;
-import com.google.type.DateTime;
-
-import java.util.Date;
-
 public class User {
     @DocumentId
     private String uid;

@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HRegisterFragment extends Fragment {
 
     private FragmentHRegisterBinding binding;
-    private HRegisterViewModel hRegisterViewModel;
+    private HRegisterVM hRegisterVM;
 
     @Inject
     FirebaseFirestore firestore;
@@ -46,7 +46,7 @@ public class HRegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hRegisterViewModel = new ViewModelProvider(this).get(HRegisterViewModel.class);
+        hRegisterVM = new ViewModelProvider(this).get(HRegisterVM.class);
 
         NavController navController = NavHostFragment.findNavController(this);
 
@@ -87,7 +87,7 @@ public class HRegisterFragment extends Fragment {
             String password = binding.etPassword.getText().toString().trim();
             String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
 
-            hRegisterViewModel.registerUser(email, password, confirmPassword,
+            hRegisterVM.registerUser(email, password, confirmPassword,
                     () -> {
                         Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                         navController.navigate(R.id.action_HRegisterFragment_to_profileFragment);

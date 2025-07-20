@@ -1,16 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.auth.reset;
 
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,6 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
@@ -36,7 +34,7 @@ public class HResetFragment extends Fragment {
     // ================================
 
     private FragmentHResetBinding binding;
-    private HResetViewModel hResetViewModel;
+    private HResetVM hResetVM;
 
     @Inject
     FirebaseFirestore firestore;
@@ -55,7 +53,7 @@ public class HResetFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hResetViewModel = new ViewModelProvider(this).get(HResetViewModel.class);
+        hResetVM = new ViewModelProvider(this).get(HResetVM.class);
 
         EditText etEmail = binding.etEmail;
 
@@ -97,7 +95,7 @@ public class HResetFragment extends Fragment {
                 return;
             }
 
-            hResetViewModel.resetPassword(
+            hResetVM.resetPassword(
                     email,
                     () -> {
                         Toast.makeText(requireContext(), "Hãy kiểm tra email của bạn", Toast.LENGTH_LONG).show();

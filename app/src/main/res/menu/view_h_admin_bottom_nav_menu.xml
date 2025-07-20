@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Thống kê -->
+    <item
+        android:id="@+id/dashboardFragment"
+        android:icon="@drawable/ic_admin_bottom_nav_dashboard"
+        android:title="Thống kê" />
+
+    <!-- Đơn hàng -->
+    <item
+        android:id="@+id/ordersFragment"
+        android:icon="@drawable/ic_admin_bottom_nav_orders"
+        android:title="Đơn hàng" />
+
+    <!-- Sản phẩm -->
+    <item
+        android:id="@+id/productManageFragment"
+        android:icon="@drawable/ic_admin_bottom_nav_products"
+        android:title="Sản phẩm" />
+
+    <!-- Ưu đãi -->
+    <item
+        android:id="@+id/couponManageFragment"
+        android:icon="@drawable/ic_admin_bottom_nav_coupons"
+        android:title="Ưu đãi" />
+
+    <!-- Cá nhân -->
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_bottom_profile"
+        android:title="Cá nhân" />
+
+</menu>
