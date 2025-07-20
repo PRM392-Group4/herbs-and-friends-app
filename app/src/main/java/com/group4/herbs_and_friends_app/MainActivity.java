@@ -1,12 +1,8 @@
 package com.group4.herbs_and_friends_app;
 
-import android.app.ComponentCaller;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,8 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.group4.herbs_and_friends_app.databinding.ActivityMainBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import vn.zalopay.sdk.Environment;
-import vn.zalopay.sdk.ZaloPaySDK;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -52,19 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup NavHost Controller
         setupNavHostFragment();
-
-        // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
-        Intent intent = getIntent();
-        if (intent != null) {
-            ZaloPaySDK.getInstance().onResult(intent);
-        }
-    }
-
-    @Override
-    public void onNewIntent(@NonNull Intent intent, @NonNull ComponentCaller caller) {
-        super.onNewIntent(intent, caller);
-        ZaloPaySDK.getInstance().onResult(intent);
     }
 
     // ================================
@@ -81,12 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 int destinationId = destination.getId();
-                if (destinationId == R.id.HCheckoutFragment || destinationId == R.id.HOrderResultFragment) {
+                if (destinationId == R.id.HCheckoutFragment) {
                     binding.herbBottomNavigation.setVisibility(View.GONE);
-//                    binding.herbNavHostFragment.setVisibility(View.GONE);
                 } else {
-                    binding.herbNavHostFragment.setVisibility(View.GONE);
-//                    binding.herbBottomNavigation.setVisibility(View.VISIBLE);
+                    binding.herbBottomNavigation.setVisibility(View.VISIBLE);
                 }
             });
         }

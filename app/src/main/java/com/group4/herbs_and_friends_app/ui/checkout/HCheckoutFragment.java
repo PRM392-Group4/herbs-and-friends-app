@@ -3,17 +3,13 @@ package com.group4.herbs_and_friends_app.ui.checkout;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,7 +23,6 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.R;
-import com.group4.herbs_and_friends_app.data.api.OrderSchema;
 import com.group4.herbs_and_friends_app.data.model.CartItem;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
@@ -40,17 +35,11 @@ import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchB
 import com.group4.herbs_and_friends_app.ui.checkout.adapter.OrderItemAdapter;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import vn.zalopay.sdk.Environment;
-import vn.zalopay.sdk.ZaloPayError;
-import vn.zalopay.sdk.ZaloPaySDK;
-import vn.zalopay.sdk.listeners.PayOrderListener;
 
 @AndroidEntryPoint
 public class HCheckoutFragment extends Fragment {
@@ -59,7 +48,7 @@ public class HCheckoutFragment extends Fragment {
     private OrderItemAdapter adapter;
     private HCheckoutVM checkoutVM;
     private FirebaseUser currentUser;
-    private Bundle pendingNavigationBundle;
+    private String orderId;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -75,9 +64,6 @@ public class HCheckoutFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new
-                StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         checkoutVM = new ViewModelProvider(this).get(HCheckoutVM.class);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -107,30 +93,18 @@ public class HCheckoutFragment extends Fragment {
         setShippingMethodAction();
         setPaymentMethodAction();
         binding.btnCheckout.setOnClickListener(v -> {
-//            if (checkoutVM.getOrderCreated()!= null && checkoutVM.getOrderCreated().getValue()){
-//                processPayment();
-//                return;
-//            }
+            if (checkoutVM.getOrderCreated()!= null && checkoutVM.getOrderCreated().getValue()){
+                //Payment
+                return;
+            }
             placeOrder();
-//            processPayment();
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("HCheckoutFragment", "onResume called");
-        if (pendingNavigationBundle != null) {
-            Log.d("HCheckoutFragment", "Processing pending navigation: result=" + pendingNavigationBundle.getString("result"));
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, pendingNavigationBundle);
-            pendingNavigationBundle = null;
-        }
-    }
     private void setActionBar() {
         ViewHActionbarWithoutSearchBinding actionBar = binding.includeActionbarCheckout;
         actionBar.actionBarTitle.setText(R.string.checkout_title);
-//        actionBar.btnBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        actionBar.btnBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
     }
 
     private void setOrderProductView() {
@@ -188,8 +162,8 @@ public class HCheckoutFragment extends Fragment {
 
     private void setPaymentMethodAction() {
         binding.radioGroupPayment.setOnCheckedChangeListener((group, checked) -> {
-            if (checked == R.id.radioZalo) {
-                checkoutVM.setPaymentMethod(PaymentMethod.ZALOPAY);
+            if (checked == R.id.radioMomo) {
+                checkoutVM.setPaymentMethod(PaymentMethod.MOMO);
             } else {
                 checkoutVM.setPaymentMethod(PaymentMethod.CASH);
             }
@@ -225,7 +199,7 @@ public class HCheckoutFragment extends Fragment {
         // Create Order object
         Order order = new Order();
         order.setUserId(currentUser.getUid());
-        order.setStatus(paymentMethod == PaymentMethod.ZALOPAY ?
+        order.setStatus(paymentMethod == PaymentMethod.MOMO ?
                 OrderStatus.UNPAID.getValue() : OrderStatus.PENDING.getValue());
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
@@ -244,33 +218,12 @@ public class HCheckoutFragment extends Fragment {
         checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
             if (checkoutVM.getOrderCreated().getValue() && success!=null) {
                 Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
-                if (checkoutVM.getPaymentMethod().getValue() == PaymentMethod.ZALOPAY){
-                    checkoutVM.processPayment(requireActivity(), bundle -> {
-                        Log.d("HCheckoutFragment", "Redirecting with bundle: result=" + bundle.getString("result") +
-                                ", total=" + bundle.getString("total") + ", orderId=" + bundle.getString("order_id"));
-                        if (isResumed()) {
-                            NavController navController = NavHostFragment.findNavController(HCheckoutFragment.this);
-                            navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
-                        } else {
-                            pendingNavigationBundle = bundle;
-                            Log.d("HCheckoutFragment", "Fragment not resumed, storing pending navigation");
-                        }
-                    });
-                } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("result", "Đặt hàng thành công");
-                    bundle.putString("total",
-                            "Đơn hàng của bạn có tổng giá trị là "+DisplayFormat.toMoneyDisplayString(checkoutVM.getTotalPrice().getValue()));
-                    bundle.putString("order_id", checkoutVM.getOrderId().getValue());
-                    NavController navController = NavHostFragment.findNavController(HCheckoutFragment.this);
-                    navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
-                }
-                } else {
+//                    NavHostFragment.findNavController(this).navigate(R.id.action_checkout_to_order_confirmation);
+            } else {
                 Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-
 
 }

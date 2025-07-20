@@ -184,11 +184,11 @@
             android:layout_marginBottom="24dp">
 
             <RadioButton
-                android:id="@+id/radioZalo"
+                android:id="@+id/radioMomo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Ví ZaloPay" />
+                android:text="Ví Momo" />
 
             <RadioButton
                 android:id="@+id/radioCOD"

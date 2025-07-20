@@ -258,13 +258,11 @@ public class OrderRepository {
                         batch.set(itemDoc, item);
                     }
                     batch.commit().addOnCompleteListener(aVoid -> {
-                        Log.d("OrderRepository", "Batch commit successful for order: " + orderDoc.getId());
                         result.setValue(orderDoc.getId());
                     });
                 })
                 .addOnFailureListener(aVoid -> {
                     result.setValue(null);
-                    Log.d("Order created failed", "Error: "+aVoid.getMessage());
                 });
         return result;
     }

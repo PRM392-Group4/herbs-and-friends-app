@@ -2,7 +2,6 @@ package com.group4.herbs_and_friends_app.data.model.enums;
 
 public enum PaymentMethod {
     MOMO("Momo", "Momo"),
-    ZALOPAY("ZaloPay", "ZaloPay"),
     CASH("Cash", "Tiền mặt");
 
     private final String value;
