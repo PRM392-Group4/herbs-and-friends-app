@@ -80,6 +80,14 @@ dependencies {
     implementation("com.sun.mail:android-mail:1.6.7")
     implementation("com.sun.mail:android-activation:1.6.7")
 
+    //ZaloPay
+    implementation(fileTree(mapOf(
+        "dir" to "E:\\FPT\\SU25\\PRM392\\herbs-and-friends-app\\libs",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
+    implementation("commons-codec:commons-codec:1.14")
+
 
     implementation(libs.appcompat)
     implementation(libs.material)
