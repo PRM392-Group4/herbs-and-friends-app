@@ -15,6 +15,12 @@
         <action
             android:id="@+id/home_to_productDetail"
             app:destination="@id/productDetailFragment" />
+        <action
+            android:id="@+id/action_HHomeFragment_to_HOrderResultFragment"
+            app:destination="@+id/HOrderResultFragment"
+            app:popUpTo="@id/HCheckoutFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
     <fragment
@@ -51,6 +57,34 @@
         android:id="@+id/HCheckoutFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
         android:label="fragment_h_checkout"
-        />
+        >>
+        <action
+            android:id="@+id/action_HCheckoutFragment_to_HOrderResultFragment"
+            app:destination="@+id/HOrderResultFragment"
+            app:popUpTo="@id/HCheckoutFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/HOrderResultFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HOrderResultFragment"
+        android:label="fragment_h_order_result">
+        <action
+            android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
+            app:destination="@id/HOrderDetailFragment"/>
+        <action
+            android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
+            app:destination="@id/homeMainFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
+        android:label="Order Detail">
+
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>
