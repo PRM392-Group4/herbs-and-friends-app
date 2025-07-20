@@ -40,9 +40,6 @@ public class NotificationConsumer {
             Log.i(TAG, "haha" + firebaseAuthInstance.getUid().toString());
         }
         valueEventListenerCallback = initializeOnDataChangeCallback();
-        //For testing only
-//        var databaseReference = firebaseRealtimeInstance.getReference("notify/123");
-//        databaseReference.addValueEventListener(valueEventListenerCallback);
 
 
         firebaseAuthInstance.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
@@ -97,7 +94,6 @@ public class NotificationConsumer {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
