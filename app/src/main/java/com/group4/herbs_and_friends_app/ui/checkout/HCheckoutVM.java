@@ -5,7 +5,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.api.OrderSchema;
 import com.group4.herbs_and_friends_app.data.model.CartItem;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
@@ -15,8 +19,15 @@ import com.group4.herbs_and_friends_app.data.model.enums.PaymentMethod;
 import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
+import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +36,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 @HiltViewModel
 public class HCheckoutVM extends ViewModel {
@@ -44,10 +59,12 @@ public class HCheckoutVM extends ViewModel {
             new MutableLiveData<>(ShippingMethod.STANDARD);
     private final MutableLiveData<Long> shippingFee;
     private final MutableLiveData<PaymentMethod> paymentMethod =
-            new MutableLiveData<>(PaymentMethod.MOMO);
+            new MutableLiveData<>(PaymentMethod.ZALOPAY);
     private final MutableLiveData<Coupon> coupon = new MutableLiveData<>(null);
     private final MutableLiveData<String> address = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> orderCreated = new MutableLiveData<>(false);
+
+    private final MutableLiveData<String> orderId = new MutableLiveData<>(null);
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
 
@@ -126,6 +143,10 @@ public class HCheckoutVM extends ViewModel {
         return errorMessage;
     }
 
+    public MutableLiveData<String> getOrderId() {
+        return orderId;
+    }
+
     // ========== Setters (used by Fragment binding) ==========
     public void setFastCheckoutItem(CartItem item) {
         List<CartItem> currentItems = fastCheckoutItem.getValue();
@@ -199,12 +220,15 @@ public class HCheckoutVM extends ViewModel {
                     });
                 }
                 orderCreated.setValue(true);
+                orderId.setValue(success);
                 result.setValue(success);
+                Log.d("HCheckoutVM", "Order created with ID: " + success);
             } else {
                 orderCreated.setValue(false);
             }
         });
-
+        orderId.postValue(result.getValue());
+        Log.d("CreateOrder","Order created "+result.getValue());
         return result;
     }
 
@@ -233,4 +257,61 @@ public class HCheckoutVM extends ViewModel {
         }
         return list;
     }
+
+    public void processPayment(Activity activity, RedirectCallback redirect){
+        OrderSchema orderApi = new OrderSchema();
+        try {
+            JSONObject data = orderApi.createOrder(String.format("%.0f",(double)
+                    getTotalPrice().getValue()));
+            String code = data.getString("return_code");
+
+            if (code != null && code.equals("1")) {
+                Bundle bundle = new Bundle();
+                String token = data.getString("zp_trans_token");
+                ZaloPaySDK.getInstance().payOrder(activity, token, "demozpdk://app",
+                        new PayOrderListener() {
+                            @Override
+                            public void onPaymentSucceeded(String s, String s1, String s2) {
+                                Log.d("ZaloPay", "Payment succeeded: " + s + ", " + s1 + ", " + s2);
+
+                                    bundle.putString("result", "Thanh toán thành công");
+                                    bundle.putString("total",
+                                            "Bạn đã thanh toán " + DisplayFormat.toMoneyDisplayString(getTotalPrice().getValue()));
+                                    bundle.putString("order_id", getOrderId().getValue());
+                                    redirect.onRedirect(bundle);
+                            }
+
+                            @Override
+                            public void onPaymentCanceled(String s, String s1) {
+                                Log.d("ZaloPay", "Payment failed: " + s + ", " + s + ", " + s1);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("result", "Thanh toán đã được hủy");
+                                    bundle.putString("order_id", getOrderId().getValue());
+
+                                redirect.onRedirect(bundle);
+                            }
+
+                            @Override
+                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                Log.d("ZaloPay", "Payment error: " + s + ", " + s1);
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("result", "Lỗi thanh toán: " + zaloPayError.toString());
+                                    bundle.putString("order_id", getOrderId().getValue());
+                                redirect.onRedirect(bundle);
+                            }
+                        });
+
+            }
+        } catch (Exception e) {
+            Log.d("Payment Error", e.getMessage());
+            Toast.makeText(activity.getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG);
+        }
+
+    }
+    public interface RedirectCallback{
+        void onRedirect(Bundle bundle);
+    }
+
+
 }
