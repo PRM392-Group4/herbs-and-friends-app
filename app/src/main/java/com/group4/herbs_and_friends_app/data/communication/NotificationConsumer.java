@@ -32,7 +32,7 @@ public class NotificationConsumer {
     private FirebaseDatabase firebaseRealtimeInstance;
 
     private final ValueEventListener valueEventListenerCallback;
-    private final MutableLiveData<List<NotificationDto>> notificationsLiveData = new MutableLiveData<>(new ArrayList<>());
+    private MutableLiveData<List<NotificationDto>> notificationsLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public NotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
         this.firebaseRealtimeInstance = firebaseRealtimeInstance;
@@ -41,7 +41,6 @@ public class NotificationConsumer {
         }
         valueEventListenerCallback = initializeOnDataChangeCallback();
 
-
         firebaseAuthInstance.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -49,6 +48,7 @@ public class NotificationConsumer {
                 if (user == null) {
                     Log.i("firebase", "AuthState changed to null");
                     stopListenToDataChanges();
+                    notificationsLiveData = new MutableLiveData<>();
                 } else {
                     storedUserId = user.getUid();
                     Log.i("firebase", "AuthState changed to ");
