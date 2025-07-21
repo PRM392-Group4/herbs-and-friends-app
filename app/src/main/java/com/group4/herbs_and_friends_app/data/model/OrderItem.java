@@ -65,6 +65,7 @@ public class OrderItem {
     }
 
     // Helper methods for display
+    @Exclude
     public String getUnitPriceDisplay() {
         return DisplayFormat.toMoneyDisplayString(unitPrice);
     }

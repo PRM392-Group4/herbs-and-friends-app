@@ -1,7 +1,6 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
-import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

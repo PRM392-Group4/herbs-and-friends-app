@@ -6,32 +6,31 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.home.HHomeContainerFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeContainerFragment"
         android:label="Home">
-
     </fragment>
 
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.cart.HCartFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.cart.HCartFragment"
         android:label="Cart">
+
+        <action
+            android:id="@+id/fromCartToCheckoutNavigation"
+            app:destination="@id/HCheckoutFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.notification.HNotificationFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.notification.HNotificationFragment"
         android:label="Notification" />
 
     <fragment
-        android:id="@+id/productManageFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.manage.HProductManageContainerFragment"
-        android:label="Manage" />
-
-    <fragment
         android:id="@+id/profileFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.profile.HProfileFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragment"
         android:label="Profile">
 
+        <!-- Đến Login -->
         <action
             android:id="@+id/action_profileFragment_to_HLoginFragment"
             app:destination="@id/HLoginFragment" />
@@ -102,14 +101,17 @@
     <!-- Order Detail -->
     <fragment
         android:id="@+id/HOrderDetailFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.order.HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
         android:label="Order Detail">
-        
+
         <argument
             android:name="orderId"
             app:argType="string" />
-            
+
     </fragment>
-
-
+    <fragment
+        android:id="@+id/HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
+        android:label="fragment_h_checkout"
+        />
 </navigation>

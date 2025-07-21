@@ -68,6 +68,7 @@ public class Order {
         this.userId = userId;
     }
 
+    @Exclude
     public DocumentReference getCoupon() {
         return coupon;
     }
@@ -80,6 +81,7 @@ public class Order {
         this.appliedCoupon = appliedCoupon;
     }
 
+    @Exclude
     public Coupon getAppliedCoupon() {
         return appliedCoupon;
     }
@@ -163,6 +165,7 @@ public class Order {
         this.recipientPhone = recipientPhone;
     }
 
+    @Exclude
     public List<OrderItem> getItems() {
         return items;
     }
@@ -171,6 +174,7 @@ public class Order {
         this.items = items;
     }
 
+    @Exclude
     public OrderStatus getStatusEnum() {
         return OrderStatus.fromValue(status);
     }
@@ -179,6 +183,7 @@ public class Order {
         this.status = status.getValue();
     }
 
+    @Exclude
     public PaymentMethod getPaymentMethodEnum() {
         return PaymentMethod.fromValue(paymentMethod);
     }
@@ -187,6 +192,7 @@ public class Order {
         this.paymentMethod = paymentMethod.getValue();
     }
 
+    @Exclude
     public ShippingMethod getShippingMethodEnum() {
         return ShippingMethod.fromValue(shippingMethod);
     }
@@ -195,32 +201,39 @@ public class Order {
         this.shippingMethod = shippingMethod.getValue();
     }
 
+    @Exclude
     public String getTotalDisplay() {
         return DisplayFormat.toMoneyDisplayString(total);
     }
 
+    @Exclude
     public String getStatusDisplay() {
         return getStatusEnum().getDisplayName();
     }
 
+    @Exclude
     public String getPaymentMethodDisplay() {
         return getPaymentMethodEnum().getDisplayName();
     }
 
+    @Exclude
     public String getShippingMethodDisplay() {
         return getShippingMethodEnum().getDisplayName();
     }
 
+    @Exclude
     public String getPlacedAtDisplay() {
         if (placedAt == null) return "";
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd/MM/yyyy", Locale.getDefault());
         return sdf.format(placedAt);
     }
 
+    @Exclude
     public String getOrderNumber() {
         return "#" + (id != null ? id.substring(0, Math.min(id.length(), 8)) : "unknown");
     }
 
+    @Exclude
     public int getTotalItemCount() {
         if (items == null || items.isEmpty()) return 0;
         int total = 0;
@@ -230,14 +243,17 @@ public class Order {
         return total;
     }
 
+    @Exclude
     public long getShippingFee() {
         return (long)getShippingMethodEnum().getPrice();
     }
 
+    @Exclude
     public String getShippingFeeDisplay() {
         return DisplayFormat.toMoneyDisplayString(getShippingFee());
     }
 
+    @Exclude
     public long getDiscount() {
         if (appliedCoupon != null && appliedCoupon.isValid()) {
             return appliedCoupon.calculateDiscountAmount(getSubtotal());
@@ -245,10 +261,12 @@ public class Order {
         return 0;
     }
 
+    @Exclude
     public String getDiscountDisplay() {
         return DisplayFormat.toMoneyDisplayString(getDiscount());
     }
 
+    @Exclude
     public long getSubtotal() {
         if (appliedCoupon != null && appliedCoupon.isValid()) {
             double discountPercentage = appliedCoupon.getDiscount();
@@ -262,6 +280,7 @@ public class Order {
         }
     }
 
+    @Exclude
     public String getSubtotalDisplay() {
         return DisplayFormat.toMoneyDisplayString(getSubtotal());
     }
@@ -273,6 +292,7 @@ public class Order {
     }
 
     // Helper method to check if order is completed
+    @Exclude
     public boolean isCompleted() {
         return getStatusEnum() == OrderStatus.COMPLETED;
     }

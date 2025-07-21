@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.mail.GmailSender;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.data.model.User;
@@ -64,6 +65,7 @@ public class AuthRepository {
                                                         onInvalidCredentialsOrFailure,
                                                         true,
                                                         null);
+
                                             } else {
                                                 onSuccess.run();
                                             }
@@ -152,6 +154,7 @@ public class AuthRepository {
         newUser.setCreatedAt(new Date());
         newUser.setUpdateAt(new Date());
         newUser.setPassword(hashedPassword);
+        newUser.setRole("customer");
 
         if (sendPasswordEmail) {
             sendPasswordEmail(email, name != null ? name : "User", plainPassword);
@@ -283,5 +286,21 @@ public class AuthRepository {
                 });
     }
 
+    public void getUserByUid(String uid, Consumer<User> onUserLoaded, Runnable onFailure) {
+        firestore.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (snapshot.exists()) {
+                        User user = snapshot.toObject(User.class);
+                        onUserLoaded.accept(user);
+                    } else {
+                        onFailure.run();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("USER", "Failed to fetch user", e);
+                    onFailure.run();
+                });
+    }
 
 }

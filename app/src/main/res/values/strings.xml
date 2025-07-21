@@ -67,4 +67,26 @@
         <item>Quản lý cây</item>
         <item>Quản lý đơn hàng</item>
     </string-array>
+
+    <!--    Checkout-->
+    <string name="checkout_title">Xác nhận đơn hàng</string>
+    <string name="checkout_title_product">Sản phẩm</string>
+    <string name="checkout_title_delivery_method">Phương thức nhận hàng</string>
+    <string name="checkout_title_payment_method">Phương thức thanh toán</string>
+    <string name="checkout_title_payment_details">Chi tiết thanh toán</string>
+
+    <string name="checkout_placeholder_discount">Mã giảm giá</string>
+    <string name="checkout_placeholder_note">Ghi chú</string>
+
+    <string name="checkout_shipping_standard">Giao tiêu chuẩn (3-7 ngày)</string>
+    <string name="checkout_shipping_express">Giao nhanh (1-3 ngày)</string>
+    <string name="checkout_shipping_pick_up">Đến lấy tại cửa hàng</string>
+    <string name="checkout_payment_momo">Ví Momo</string>
+    <string name="checkout_payment_cash">Thanh toán khi nhận hàng</string>
+
+    <string name="checkout_label_subtotal">Tổng tiền hàng</string>
+    <string name="checkout_label_shipping">Phí vận chuyển</string>
+    <string name="checkout_label_discount">Giảm giá</string>
+    <string name="checkout_label_total">Tổng thanh toán</string>
+    <string name="looker_embed_url">https://lookerstudio.google.com/embed/reporting/c0871a43-66c2-4e6b-9bf5-2b30b930d113/page/IU2RF</string>
 </resources>
