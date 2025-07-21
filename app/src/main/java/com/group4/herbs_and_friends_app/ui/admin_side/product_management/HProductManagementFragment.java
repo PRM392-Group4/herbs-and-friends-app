@@ -59,7 +59,7 @@ public class HProductManagementFragment extends BaseProductFilterFragment<HProdu
 
     private void setupManageSpinner() {
         Spinner spinner = binding.spinnerManageType;
-
+        
         // Create adapter for spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),
@@ -68,10 +68,10 @@ public class HProductManagementFragment extends BaseProductFilterFragment<HProdu
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
+        
         // Set default selection to "Quản lý cây" (index 0)
         spinner.setSelection(0);
-
+        
         // Handle spinner selection
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

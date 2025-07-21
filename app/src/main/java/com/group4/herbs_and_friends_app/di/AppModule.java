@@ -83,8 +83,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public OrderRepository provideOrderRepository(FirebaseFirestore firestore, FirebaseAuth firebaseAuth, ProductRepository productRepository) {
-        return new OrderRepository(firestore, firebaseAuth, productRepository);
+    public OrderRepository provideOrderRepository(FirebaseFirestore firestore, FirebaseAuth firebaseAuth, ProductRepository productRepository, CouponRepository couponRepository) {
+        return new OrderRepository(firestore, firebaseAuth, productRepository, couponRepository);
     }
 
     @Provides

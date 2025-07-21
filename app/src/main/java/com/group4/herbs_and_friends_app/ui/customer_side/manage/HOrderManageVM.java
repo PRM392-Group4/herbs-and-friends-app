@@ -108,7 +108,6 @@ public class HOrderManageVM extends ViewModel {
         return searchQueryLive.getValue();
     }
 
-    // Method to update order status (for admin functions)
     public LiveData<Boolean> updateOrderStatus(String orderId, OrderStatus newStatus) {
         return orderRepository.updateOrderStatus(orderId, newStatus.getValue());
     }

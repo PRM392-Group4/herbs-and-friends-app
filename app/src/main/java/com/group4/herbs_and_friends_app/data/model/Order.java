@@ -20,8 +20,8 @@ public class Order {
     private String id;
     private String userId;        
     private String status;         
-    private long total;             
-    private String paymentMethod;   
+    private long total;
+    private String paymentMethod;
     private String shippingMethod;
     private DocumentReference coupon;
     private Date placedAt;
@@ -295,5 +295,22 @@ public class Order {
     @Exclude
     public boolean isCompleted() {
         return getStatusEnum() == OrderStatus.COMPLETED;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "couponId='" + couponId + '\'' +
+                ", placedAt=" + placedAt +
+                ", coupon=" + coupon +
+                ", shippingMethod='" + shippingMethod + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", total=" + total +
+                ", status='" + status + '\'' +
+                ", userId='" + userId + '\'' +
+                ", id='" + id + '\'' +
+                ", items=" + items +
+                ", appliedCoupon=" + appliedCoupon +
+                '}';
     }
 }
