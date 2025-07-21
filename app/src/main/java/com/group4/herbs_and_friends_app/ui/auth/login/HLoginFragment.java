@@ -234,11 +234,11 @@ public class HLoginFragment extends Fragment {
         Log.d("CHECK_FIREBASE", "Client ID: " + getString(R.string.default_client_id));
 
         binding.tvRegister.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HLoginFragment_to_HRegisterFragment);
+            navController.navigate(R.id.action_loginFragment_to_registerFragment);
         });
 
         binding.tvForgotPassword.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HLoginFragment_to_HResetFragment);
+            navController.navigate(R.id.action_loginFragment_to_resetFragment);
         });
 
         binding.btnLogin.setOnClickListener(v -> {

@@ -100,7 +100,7 @@ public class HResetFragment extends Fragment {
                     () -> {
                         Toast.makeText(requireContext(), "Hãy kiểm tra email của bạn", Toast.LENGTH_LONG).show();
                         NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_HResetFragment_to_HLoginFragment);
+                                .navigate(R.id.action_resetFragment_to_loginFragment);
                     },
                     () -> Toast.makeText(requireContext(), "Email không tồn tại trong hệ thống", Toast.LENGTH_SHORT).show(),
                     () -> Toast.makeText(requireContext(), "Có lỗi xảy ra. Vui lòng thử lại", Toast.LENGTH_SHORT).show()
@@ -109,7 +109,7 @@ public class HResetFragment extends Fragment {
 
         binding.btnReturn.setOnClickListener(v -> {
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_HResetFragment_to_HLoginFragment);
+                    .navigate(R.id.action_resetFragment_to_loginFragment);
         });
 
     }
