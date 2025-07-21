@@ -2,10 +2,6 @@ package com.group4.herbs_and_friends_app.di;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
 
