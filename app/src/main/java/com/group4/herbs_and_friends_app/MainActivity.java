@@ -158,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
         binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
 
         NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
-
+        navController.navigate(R.id.action_loginFragment_to_profileFragment);
         // redirect to profile fragment
-        navController.navigate(R.id.profileFragment);
+//        navController.navigate(R.id.profileFragment);
     }
 
     /**
