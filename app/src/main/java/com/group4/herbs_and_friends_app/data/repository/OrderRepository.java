@@ -16,11 +16,13 @@ import com.google.firebase.firestore.WriteBatch;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
+import com.group4.herbs_and_friends_app.data.model.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderRepository {
@@ -28,11 +30,15 @@ public class OrderRepository {
     private final FirebaseFirestore firestore;
     private final CollectionReference ordersRef;
     private final FirebaseAuth auth;
+    private ProductRepository productRepository;
+    private CouponRepository couponRepository;
 
-    public OrderRepository(FirebaseFirestore firestore, FirebaseAuth auth) {
+    public OrderRepository(FirebaseFirestore firestore, FirebaseAuth auth, ProductRepository productRepository, CouponRepository couponRepository) {
         this.firestore = firestore;
         this.auth = auth;
         this.ordersRef = firestore.collection("orders");
+        this.productRepository = productRepository;
+        this.couponRepository = couponRepository;
     }
 
     public LiveData<Order> getOrderWithItems(String orderId) {
@@ -91,19 +97,15 @@ public class OrderRepository {
             result.setValue(orders);
             return;
         }
-        
-        Log.d("OrderRepository", "Loading items for " + orders.size() + " orders");
-        
+
         AtomicInteger completed = new AtomicInteger(0);
         final int totalOrders = orders.size();
         
         for (Order order : orders) {
-            Log.d("quantity of order id: ", order.getId() + " is " + order.getTotalItemCount());
-            
+
             loadItemsAndCouponForOrder(order, () -> {
                 int completedCount = completed.incrementAndGet();
-                Log.d("OrderRepository", "Completed " + completedCount + "/" + totalOrders + " orders");
-                
+
                 if (completedCount == totalOrders) {
                     Log.d("OrderRepository", "All orders loaded, updating UI");
                     result.setValue(orders);
@@ -118,10 +120,44 @@ public class OrderRepository {
                 .get()
                 .addOnSuccessListener(itemsQuery -> {
                     List<OrderItem> items = itemsQuery.toObjects(OrderItem.class);
-                    order.setItems(items);
-                    
-                    // Load coupon if exists
-                    loadCouponForOrder(order, onComplete);
+
+                    if (items.isEmpty()) {
+                        order.setItems(items);
+                        loadCouponForOrder(order, onComplete);
+                        return;
+                    }
+
+                    AtomicInteger loadedItemCount = new AtomicInteger(0);
+                    final int totalItems = items.size();
+
+                    for (OrderItem item : items) {
+
+                        // Get product reference
+                        firestore.collection("products")
+                                .document(item.getProductId())
+                                .get()
+                                .addOnSuccessListener(productDoc -> {
+                                    if (productDoc.exists()) {
+                                        Product product = productDoc.toObject(Product.class);
+                                        if (product != null && product.getImageUrls() != null && !product.getImageUrls().isEmpty()) {
+                                            item.setImgUrl(product.getImageUrls().get(0));
+                                        }
+                                    }
+
+                                    // Check if all items are loaded
+                                    if (loadedItemCount.incrementAndGet() == totalItems) {
+                                        order.setItems(items);
+                                        loadCouponForOrder(order, onComplete);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("OrderRepository", "Failed to load product for item: " + item.getProductId(), e);
+                                    if (loadedItemCount.incrementAndGet() == totalItems) {
+                                        order.setItems(items);
+                                        loadCouponForOrder(order, onComplete);
+                                    }
+                                });
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("OrderRepository", "Failed to load items for order " + order.getId(), e);
@@ -131,18 +167,16 @@ public class OrderRepository {
     }
 
     private void loadCouponForOrder(Order order, Runnable onComplete) {
-        if (order.getCoupon() != null) {
-            order.getCoupon()
+        if (order.getCouponId() != null && !order.getCouponId().trim().isEmpty()) {
+            firestore.collection("coupons").document(order.getCouponId())
                     .get()
                     .addOnSuccessListener(couponDoc -> {
                         if (couponDoc.exists()) {
-                            Log.d("coupon: ", couponDoc.toString());
                             Coupon coupon = couponDoc.toObject(Coupon.class);
                             order.setAppliedCoupon(coupon);
-                            Log.d("coupon: ", order.getAppliedCoupon().toString());
                         } else {
-                            order.setAppliedCoupon(null);
                             Log.d("coupon: ", "Coupon document doesn't exist");
+                            order.setAppliedCoupon(null);
                         }
                         onComplete.run();
                     })
@@ -152,7 +186,7 @@ public class OrderRepository {
                         onComplete.run();
                     });
         } else {
-            // No coupon reference, complete immediately
+            Log.d("coupon: ", "No coupon ID for this order");
             onComplete.run();
         }
     }

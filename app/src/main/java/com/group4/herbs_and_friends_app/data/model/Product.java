@@ -115,5 +115,20 @@ public class Product {
         return imageUrls.get(0);
     }
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", inStock=" + inStock +
+                ", categoryId='" + categoryId + '\'' +
+                ", imageUrls=" + imageUrls +
+                ", tags=" + tags +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", category=" + category +
+                '}';
+    }
 }

@@ -15,7 +15,21 @@
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.group4.herbs_and_friends_app.ui.admin_side.order_management.HOrderManagementFragment"
-        android:label="Đơn hàng" />
+        android:label="Đơn hàng">
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
+
+    <!-- Chi tiết đơn hàng -->
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
+        android:label="Chi tiết đơn hàng">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
 
     <!-- Sản phẩm -->
     <fragment

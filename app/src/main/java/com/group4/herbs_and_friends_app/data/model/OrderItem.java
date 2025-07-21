@@ -14,11 +14,22 @@ public class OrderItem {
 
     public OrderItem() {}
 
+    @Exclude
+    private String imgUrl;
+
     public OrderItem(String productId, String name, int quantity, long unitPrice) {
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public String getProductId() {
@@ -66,7 +77,7 @@ public class OrderItem {
                 ", name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", unitPrice=" + unitPrice +
+                ", imgUrl='" + imgUrl + '\'' +
                 '}';
     }
-
 }

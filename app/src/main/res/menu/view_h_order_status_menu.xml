@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/status_all"
+        android:title="Tất cả" />
+    <item
+        android:id="@+id/status_unpaid"
+        android:title="Chờ thanh toán" />
+    <item
+        android:id="@+id/status_pending"
+        android:title="Chờ xác nhận" />
+    <item
+        android:id="@+id/status_confirmed"
+        android:title="Đã xác nhận" />
+    <item
+        android:id="@+id/status_shipping"
+        android:title="Đang giao" />
+    <item
+        android:id="@+id/status_completed"
+        android:title="Hoàn thành" />
+    <item
+        android:id="@+id/status_cancelled"
+        android:title="Đã hủy" />
+</menu> 
