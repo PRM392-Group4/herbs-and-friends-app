@@ -32,7 +32,7 @@ public class NotificationConsumer {
     private FirebaseDatabase firebaseRealtimeInstance;
 
     private final ValueEventListener valueEventListenerCallback;
-    private final MutableLiveData<List<NotificationDto>> notificationsLiveData = new MutableLiveData<>(new ArrayList<>());
+    private MutableLiveData<List<NotificationDto>> notificationsLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public NotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
         this.firebaseRealtimeInstance = firebaseRealtimeInstance;
@@ -40,10 +40,6 @@ public class NotificationConsumer {
             Log.i(TAG, "haha" + firebaseAuthInstance.getUid().toString());
         }
         valueEventListenerCallback = initializeOnDataChangeCallback();
-        //For testing only
-//        var databaseReference = firebaseRealtimeInstance.getReference("notify/123");
-//        databaseReference.addValueEventListener(valueEventListenerCallback);
-
 
         firebaseAuthInstance.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
@@ -52,6 +48,7 @@ public class NotificationConsumer {
                 if (user == null) {
                     Log.i("firebase", "AuthState changed to null");
                     stopListenToDataChanges();
+                    notificationsLiveData = new MutableLiveData<>();
                 } else {
                     storedUserId = user.getUid();
                     Log.i("firebase", "AuthState changed to ");
@@ -97,7 +94,6 @@ public class NotificationConsumer {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };

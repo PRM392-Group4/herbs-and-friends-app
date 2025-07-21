@@ -22,22 +22,6 @@ public class NotificationPublisher {
     private final FirebaseDatabase firebaseRealtimeInstance;
     public NotificationPublisher(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
         this.firebaseRealtimeInstance = firebaseRealtimeInstance;
-        // for testing only
-        firebaseAuthInstance.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    Log.i("firebase", "AuthState changed to null");
-                    databaseReference = null;
-                } else{
-                    Log.i("firebase", "AuthState changed to " + user.getUid());
-                    databaseReference = firebaseRealtimeInstance.getReference("notify").child(user.getUid());
-                    //for testing only
-                    databaseReference.push().setValue(new NotificationDto("title", "body", NotificationTypes.ORDER_STATUS_UPDATED, new Date()));
-                }
-            }
-        });
     }
 
     public void publishNotification(String receiverUserId, NotificationDto notificationDto) {
