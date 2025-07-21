@@ -142,8 +142,8 @@ public class HOrderManagementFragment extends Fragment implements OrderManageAda
     @Override
     public void onOrderClick(Order order) {
         NavController navController = NavHostFragment.findNavController(this);
-        HOrderManageFragmentDirections.ActionOrderManageToOrderDetail action =
-                HOrderManageFragmentDirections.actionOrderManageToOrderDetail(order.getId());
-        navController.navigate(action);
+        Bundle args = new Bundle();
+        args.putString("orderId", order.getId());
+        navController.navigate(R.id.action_ordersFragment_to_orderDetailFragment, args);
     }
 }
