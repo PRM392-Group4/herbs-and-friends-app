@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.databinding.FragmentHDashboardManagementBinding;
 import com.group4.herbs_and_friends_app.ui.auth.login.HAuthVM;
@@ -60,10 +64,28 @@ public class HDashboardManagementFragment extends Fragment {
         if (currentUser != null) {
             String uid = currentUser.getUid();
             hDashboardManagementVM.fetchUser(uid, user -> {
-                binding.tvName.setText(user.getName());
             }, () -> {
                 Log.e("ADMIN", "Không tìm thấy user trong Firestore");
             });
         }
+
+        // Get web view instance
+        WebView dashboardWebView = binding.dashboardWebView;
+
+        // Configure WebView settings
+        WebSettings webSettings = dashboardWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setBuiltInZoomControls(true); // Enable built-in zoom controls
+        webSettings.setDisplayZoomControls(false);
+
+        // Set a WebViewClient to handle redirects within the WebView
+        dashboardWebView.setWebViewClient(new WebViewClient());
+
+        // Load the Looker Studio Embed URL
+        String embedUrl = getString(R.string.looker_embed_url);
+        dashboardWebView.loadUrl(embedUrl);
     }
 }
