@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app;
 import android.app.ComponentCaller;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) return;
+
         // Setup View Binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             ZaloPaySDK.getInstance().onResult(intent);
         }
+
     }
 
     public void onNewIntent(@NonNull Intent intent, @NonNull ComponentCaller caller) {
@@ -151,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
      * Setup the Nav Host system if current user is customer
      */
     public void onLoginAsCustomer() {
+        try {
         navController.setGraph(R.navigation.navigation_h_main, null);
 
         // clear the current menu and inflate new navigation
@@ -158,9 +163,14 @@ public class MainActivity extends AppCompatActivity {
         binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
 
         NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
-        navController.navigate(R.id.action_loginFragment_to_profileFragment);
+
+            navController.navigate(R.id.action_loginFragment_to_profileFragment);
         // redirect to profile fragment
 //        navController.navigate(R.id.profileFragment);
+        } catch (
+                Exception e) {
+            Log.d("ERROR MAIN", e.getMessage().toString());
+        }
     }
 
     /**

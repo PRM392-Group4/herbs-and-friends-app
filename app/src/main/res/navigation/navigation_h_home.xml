@@ -16,7 +16,7 @@
             android:id="@+id/home_to_productDetail"
             app:destination="@id/productDetailFragment" />
         <action
-            android:id="@+id/action_HHomeFragment_to_HOrderResultFragment"
+            android:id="@+id/action_homeFragment_to_orderResultFragment"
             app:destination="@+id/HOrderResultFragment"
             app:popUpTo="@id/HCheckoutFragment"
             app:popUpToInclusive="true"
