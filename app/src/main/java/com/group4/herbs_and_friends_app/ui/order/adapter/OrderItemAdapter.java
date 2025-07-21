@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
 
@@ -54,17 +56,30 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         private TextView tvProductPrice;
         private TextView tvProductQuantity;
 
+        private ImageView imgUrl;
+
         public OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             tvProductQuantity = itemView.findViewById(R.id.tvProductQuantity);
+            imgUrl = itemView.findViewById(R.id.ivProductImage);
         }
 
         public void bind(OrderItem item) {
             tvProductName.setText(item.getName());
             tvProductPrice.setText(item.getUnitPriceDisplay());
             tvProductQuantity.setText("x" + item.getQuantity());
+
+            if (item.getImgUrl() != null && !item.getImgUrl().isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(item.getImgUrl())
+                        .placeholder(R.drawable.ic_category_all)
+                        .error(R.drawable.ic_category_all)
+                        .into(imgUrl);
+            } else {
+                imgUrl.setImageResource(R.drawable.ic_category_all);
+            }
         }
     }
 } 

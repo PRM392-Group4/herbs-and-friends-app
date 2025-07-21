@@ -92,6 +92,7 @@ public class ProductRepository {
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
                         Product product = doc.toObject(Product.class);
+                        Log.d("Product loaded: ", product.toString());
                         productLive.setValue(product);
                     } else productLive.setValue(null);
                 })

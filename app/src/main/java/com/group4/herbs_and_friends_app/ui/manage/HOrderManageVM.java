@@ -38,8 +38,7 @@ public class HOrderManageVM extends ViewModel {
     public HOrderManageVM(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
         
-        // Get all orders (you may want to create a method to get all orders for admin)
-        this.allOrdersLive = orderRepository.getAllOrders(); // We'll need to create this method
+        this.allOrdersLive = orderRepository.getAllOrders();
         
         // Setup filtering logic
         setupFiltering();

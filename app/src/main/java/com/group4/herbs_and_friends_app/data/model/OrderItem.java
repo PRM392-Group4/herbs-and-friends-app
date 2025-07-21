@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 public class OrderItem {
@@ -13,11 +14,22 @@ public class OrderItem {
 
     public OrderItem() {}
 
+    @Exclude
+    private String imgUrl;
+
     public OrderItem(String productId, String name, int quantity, long unitPrice) {
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public String getProductId() {
@@ -64,7 +76,7 @@ public class OrderItem {
                 ", name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", unitPrice=" + unitPrice +
+                ", imgUrl='" + imgUrl + '\'' +
                 '}';
     }
-
 }

@@ -18,10 +18,12 @@ import com.google.firestore.v1.Write;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
+import com.group4.herbs_and_friends_app.data.model.Product;
 
 import java.io.Console;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderRepository {
@@ -29,11 +31,13 @@ public class OrderRepository {
     private final FirebaseFirestore firestore;
     private final CollectionReference ordersRef;
     private final FirebaseAuth auth;
+    private ProductRepository productRepository;
 
-    public OrderRepository(FirebaseFirestore firestore, FirebaseAuth auth) {
+    public OrderRepository(FirebaseFirestore firestore, FirebaseAuth auth, ProductRepository productRepository) {
         this.firestore = firestore;
         this.auth = auth;
         this.ordersRef = firestore.collection("orders");
+        this.productRepository = productRepository;
     }
 
     public LiveData<Order> getOrderWithItems(String orderId) {
@@ -119,10 +123,46 @@ public class OrderRepository {
                 .get()
                 .addOnSuccessListener(itemsQuery -> {
                     List<OrderItem> items = itemsQuery.toObjects(OrderItem.class);
-                    order.setItems(items);
-                    
-                    // Load coupon if exists
-                    loadCouponForOrder(order, onComplete);
+                    AtomicInteger loadedItemCount = new AtomicInteger(0);
+                    final int totalItems = items.size();
+
+                    if (items.isEmpty()) {
+                        order.setItems(items);
+                        loadCouponForOrder(order, onComplete);
+                        return;
+                    }
+
+                    for (OrderItem item : items) {
+                        Log.d("Item loaded: ", item.toString() + " items for order " + order.getId());
+                        
+                        // Get product reference
+                        firestore.collection("products")
+                                .document(item.getProductId())
+                                .get()
+                                .addOnSuccessListener(productDoc -> {
+                                    if (productDoc.exists()) {
+                                        Product product = productDoc.toObject(Product.class);
+                                        if (product != null && product.getImageUrls() != null && !product.getImageUrls().isEmpty()) {
+                                            item.setImgUrl(product.getImageUrls().get(0));
+                                            Log.d("Product loaded:", "Product " + product.getName() + " image set for order item: " +
+                                                    item.getImgUrl());
+                                        }
+                                    }
+
+                                    // Check if all items are loaded
+                                    if (loadedItemCount.incrementAndGet() == totalItems) {
+                                        order.setItems(items);
+                                        loadCouponForOrder(order, onComplete);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("OrderRepository", "Failed to load product for item: " + item.getProductId(), e);
+                                    if (loadedItemCount.incrementAndGet() == totalItems) {
+                                        order.setItems(items);
+                                        loadCouponForOrder(order, onComplete);
+                                    }
+                                });
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("OrderRepository", "Failed to load items for order " + order.getId(), e);
