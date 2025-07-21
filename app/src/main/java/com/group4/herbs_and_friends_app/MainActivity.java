@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onNewIntent(@NonNull Intent intent, @NonNull ComponentCaller caller) {
-        super.onNewIntent(intent, caller);
+    @Override
+    public void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
     }
 

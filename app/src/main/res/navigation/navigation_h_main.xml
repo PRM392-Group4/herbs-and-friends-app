@@ -120,7 +120,7 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
-    <!-- Order REsult Fragment -->
+    <!-- Order Result Fragment -->
     <fragment
         android:id="@+id/HOrderResultFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HOrderResultFragment"
@@ -128,5 +128,11 @@
         <action
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
             app:destination="@id/HOrderDetailFragment"/>
+        <action android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
+            app:destination="@id/HHomeFragment"/>
     </fragment>
+
+    <fragment android:id="@+id/HHomeFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeFragment"
+        android:label="fragment_h_home"/>
 </navigation>
