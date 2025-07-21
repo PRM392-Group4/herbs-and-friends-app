@@ -32,7 +32,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etSearchOrder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:hint="Tìm theo mã đơn hàng"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -43,7 +43,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilterStatus"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="78dp"
             android:text="TRẠNG THÁI"
             android:textSize="12sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
