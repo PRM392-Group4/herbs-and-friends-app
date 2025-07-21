@@ -88,4 +88,5 @@
     <string name="checkout_label_shipping">Phí vận chuyển</string>
     <string name="checkout_label_discount">Giảm giá</string>
     <string name="checkout_label_total">Tổng thanh toán</string>
+    <string name="looker_embed_url">https://lookerstudio.google.com/embed/reporting/c0871a43-66c2-4e6b-9bf5-2b30b930d113/page/IU2RF</string>
 </resources>
