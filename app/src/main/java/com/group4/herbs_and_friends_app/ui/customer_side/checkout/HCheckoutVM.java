@@ -55,6 +55,8 @@ public class HCheckoutVM extends ViewModel {
     private final MutableLiveData<String> orderId = new MutableLiveData<>(null);
     private final MutableLiveData<Coupon> coupon = new MutableLiveData<>(null);
     private final MutableLiveData<String> address = new MutableLiveData<>("");
+    private final MutableLiveData<String> recipientName = new MutableLiveData<>("");
+    private final MutableLiveData<String> recipientPhone = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> orderCreated = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
@@ -127,6 +129,8 @@ public class HCheckoutVM extends ViewModel {
     public LiveData<String> getAddress() {
         return address;
     }
+    public LiveData<String> getRecipientName() { return recipientName; }
+    public LiveData<String> getRecipientPhone() { return recipientPhone; }
 
     public LiveData<Boolean> getOrderCreated() {
         return orderCreated;
@@ -171,6 +175,13 @@ public class HCheckoutVM extends ViewModel {
 
     public void setAddress(String value) {
         address.setValue(value);
+    }
+    public void setRecipientName(String value) {
+        recipientName.setValue(value);
+    }
+
+    public void setRecipientPhone(String value) {
+        recipientPhone.setValue(value);
     }
 
     // ========== Total Calculation ==========

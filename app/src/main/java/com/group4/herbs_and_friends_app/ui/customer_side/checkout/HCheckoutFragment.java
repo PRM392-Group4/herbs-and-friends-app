@@ -94,6 +94,7 @@ public class HCheckoutFragment extends Fragment {
         setPriceDisplay();
         setShippingMethodAction();
         setPaymentMethodAction();
+        setupEditAddressAction();
         binding.btnCheckout.setOnClickListener(v -> {
             placeOrder();
         });
@@ -172,7 +173,6 @@ public class HCheckoutFragment extends Fragment {
     }
 
     private void placeOrder() {
-
         // Collect form data
         String address = binding.textReceiverAddress.getText().toString().trim();
         String recipientName = binding.textReceiverName.getText().toString().trim();
@@ -230,6 +230,38 @@ public class HCheckoutFragment extends Fragment {
             }
         });
 
+    }
+
+    private void setupEditAddressAction() {
+        binding.textReceiverName.setText(!currentUser.getDisplayName().isEmpty() ?
+                currentUser.getDisplayName() : "Tên người nhận");
+        binding.textReceiverPhone.setText(!currentUser.getPhoneNumber().isEmpty() ?
+                currentUser.getPhoneNumber() : "Số điện thoại");
+        binding.textReceiverAddress.setText(!checkoutVM.getAddress().getValue().isEmpty() ?
+                checkoutVM.getAddress().getValue() : "Địa chỉ nhận hàng");
+
+        binding.btnEditAddress.setOnClickListener(v -> {
+            // Get current values from UI
+            String currentName = binding.textReceiverName.getText().toString().trim().equals("Tên người nhận") ? "" :
+                    binding.textReceiverName.getText().toString().trim();
+            String currentPhone = binding.textReceiverPhone.getText().toString().trim().equals("Số điện thoại") ? "" :
+                    binding.textReceiverPhone.getText().toString().trim();
+            String currentAddress = binding.textReceiverAddress.getText().toString().trim().equals("Địa chỉ nhận hàng") ? "" :
+                    binding.textReceiverAddress.getText().toString().trim();
+
+            // Show dialog with current values
+            HEditAddressDialog dialog = HEditAddressDialog.newInstance(currentName, currentPhone, currentAddress);
+            dialog.setOnAddressUpdatedListener((recipientName, recipientPhone, address) -> {
+                // Update UI
+                binding.textReceiverName.setText(recipientName);
+                binding.textReceiverPhone.setText(recipientPhone);
+                binding.textReceiverAddress.setText(address);
+                // Update ViewModel
+                checkoutVM.setAddress(address);
+                Log.d("HCheckoutFragment", "Address updated: name=" + recipientName + ", phone=" + recipientPhone + ", address=" + address);
+            });
+            dialog.show(getParentFragmentManager(), "HEditAddressDialog");
+        });
     }
 
     /**
