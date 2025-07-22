@@ -19,6 +19,7 @@ import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.data.model.enums.PaymentMethod;
 import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
+import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
@@ -41,6 +42,8 @@ public class HCheckoutVM extends ViewModel {
     private final OrderRepository repository;
     private final CartRepository cartRepo;
     private final ProductRepository productRepo;
+    private final CouponRepository couponRepository;
+
     // ========== LiveData for Order Data ==========
     private final LiveData<List<CartItem>> orderItems;
     private final MutableLiveData<List<CartItem>> fastCheckoutItem =
@@ -66,10 +69,11 @@ public class HCheckoutVM extends ViewModel {
 
     @Inject
     public HCheckoutVM(OrderRepository repository, CartRepository cartRepo,
-                       ProductRepository productRepo) {
+                       ProductRepository productRepo, CouponRepository couponRepository) {
         this.repository = repository;
         this.cartRepo = cartRepo;
         this.productRepo = productRepo;
+        this.couponRepository = couponRepository;
         this.orderItems = cartRepo.getLiveCartItems();
         this.subTotal = cartRepo.getLiveTotalPrice();
         this.shippingFee = new MutableLiveData<>(ShippingMethod.STANDARD.getPrice());
@@ -128,6 +132,8 @@ public class HCheckoutVM extends ViewModel {
         return !fastCheckoutItem.getValue().isEmpty() ? calculateFastCheckoutSubTotal() :
                 this.subTotal;
     }
+
+
 
     public LiveData<Boolean> getIsFastCheckout() {
         return isFastCheckout;
