@@ -1,8 +1,7 @@
 package com.group4.herbs_and_friends_app;
 
-import android.content.SharedPreferences;
-import android.app.ComponentCaller;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -164,31 +163,26 @@ public class MainActivity extends AppCompatActivity {
     public void onLoginAsCustomer() {
 
         try {
-        navController.setGraph(R.navigation.navigation_h_main, null);
+            navController.setGraph(R.navigation.navigation_h_main, null);
 
-        // clear the current menu and inflate new navigation
-        binding.herbBottomNavigation.getMenu().clear();
-        binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
+            // clear the current menu and inflate new navigation
+            binding.herbBottomNavigation.getMenu().clear();
+            binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
 
-        // redirect to profile fragment
-        NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
+            // redirect to profile fragment
+            NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
 
-            navController.navigate(R.id.action_loginFragment_to_profileFragment);
-        // redirect to profile fragment
-//        navController.navigate(R.id.profileFragment);
-
-
-        // Flow:
-        // - first login -> goes to profile
-        // - resume app + login -> goes to home
-        boolean isFirstLogin = sharedPrefs.getBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, true);
-        if (isFirstLogin) {
-            navController.navigate(R.id.action_loginFragment_to_profileFragment);
-            sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
-        } else {
-            navController.navigate(R.id.homeFragment);
-        }} catch (
-                Exception e) {
+            // Flow:
+            // - first login -> goes to profile
+            // - resume app + login -> goes to home
+            boolean isFirstLogin = sharedPrefs.getBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, true);
+            if (isFirstLogin) {
+                navController.navigate(R.id.action_loginFragment_to_profileFragment);
+                sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
+            } else {
+                navController.navigate(R.id.homeFragment);
+            }
+        } catch (Exception e) {
             Log.d("ERROR MAIN", e.getMessage().toString());
         }
     }
