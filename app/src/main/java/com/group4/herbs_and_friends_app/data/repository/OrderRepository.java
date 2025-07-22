@@ -22,11 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderRepository {
-    
+
     private final FirebaseFirestore firestore;
     private final CollectionReference ordersRef;
     private final FirebaseAuth auth;
@@ -43,29 +42,39 @@ public class OrderRepository {
 
     public LiveData<Order> getOrderWithItems(String orderId) {
         MutableLiveData<Order> result = new MutableLiveData<>();
-        ordersRef.document(orderId).get()
-                .addOnSuccessListener(orderDoc -> {
-                    if (orderDoc.exists()) {
-                        Order order = orderDoc.toObject(Order.class);
-                        loadItemsAndCouponForOrder(order, () -> {
-                            result.setValue(order);
-                        });
-                    } else {
-                        result.setValue(null);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    result.setValue(null);
+        if (orderId == null || orderId.isEmpty()) {
+            Log.w("OrderRepository", "Invalid orderId provided");
+            result.setValue(null);
+            return result;
+        }
+
+        ordersRef.document(orderId).addSnapshotListener((orderDoc, e) -> {
+            if (e != null) {
+                Log.e("OrderRepository", "Failed to listen for order: " + orderId + ", error: " + e.getMessage(), e);
+                result.setValue(null);
+                return;
+            }
+
+            if (orderDoc != null && orderDoc.exists()) {
+                Order order = orderDoc.toObject(Order.class);
+                loadItemsAndCouponForOrder(order, () -> {
+                    Log.d("OrderRepository", "Order loaded with items: " + orderId + ", status: " + order.getStatus());
+                    result.setValue(order);
                 });
-        
+            } else {
+                Log.w("OrderRepository", "Order not found: " + orderId);
+                result.setValue(null);
+            }
+        });
+
         return result;
     }
 
     public LiveData<List<Order>> getUserOrders() {
         MutableLiveData<List<Order>> result = new MutableLiveData<>();
-        
+
         loadOrdersWithAllData(result);
-        
+
         return result;
     }
 
@@ -75,14 +84,14 @@ public class OrderRepository {
             result.setValue(Collections.emptyList());
             return;
         }
-        
+
         String userId = currentUser.getUid();
         ordersRef.whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener(query -> {
                     List<Order> orders = query.toObjects(Order.class);
                     sortOrdersByDate(orders);
-                    
+
                     // Load items and coupons for all orders
                     loadItemsForAllOrders(orders, result);
                 })
@@ -100,7 +109,7 @@ public class OrderRepository {
 
         AtomicInteger completed = new AtomicInteger(0);
         final int totalOrders = orders.size();
-        
+
         for (Order order : orders) {
 
             loadItemsAndCouponForOrder(order, () -> {
@@ -191,7 +200,7 @@ public class OrderRepository {
         }
     }
 
-    public LiveData<List<Coupon>> loadCoupons(){
+    public LiveData<List<Coupon>> loadCoupons() {
         MutableLiveData<List<Coupon>> couponsLiveData = new MutableLiveData<>();
         firestore.collection("coupons").addSnapshotListener((querySnapshot, e) -> {
             if (e != null) {
@@ -203,8 +212,8 @@ public class OrderRepository {
             for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                 Coupon item = doc.toObject(Coupon.class);
 //                if (item!=null && item.getExpiryDate().after(new Date())){
-                    item.setId(doc.getId());
-                    items.add(item);
+                item.setId(doc.getId());
+                items.add(item);
 //                }
             }
             couponsLiveData.setValue(items);
@@ -223,9 +232,9 @@ public class OrderRepository {
 
     public LiveData<List<OrderItem>> getOrderItems(String orderId) {
         MutableLiveData<List<OrderItem>> result = new MutableLiveData<>();
-        
+
         ordersRef.document(orderId)
-                .collection("items")                    
+                .collection("items")
                 .get()
                 .addOnSuccessListener(query -> {
                     List<OrderItem> items = query.toObjects(OrderItem.class);
@@ -234,18 +243,18 @@ public class OrderRepository {
                 .addOnFailureListener(e -> {
                     result.setValue(Collections.emptyList());
                 });
-        
+
         return result;
     }
 
     public LiveData<Boolean> updateOrderStatus(String orderId, String newStatus) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        
+
         ordersRef.document(orderId)
                 .update("status", newStatus)
                 .addOnSuccessListener(aVoid -> result.setValue(true))
                 .addOnFailureListener(e -> result.setValue(false));
-        
+
         return result;
     }
 
@@ -253,22 +262,26 @@ public class OrderRepository {
      * Get all orders (for admin/management purposes)
      * This loads all orders from all users with their items and coupons
      */
+
     public LiveData<List<Order>> getAllOrders() {
         MutableLiveData<List<Order>> result = new MutableLiveData<>();
-        
-        ordersRef.get()
-                .addOnSuccessListener(query -> {
-                    List<Order> orders = query.toObjects(Order.class);
-                    sortOrdersByDate(orders);
-                    
-                    // Load items and coupons for all orders
-                    loadItemsForAllOrders(orders, result);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("OrderRepository", "Failed to load all orders", e);
-                    result.setValue(Collections.emptyList());
-                });
-        
+        ordersRef.addSnapshotListener((querySnapshot, e) -> {
+            if (e != null) {
+                Log.e("OrderRepository", "Failed to listen for all orders: " + e.getMessage(), e);
+                result.setValue(Collections.emptyList());
+                return;
+            }
+
+            if (querySnapshot != null) {
+                List<Order> orders = querySnapshot.toObjects(Order.class);
+                sortOrdersByDate(orders);
+                loadItemsForAllOrders(orders, result);
+            } else {
+                Log.w("OrderRepository", "No orders found");
+                result.setValue(Collections.emptyList());
+            }
+        });
+
         return result;
     }
 
