@@ -9,8 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.group4.herbs_and_friends_app.data.model.OrderItem;
 import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
 
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProductRepository {
 
@@ -236,5 +239,111 @@ public class ProductRepository {
                 });
         }
         return live;
+    }
+
+    public LiveData<Boolean> modifyProductStock(List<OrderItem> orderItems, boolean isAdding) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        if (orderItems == null || orderItems.isEmpty()) {
+            Log.d("ProductRepository", "No order items provided for stock reduction");
+            result.setValue(true); // No items to process, consider as success
+            return result;
+        }
+
+        WriteBatch batch = firestore.batch();
+        AtomicInteger productsLoaded = new AtomicInteger(0);
+        int totalItems = orderItems.size();
+
+        if (!isAdding){
+            for (OrderItem item : orderItems) {
+                if (item.getProductId() == null || item.getQuantity() <= 0) {
+                    Log.e("ProductRepository", "Invalid order item: productId=" + item.getProductId() + ", quantity=" + item.getQuantity());
+                    result.setValue(false);
+                    return result;
+                }
+
+                products.document(item.getProductId()).get()
+                        .addOnSuccessListener(doc -> {
+                            if (doc.exists()) {
+                                Product product = doc.toObject(Product.class);
+                                if (product != null) {
+                                    int currentStock = product.getInStock();
+                                    if (currentStock < item.getQuantity()) {
+                                        Log.e("ProductRepository", "Insufficient stock for product: " + item.getProductId() +
+                                                ", current: " + currentStock + ", requested: " + item.getQuantity());
+                                        result.setValue(false);
+                                        return;
+                                    }
+                                    batch.update(products.document(item.getProductId()),
+                                            "inStock", currentStock - item.getQuantity(),
+                                            "updatedAt", new Date());
+                                }
+                            } else {
+                                Log.e("ProductRepository", "Product not found: " + item.getProductId());
+                                result.setValue(false);
+                                return;
+                            }
+
+                            if (productsLoaded.incrementAndGet() == totalItems) {
+                                batch.commit()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Log.d("ProductRepository", "Stock reduced successfully for " + totalItems + " products");
+                                            result.setValue(true);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("ProductRepository", "Failed to reduce stock: " + e.getMessage(), e);
+                                            result.setValue(false);
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("ProductRepository", "Failed to load product: " + item.getProductId() + ", error: " + e.getMessage(), e);
+                            result.setValue(false);
+                        });
+            }
+        } else {
+            for (OrderItem item : orderItems) {
+                if (item.getProductId() == null || item.getQuantity() <= 0) {
+                    Log.e("ProductRepository", "Invalid order item: productId=" + item.getProductId() + ", quantity=" + item.getQuantity());
+                    result.setValue(false);
+                    return result;
+                }
+
+                products.document(item.getProductId()).get()
+                        .addOnSuccessListener(doc -> {
+                            if (doc.exists()) {
+                                Product product = doc.toObject(Product.class);
+                                if (product != null) {
+                                    int currentStock = product.getInStock();
+                                    batch.update(products.document(item.getProductId()),
+                                            "inStock", currentStock + item.getQuantity(),
+                                            "updatedAt", new Date());
+                                }
+                            } else {
+                                Log.e("ProductRepository", "Product not found: " + item.getProductId());
+                                result.setValue(false);
+                                return;
+                            }
+
+                            if (productsLoaded.incrementAndGet() == totalItems) {
+                                batch.commit()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Log.d("ProductRepository", "Stock added successfully " +
+                                                    "for " + totalItems + " products");
+                                            result.setValue(true);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("ProductRepository", "Failed to added stock: " + e.getMessage(), e);
+                                            result.setValue(false);
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("ProductRepository", "Failed to load product: " + item.getProductId() + ", error: " + e.getMessage(), e);
+                            result.setValue(false);
+                        });
+            }
+        }
+
+        return result;
     }
 }

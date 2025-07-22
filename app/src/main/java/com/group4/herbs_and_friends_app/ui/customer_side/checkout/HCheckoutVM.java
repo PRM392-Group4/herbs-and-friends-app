@@ -15,10 +15,12 @@ import com.group4.herbs_and_friends_app.data.model.CartItem;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
+import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.data.model.enums.PaymentMethod;
 import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
+import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import org.json.JSONObject;
@@ -38,6 +40,7 @@ public class HCheckoutVM extends ViewModel {
 
     private final OrderRepository repository;
     private final CartRepository cartRepo;
+    private final ProductRepository productRepo;
     // ========== LiveData for Order Data ==========
     private final LiveData<List<CartItem>> orderItems;
     private final MutableLiveData<List<CartItem>> fastCheckoutItem =
@@ -62,9 +65,11 @@ public class HCheckoutVM extends ViewModel {
     private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
 
     @Inject
-    public HCheckoutVM(OrderRepository repository, CartRepository cartRepo) {
+    public HCheckoutVM(OrderRepository repository, CartRepository cartRepo,
+                       ProductRepository productRepo) {
         this.repository = repository;
         this.cartRepo = cartRepo;
+        this.productRepo = productRepo;
         this.orderItems = cartRepo.getLiveCartItems();
         this.subTotal = cartRepo.getLiveTotalPrice();
         this.shippingFee = new MutableLiveData<>(ShippingMethod.STANDARD.getPrice());
@@ -209,17 +214,10 @@ public class HCheckoutVM extends ViewModel {
         // Save order to Firestore
         repository.createOrder(order).observeForever(success -> {
             if (success!=null) {
-                if (!isFastCheckout.getValue()) {
-                    cartRepo.clearCart().observeForever(clearSuccess -> {
-                        if (clearSuccess) {
-                            Log.d("HCheckoutVM", "Cart cleared successfully");
-                        } else {
-                            Log.e("HCheckoutVM", "Failed to clear cart");
-                            errorMessage.setValue("Failed to clear cart");
-                        }
-                    });
-                }
                 orderCreated.setValue(true);
+
+                productRepo.modifyProductStock(getOrderProducts(), false);
+
                 orderId.setValue(success);
                 result.setValue(success);
             } else {
@@ -276,6 +274,20 @@ public class HCheckoutVM extends ViewModel {
                                 bundle.putString("total",
                                         "Bạn đã thanh toán " + DisplayFormat.toMoneyDisplayString(getTotalPrice().getValue()));
                                 bundle.putString("order_id", getOrderId().getValue());
+
+                                repository.updateOrderStatus(orderId.getValue(),
+                                        OrderStatus.PENDING.getValue());
+                                if (!isFastCheckout.getValue()) {
+                                    cartRepo.clearCart().observeForever(success -> {
+                                        if (success) {
+                                            Log.d("HCheckoutVM", "Cart cleared successfully");
+                                        } else {
+                                            Log.e("HCheckoutVM", "Failed to clear cart");
+                                            errorMessage.setValue("Failed to clear cart");
+                                        }
+                                    });
+                                }
+
                                 redirect.onRedirect(bundle);
                             }
 
@@ -285,6 +297,10 @@ public class HCheckoutVM extends ViewModel {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("result", "Thanh toán đã được hủy");
                                 bundle.putString("order_id", getOrderId().getValue());
+
+                                repository.updateOrderStatus(orderId.getValue(),
+                                        OrderStatus.CANCELLED.getValue());
+                                productRepo.modifyProductStock(getOrderProducts(), true);
 
                                 redirect.onRedirect(bundle);
                             }
@@ -296,6 +312,11 @@ public class HCheckoutVM extends ViewModel {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("result", "Lỗi thanh toán: " + zaloPayError.toString());
                                 bundle.putString("order_id", getOrderId().getValue());
+
+                                repository.updateOrderStatus(orderId.getValue(),
+                                        OrderStatus.CANCELLED.getValue());
+                                productRepo.modifyProductStock(getOrderProducts(), true);
+
                                 redirect.onRedirect(bundle);
                             }
                         });

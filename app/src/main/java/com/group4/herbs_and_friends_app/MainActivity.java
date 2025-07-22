@@ -176,10 +176,7 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.action_loginFragment_to_profileFragment);
         // redirect to profile fragment
 //        navController.navigate(R.id.profileFragment);
-        } catch (
-                Exception e) {
-            Log.d("ERROR MAIN", e.getMessage().toString());
-        }
+
 
         // Flow:
         // - first login -> goes to profile
@@ -190,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
             sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
         } else {
             navController.navigate(R.id.homeFragment);
+        }} catch (
+                Exception e) {
+            Log.d("ERROR MAIN", e.getMessage().toString());
         }
     }
 
