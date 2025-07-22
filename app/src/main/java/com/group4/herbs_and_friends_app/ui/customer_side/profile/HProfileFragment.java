@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.PopupMenu;
+import com.google.android.material.chip.Chip;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,11 +26,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileBinding;
+import com.group4.herbs_and_friends_app.data.model.Order;
+import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.ui.customer_side.order.OrderHistoryClickHandler;
 import com.group4.herbs_and_friends_app.ui.customer_side.profile.adapter.OrderHistoryAdapter;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -148,6 +153,120 @@ public class HProfileFragment extends Fragment {
         });
         
         recyclerView.setAdapter(orderHistoryAdapter);
+        
+        // Setup filter and sort buttons
+        setupFilterAndSortButtons(layoutHistory);
+    }
+    
+    private void setupFilterAndSortButtons(View layoutHistory) {
+        // Status filter button
+        View btnFilterStatus = layoutHistory.findViewById(R.id.btnFilterStatus);
+        btnFilterStatus.setOnClickListener(v -> showStatusFilterMenu(btnFilterStatus));
+        
+        // Sort button
+        View btnSortDate = layoutHistory.findViewById(R.id.btnSortDate);
+        btnSortDate.setOnClickListener(v -> showSortMenu(btnSortDate));
+        
+        // Setup active filter chips
+        setupActiveFilterChips(layoutHistory);
+    }
+    
+    private void showStatusFilterMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(requireContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.view_h_order_status_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            OrderStatus selectedStatus = null;
+
+            if (itemId == R.id.status_all) {
+                selectedStatus = null;
+            } else if (itemId == R.id.status_pending) {
+                selectedStatus = OrderStatus.PENDING;
+            } else if (itemId == R.id.status_confirmed) {
+                selectedStatus = OrderStatus.CONFIRMED;
+            } else if (itemId == R.id.status_shipping) {
+                selectedStatus = OrderStatus.SHIPPING;
+            } else if (itemId == R.id.status_completed) {
+                selectedStatus = OrderStatus.COMPLETED;
+            } else if (itemId == R.id.status_cancelled) {
+                selectedStatus = OrderStatus.CANCELLED;
+            } else if (itemId == R.id.status_unpaid) {
+                selectedStatus = OrderStatus.UNPAID;
+            }
+
+            hProfileVM.setStatusFilter(selectedStatus);
+            updateActiveFilterChips();
+            return true;
+        });
+
+        popup.show();
+    }
+    
+    private void showSortMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(requireContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.view_h_order_sort_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            HProfileVM.SortOrder sortOrder = null;
+
+            if (itemId == R.id.sort_newest_first) {
+                sortOrder = HProfileVM.SortOrder.NEWEST_FIRST;
+            } else if (itemId == R.id.sort_oldest_first) {
+                sortOrder = HProfileVM.SortOrder.OLDEST_FIRST;
+            }
+
+            hProfileVM.setSortOrder(sortOrder);
+            updateActiveFilterChips();
+            return true;
+        });
+
+        popup.show();
+    }
+    
+    private void setupActiveFilterChips(View layoutHistory) {
+        View layoutActiveFilters = layoutHistory.findViewById(R.id.layoutActiveFilters);
+        View chipStatusFilter = layoutHistory.findViewById(R.id.chipStatusFilter);
+        View chipSortOrder = layoutHistory.findViewById(R.id.chipSortOrder);
+        
+        // Set up chip close listeners
+        chipStatusFilter.setOnClickListener(v -> {
+            hProfileVM.setStatusFilter(null);
+            updateActiveFilterChips();
+        });
+        
+        chipSortOrder.setOnClickListener(v -> {
+            hProfileVM.setSortOrder(null);
+            updateActiveFilterChips();
+        });
+    }
+    
+    private void updateActiveFilterChips() {
+        View layoutHistory = binding.layoutHistory.getRoot();
+        View layoutActiveFilters = layoutHistory.findViewById(R.id.layoutActiveFilters);
+        Chip chipStatusFilter = layoutHistory.findViewById(R.id.chipStatusFilter);
+        Chip chipSortOrder = layoutHistory.findViewById(R.id.chipSortOrder);
+        
+        OrderStatus selectedStatus = hProfileVM.getSelectedStatus();
+        HProfileVM.SortOrder sortOrder = hProfileVM.getSortOrder();
+        
+        boolean hasActiveFilters = selectedStatus != null || sortOrder != null;
+        layoutActiveFilters.setVisibility(hasActiveFilters ? View.VISIBLE : View.GONE);
+        
+        if (selectedStatus != null) {
+            chipStatusFilter.setVisibility(View.VISIBLE);
+            chipStatusFilter.setText("Trạng thái: " + selectedStatus.getDisplayName());
+        } else {
+            chipStatusFilter.setVisibility(View.GONE);
+        }
+        
+        if (sortOrder != null) {
+            chipSortOrder.setVisibility(View.VISIBLE);
+            chipSortOrder.setText("Sắp xếp: " + sortOrder.getDisplayName());
+        } else {
+            chipSortOrder.setVisibility(View.GONE);
+        }
     }
 
     private void loadOrderHistory() {
@@ -155,8 +274,23 @@ public class HProfileFragment extends Fragment {
             hProfileVM.getUserOrders().observe(getViewLifecycleOwner(), orders -> {
                 if (orders != null && orderHistoryAdapter != null) {
                     orderHistoryAdapter.setOrders(orders);
+                    updateOrderHistoryUI(orders);
                 }
             });
+        }
+    }
+    
+    private void updateOrderHistoryUI(List<Order> orders) {
+        View layoutHistory = binding.layoutHistory.getRoot();
+        RecyclerView recyclerView = layoutHistory.findViewById(R.id.recyclerViewOrderHistory);
+        View emptyStateLayout = layoutHistory.findViewById(R.id.emptyStateLayout);
+        
+        if (orders == null || orders.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyStateLayout.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyStateLayout.setVisibility(View.GONE);
         }
     }
 

@@ -1,40 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20sp">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/h_background">
 
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lịch sử mua hàng"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/h_text_primary"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Filter and Sort Controls -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <!-- Status Filter Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFilterStatus"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Đơn hàng"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginRight="20sp"/>
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Trạng thái"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:icon="@drawable/ic_product_filter"
+            app:iconGravity="textStart"
+            app:iconSize="16dp" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
+        <!-- Sort Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSortDate"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Tất cả"
-            android:layout_marginRight="2sp"/>
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Thời gian"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:icon="@drawable/ic_product_sort"
+            app:iconGravity="textStart"
+            app:iconSize="16dp" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thời gian đặt" />
     </LinearLayout>
 
+    <!-- Active Filters Display -->
+    <LinearLayout
+        android:id="@+id/layoutActiveFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStatusFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Trạng thái: Tất cả"
+            app:closeIconVisible="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSortOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sắp xếp: Mới nhất"
+            app:closeIconVisible="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+    </LinearLayout>
+
+    <!-- Orders List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewOrderHistory"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="80sp"/>
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="32dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_cart_checkout"
+            android:alpha="0.5"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có đơn hàng nào"
+            android:textSize="16sp"
+            android:textColor="@color/h_text_secondary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hãy thử thay đổi bộ lọc hoặc sắp xếp"
+            android:textSize="14sp"
+            android:textColor="@color/h_text_secondary" />
+
+    </LinearLayout>
+
+</LinearLayout>
