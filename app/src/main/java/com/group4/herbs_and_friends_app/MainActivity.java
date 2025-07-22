@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
+
         // Setup Shared Preferences
         sharedPrefs = getSharedPreferences(AppCts.SharePref.PREF_AUTH_NAME, MODE_PRIVATE);
 
@@ -72,13 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup listeners on already login user
         setupOnListeningForCurrentLoginUser();
-
-        // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
-        Intent intent = getIntent();
-        if (intent != null) {
-            ZaloPaySDK.getInstance().onResult(intent);
-        }
 
     }
 
@@ -163,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onLoginAsCustomer() {
 
-        try {
         navController.setGraph(R.navigation.navigation_h_main, null);
 
         // clear the current menu and inflate new navigation
@@ -173,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
         // redirect to profile fragment
         NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
 
-            navController.navigate(R.id.action_loginFragment_to_profileFragment);
         // redirect to profile fragment
 //        navController.navigate(R.id.profileFragment);
 
@@ -187,9 +181,6 @@ public class MainActivity extends AppCompatActivity {
             sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
         } else {
             navController.navigate(R.id.homeFragment);
-        }} catch (
-                Exception e) {
-            Log.d("ERROR MAIN", e.getMessage().toString());
         }
     }
 

@@ -72,7 +72,9 @@
         android:label="fragment_h_order_result">
         <action
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
-            app:destination="@id/HOrderDetailFragment"/>
+            app:destination="@id/HOrderDetailFragment"
+            app:popUpTo="@id/homeMainFragment"
+            app:popUpToInclusive="false"/>
         <action
             android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
             app:destination="@id/homeMainFragment"/>

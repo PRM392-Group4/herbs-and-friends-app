@@ -12,6 +12,7 @@ import com.group4.herbs_and_friends_app.databinding.DialogHEditAddressBinding;
 public class HEditAddressDialog extends DialogFragment {
 
     private DialogHEditAddressBinding binding;
+
     private OnAddressUpdatedListener listener;
 
     // Callback interface to send data back to HCheckoutFragment
@@ -23,13 +24,16 @@ public class HEditAddressDialog extends DialogFragment {
     private static final String ARG_RECIPIENT_NAME = "recipient_name";
     private static final String ARG_RECIPIENT_PHONE = "recipient_phone";
     private static final String ARG_ADDRESS = "address";
+    private static final String ARG_IS_PICKUP = "is_pickup";
 
-    public static HEditAddressDialog newInstance(String recipientName, String recipientPhone, String address) {
+    public static HEditAddressDialog newInstance(String recipientName, String recipientPhone,
+                                                 String address, boolean isPickup) {
         HEditAddressDialog dialog = new HEditAddressDialog();
         Bundle args = new Bundle();
         args.putString(ARG_RECIPIENT_NAME, recipientName);
         args.putString(ARG_RECIPIENT_PHONE, recipientPhone);
         args.putString(ARG_ADDRESS, address);
+        args.putBoolean(ARG_IS_PICKUP, isPickup);
         dialog.setArguments(args);
         return dialog;
     }
@@ -57,7 +61,13 @@ public class HEditAddressDialog extends DialogFragment {
         if (args != null) {
             binding.editReceiverName.setText(args.getString(ARG_RECIPIENT_NAME, ""));
             binding.editReceiverPhone.setText(args.getString(ARG_RECIPIENT_PHONE, ""));
-            binding.editReceiverAddress.setText(args.getString(ARG_ADDRESS, ""));
+            if (args.getBoolean(ARG_IS_PICKUP) == true) {
+                binding.editReceiverAddress.setVisibility(View.GONE); // Enable editing for
+            } else {
+                binding.editReceiverAddress.setText(args.getString(ARG_ADDRESS, ""));
+                binding.editReceiverAddress.setVisibility(View.VISIBLE); // Enable editing for
+                // delivery
+            }
         }
 
         // Set up button listeners
@@ -67,7 +77,7 @@ public class HEditAddressDialog extends DialogFragment {
             String address = binding.editReceiverAddress.getText().toString().trim();
 
             // Basic validation
-            if (recipientName.isEmpty() || recipientPhone.isEmpty() || address.isEmpty()) {
+            if (recipientName.isEmpty() || recipientPhone.isEmpty() || (args.getBoolean(ARG_IS_PICKUP) && address.isEmpty())) {
                 binding.textError.setText("Please fill in all fields");
                 binding.textError.setVisibility(View.VISIBLE);
                 return;

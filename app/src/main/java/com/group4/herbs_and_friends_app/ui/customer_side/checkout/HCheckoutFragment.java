@@ -139,13 +139,13 @@ public class HCheckoutFragment extends Fragment {
         binding.radioGroupShipping.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radioExpress) {
                 checkoutVM.setShippingMethod(ShippingMethod.EXPRESS);
-                binding.shippingInfo.setVisibility(VISIBLE);
+                binding.textReceiverAddress.setVisibility(VISIBLE);
             } else if (checkedId == R.id.radioStandard) {
                 checkoutVM.setShippingMethod(ShippingMethod.STANDARD);
-                binding.shippingInfo.setVisibility(VISIBLE);
+                binding.textReceiverAddress.setVisibility(VISIBLE);
             } else {
                 checkoutVM.setShippingMethod(ShippingMethod.PICKUP);
-                binding.shippingInfo.setVisibility(GONE);
+                binding.textReceiverAddress.setVisibility(GONE);
             }
         });
     }
@@ -182,8 +182,8 @@ public class HCheckoutFragment extends Fragment {
         String recipientPhone = checkoutVM.getRecipientPhone().getValue();
 
         ShippingMethod shippingMethod = checkoutVM.getShippingMethod().getValue();
-        if (shippingMethod != ShippingMethod.PICKUP && (address.isEmpty() || recipientName.isEmpty() || recipientPhone.isEmpty())) {
-            binding.txtErrorAddress.setText("Vui lòng nhập đầy đủ thông tin địa chỉ, tên người nhận và số điện thoại.");
+        if ((recipientName.isEmpty() || recipientPhone.isEmpty()) || (shippingMethod != ShippingMethod.PICKUP && address.isEmpty())) {
+            binding.txtErrorAddress.setText("Vui lòng nhập đầy đủ thông tin.");
             binding.txtErrorAddress.setVisibility(VISIBLE);
             return;
         }
@@ -242,7 +242,7 @@ public class HCheckoutFragment extends Fragment {
     }
 
     private void setupEditAddressAction() {
-        if (currentUser.getDisplayName().isEmpty()){
+        if (checkoutVM.getRecipientName().getValue().isEmpty()){
             binding.textReceiverName.setText("Tên người nhận");
             checkoutVM.setRecipientName("");
         }
@@ -263,7 +263,8 @@ public class HCheckoutFragment extends Fragment {
                     binding.textReceiverAddress.getText().toString().trim();
 
             // Show dialog with current values
-            HEditAddressDialog dialog = HEditAddressDialog.newInstance(currentName, currentPhone, currentAddress);
+            HEditAddressDialog dialog = HEditAddressDialog.newInstance(currentName, currentPhone,
+                    currentAddress, checkoutVM.getShippingMethod().getValue() == ShippingMethod.PICKUP);
             dialog.setOnAddressUpdatedListener((recipientName, recipientPhone, address) -> {
                 // Update UI
                 binding.textReceiverName.setText(recipientName);

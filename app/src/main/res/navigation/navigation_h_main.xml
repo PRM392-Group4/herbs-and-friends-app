@@ -129,7 +129,7 @@
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
             app:destination="@id/HOrderDetailFragment"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="true"/>
         <action android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
             app:destination="@id/homeFragment"/>
     </fragment>
