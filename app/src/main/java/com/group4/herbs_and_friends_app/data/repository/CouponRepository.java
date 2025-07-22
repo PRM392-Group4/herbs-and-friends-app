@@ -28,13 +28,23 @@ public class CouponRepository {
         this.coupons = firestore.collection(COLLECTION_NAME);
     }
 
-    public LiveData<List<Coupon>> getAllCoupons() {
+    public LiveData<List<Coupon>> getAllCoupons(boolean includeInvalid) {
         MutableLiveData<List<Coupon>> couponListLive = new MutableLiveData<>();
         coupons.get()
                 .addOnSuccessListener(query -> {
                     Log.d("CouponRepository", "Success getting coupons: " + query.size());
                     List<Coupon> couponList = query.toObjects(Coupon.class);
-                    couponListLive.setValue(couponList);
+                    if (!includeInvalid) {
+                        List<Coupon> filteredList = new ArrayList<>();
+                        for (Coupon coupon : couponList) {
+                            if (coupon != null && coupon.isValid()) {
+                                filteredList.add(coupon);
+                            }
+                        }
+                        couponListLive.setValue(filteredList);
+                    } else {
+                        couponListLive.setValue(couponList);
+                    }
                 })
                 .addOnFailureListener(query -> {
                     Log.e("CouponRepository", "Error getting coupons: " + query.getMessage());
@@ -44,14 +54,22 @@ public class CouponRepository {
         return couponListLive;
     }
 
-    public LiveData<List<Coupon>> getCouponWithCriteria(CouponParams params) {
+    public LiveData<List<Coupon>> getCouponWithCriteria(CouponParams params, boolean includeInvalid) {
         MutableLiveData<List<Coupon>> couponListLive = new MutableLiveData<>();
         Query query = coupons;
 
         query.get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<Coupon> couponList = querySnapshot.toObjects(Coupon.class);
-
+                    if (!includeInvalid) {
+                        List<Coupon> filteredList = new ArrayList<>();
+                        for (Coupon coupon : couponList) {
+                            if (coupon != null && coupon.isValid()) {
+                                filteredList.add(coupon);
+                            }
+                        }
+                        couponList = filteredList;
+                    }
                     // Apply search
                     if(params.getSearch() != null && !params.getSearch().isEmpty()) {
                         List<Coupon> filteredList = filterBySearch(couponList, params.getSearch());

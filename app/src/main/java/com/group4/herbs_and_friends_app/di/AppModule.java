@@ -1,21 +1,24 @@
 package com.group4.herbs_and_friends_app.di;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
+import com.group4.herbs_and_friends_app.data.communication.FCMClient;
 import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
 import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
+import com.group4.herbs_and_friends_app.data.repository.DevicePushNotificationTokenRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
+import com.group4.herbs_and_friends_app.di.PermissionManager;
 
 import javax.inject.Singleton;
 
@@ -50,9 +53,17 @@ public class AppModule {
 
     @Provides
     @Singleton
+    public FirebaseMessaging provideFirebaseMessaging() { return FirebaseMessaging.getInstance(); }
+
+    @Provides
+    @Singleton
     public FirebaseAuth provideFirebaseAuth() {
         return FirebaseAuth.getInstance();
     }
+
+    @Provides
+    @Singleton
+    public FirebaseApp provideFirebaseApp() { return FirebaseApp.getInstance(); }
 
     // =========================
     // === Repositories
@@ -93,6 +104,12 @@ public class AppModule {
         return new CouponRepository(firestore);
     }
 
+    @Provides
+    @Singleton
+    public DevicePushNotificationTokenRepository notificationTokenRepository(FirebaseFirestore firestore) {
+        return new DevicePushNotificationTokenRepository(firestore);
+    }
+
     // =========================
     // === Utilities
     // =========================
@@ -102,19 +119,34 @@ public class AppModule {
         return new ResourceManager(context);
     }
 
+    @Provides
+    @Singleton
+    public PermissionManager providePermissionManager(@ApplicationContext Context context) {
+        return new PermissionManager(context);
+    }
+
     // =========================
     // === Communication
     // =========================
 
     @Provides
     @Singleton
-    public NotificationPublisher provideNotificationPublisher(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
-        return new NotificationPublisher(firebaseRealtimeInstance, firebaseAuthInstance);
+    public NotificationPublisher provideNotificationPublisher(FirebaseDatabase firebaseRealtimeInstance,
+                                                              DevicePushNotificationTokenRepository notificationTokenRepository) {
+        return new NotificationPublisher(firebaseRealtimeInstance, notificationTokenRepository);
     }
 
     @Provides
     @Singleton
-    public NotificationConsumer provideNotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, FirebaseAuth firebaseAuthInstance) {
-        return new NotificationConsumer(firebaseRealtimeInstance, firebaseAuthInstance);
+    public NotificationConsumer provideNotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, 
+                                                            FirebaseAuth firebaseAuthInstance, 
+                                                            DevicePushNotificationTokenRepository notificationTokenRepository, 
+                                                            FirebaseMessaging firebaseMessaging, 
+                                                            PermissionManager permissionManager) {
+        return new NotificationConsumer(firebaseRealtimeInstance, 
+                                        firebaseAuthInstance, 
+                                        notificationTokenRepository, 
+                                        firebaseMessaging, 
+                                        permissionManager);
     }
 }
