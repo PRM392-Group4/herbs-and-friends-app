@@ -72,7 +72,7 @@ public class HCheckoutFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            Toast.makeText(getContext(), "Please log in to proceed with checkout", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Hãy đăng nhập để thanh toán", Toast.LENGTH_SHORT).show();
             return;
         }
         Bundle args = getArguments();
@@ -217,7 +217,7 @@ public class HCheckoutFragment extends Fragment {
         // Create order and observe result
         checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
             if (checkoutVM.getOrderCreated().getValue() && success != null) {
-                Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tạo đơn hàng thành công", Toast.LENGTH_SHORT).show();
                 if (checkoutVM.getPaymentMethod().getValue() == PaymentMethod.ZALOPAY) {
                     checkoutVM.processPayment(requireActivity(), bundle -> {
                         Log.d("HCheckoutFragment", "Redirecting with bundle: result=" + bundle.getString("result") +
@@ -240,7 +240,7 @@ public class HCheckoutFragment extends Fragment {
                     navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
                 }
             } else {
-                Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Lỗi tạo đơn hàng", Toast.LENGTH_SHORT).show();
             }
         });
 
