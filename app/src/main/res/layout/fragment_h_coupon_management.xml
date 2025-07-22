@@ -36,14 +36,14 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Từ ngày">
+            android:hint="@string/from_date">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:focusable="false"
+                android:focusable="true"
                 android:clickable="true"
                 android:drawableStart="@drawable/ic_location"
                 android:drawablePadding="8dp" />
@@ -58,14 +58,14 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Đến ngày">
+            android:hint="@string/until_date">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_end_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:focusable="false"
+                android:focusable="true"
                 android:clickable="true"
                 android:drawableStart="@drawable/ic_location"
                 android:drawablePadding="8dp" />
@@ -92,7 +92,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Áp dụng"
+            android:text="@string/apply_filter"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:drawableStart="@drawable/ic_product_filter"
             android:drawablePadding="8dp" />
@@ -104,7 +104,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Xóa bộ lọc"
+            android:text="@string/remove_filter"
             style="@style/Widget.MaterialComponents.Button.TextButton" />
 
     </LinearLayout>
@@ -152,7 +152,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Không có mã giảm giá nào"
+                    android:text="@string/no_coupons"
                     android:textSize="16sp"
                     android:textColor="@color/h_text_secondary" />
 
@@ -170,7 +170,7 @@
         android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="Thêm mã giảm giá mới"
+        android:contentDescription="@string/add_new_coupon"
         android:src="@drawable/ic_add"
         app:tint="@color/h_white"
         android:backgroundTint="@color/h_primary" />

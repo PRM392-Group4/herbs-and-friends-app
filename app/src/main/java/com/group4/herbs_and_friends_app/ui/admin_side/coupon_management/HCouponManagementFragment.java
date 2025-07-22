@@ -96,6 +96,7 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
 
     private void setupSearchFunctionality() {
         // Setup search text watcher
+        binding.includeActionbarCouponManage.tilSearch.setHint("Hãy nhập tên mã giảm giá");
         binding.includeActionbarCouponManage.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

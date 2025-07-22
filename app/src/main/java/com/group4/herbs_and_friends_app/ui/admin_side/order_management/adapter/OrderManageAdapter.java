@@ -1,4 +1,4 @@
-package com.group4.herbs_and_friends_app.ui.customer_side.manage.adapter;
+package com.group4.herbs_and_friends_app.ui.admin_side.order_management.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,7 +18,6 @@ import java.util.List;
 
 public class OrderManageAdapter extends RecyclerView.Adapter<OrderManageAdapter.OrderManageViewHolder> {
 
-    private Context context;
     private List<Order> orders = new ArrayList<>();
     private OnOrderClickListener onOrderClickListener;
 
@@ -26,15 +25,18 @@ public class OrderManageAdapter extends RecyclerView.Adapter<OrderManageAdapter.
         void onOrderClick(Order order);
     }
 
-    public OrderManageAdapter(Context context, OnOrderClickListener listener) {
-        this.context = context;
+    public OrderManageAdapter() {
+        // Default constructor
+    }
+
+    public void setOnOrderClickListener(OnOrderClickListener listener) {
         this.onOrderClickListener = listener;
     }
 
     @NonNull
     @Override
     public OrderManageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_order_history, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_history, parent, false);
         return new OrderManageViewHolder(view);
     }
 

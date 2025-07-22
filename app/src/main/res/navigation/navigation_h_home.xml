@@ -4,6 +4,7 @@
     android:id="@+id/navigation_h_home"
     app:startDestination="@id/homeMainFragment">
 
+    <!-- Home here-->
     <fragment
         android:id="@+id/homeMainFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeFragment"
@@ -26,7 +27,7 @@
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeProductListFragment"
-        android:label="Product List" >
+        android:label="Product List">
 
         <action
             android:id="@+id/productList_to_productDetail"

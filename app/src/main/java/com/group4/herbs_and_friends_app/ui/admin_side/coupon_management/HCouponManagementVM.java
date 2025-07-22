@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.CouponParams;
 import com.group4.herbs_and_friends_app.data.model.enums.CouponSortOptions;
+import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
 import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 
 import java.util.Date;
@@ -20,9 +23,10 @@ public class HCouponManagementVM extends ViewModel {
     private final CouponRepository couponRepository;
     private final MutableLiveData<CouponParams> paramsLive = new MutableLiveData<>();
     private final MutableLiveData<List<Coupon>> filteredCouponsLive = new MutableLiveData<>();
+    private final NotificationPublisher notificationPublisher;
     
     @Inject
-    public HCouponManagementVM(CouponRepository couponRepository) {
+    public HCouponManagementVM(CouponRepository couponRepository, NotificationPublisher notificationPublisher) {
         this.couponRepository = couponRepository;
         // Initialize with default params
         CouponParams defaultParams = new CouponParams();
@@ -30,6 +34,8 @@ public class HCouponManagementVM extends ViewModel {
         
         // Observe params changes and update coupons
         paramsLive.observeForever(this::updateCoupons);
+
+        this.notificationPublisher = notificationPublisher;
     }
     
     public LiveData<CouponParams> getParamsLive() {
@@ -44,6 +50,10 @@ public class HCouponManagementVM extends ViewModel {
     }
 
     public LiveData<Boolean> saveCoupon(Coupon coupon) {
+        var title = "Mã khuyến mãi mới: " + coupon.getCode();
+        var newNotification = new NotificationDto(title, NotificationTypes.NEW_COUPON_ADDED, new Date());
+        notificationPublisher.tryPublishToAllUsers(newNotification);
+
         return couponRepository.addCoupon(coupon);
     }
     public void setParamsLive(CouponParams params) {
@@ -89,7 +99,7 @@ public class HCouponManagementVM extends ViewModel {
         if (params == null) return;
         
         // Get coupons with search and sort criteria
-        couponRepository.getCouponWithCriteria(params).observeForever(coupons -> {
+        couponRepository.getCouponWithCriteria(params, true).observeForever(coupons -> {
             if (coupons != null) {
                 // Apply date range filtering if dates are set
                 List<Coupon> filteredCoupons = applyDateRangeFilter(coupons, params);

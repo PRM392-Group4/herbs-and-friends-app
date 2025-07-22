@@ -1,134 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.customer_side.manage.HOrderManageFragment"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="@color/h_background">
 
+    <!-- Action Bar -->
     <include
-        android:id="@+id/include_actionbar_order_manage"
-        layout="@layout/view_h_actionbar_without_search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <!-- Management Type Spinner -->
-    <Spinner
-        android:id="@+id/spinner_manage_type"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_actionbar_order_manage"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rect_border_gray"
-        android:paddingHorizontal="12dp"
-        android:gravity="center_vertical" />
+        android:id="@+id/includeActionbarOrderManage"
+        layout="@layout/view_h_actionbar_without_search" />
 
     <!-- Search and Filter Section -->
     <LinearLayout
-        android:id="@+id/search_filter_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/spinner_manage_type"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="16dp"
+        android:background="@color/h_background">
 
         <!-- Search Bar -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_layout"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Tìm theo mã đơn hàng">
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@color/h_secondary">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_search_order"
+                android:id="@+id/etSearchOrder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:hint="Tìm theo mã đơn hàng"
                 android:inputType="text"
-                android:imeOptions="actionSearch"
-                android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="8dp" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Filter Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_filter_status"
+            android:id="@+id/btnFilterStatus"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:text="Trạng thái"
+            android:layout_height="78dp"
+            android:text="TRẠNG THÁI"
+            android:textSize="12sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:drawableEnd="@drawable/ic_product_filter"
-            android:drawablePadding="8dp" />
+            app:icon="@drawable/ic_product_filter"
+            app:iconGravity="textStart"
+            app:iconSize="16dp" />
 
     </LinearLayout>
 
-    <!-- Orders RecyclerView -->
-    <androidx.core.widget.NestedScrollView
+    <!-- Orders List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOrders"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:paddingHorizontal="5dp"
-        android:paddingTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/search_filter_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="32dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_orders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:listitem="@layout/item_order_history" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_cart_checkout"
+            android:alpha="0.5"
+            android:layout_marginBottom="16dp" />
 
-            <!-- Empty State -->
-            <LinearLayout
-                android:id="@+id/empty_state_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có đơn hàng nào"
+            android:textSize="16sp"
+            android:textColor="@color/h_text_secondary"
+            android:layout_marginBottom="8dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Không có đơn hàng nào"
-                    android:textSize="16sp"
-                    android:textColor="@color/h_text_secondary" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hãy thử tìm kiếm với từ khóa khác"
+            android:textSize="14sp"
+            android:textColor="@color/h_text_secondary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Thử thay đổi bộ lọc hoặc tìm kiếm"
-                    android:textSize="14sp"
-                    android:textColor="@color/h_text_secondary" />
+    </LinearLayout>
 
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout> 
+</LinearLayout> 

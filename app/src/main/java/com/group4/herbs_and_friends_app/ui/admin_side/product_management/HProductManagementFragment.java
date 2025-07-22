@@ -53,52 +53,7 @@ public class HProductManagementFragment extends BaseProductFilterFragment<HProdu
         // Specific to manage fragment: Add Product FAB listener
         binding.btnAddProduct.setOnClickListener(v -> navigateToAddProduct());
 
-        // Setup spinner for switching between management types
-        setupManageSpinner();
     }
-
-    private void setupManageSpinner() {
-        Spinner spinner = binding.spinnerManageType;
-
-        // Create adapter for spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.manage_type_options,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        // Set default selection to "Quản lý cây" (index 0)
-        spinner.setSelection(0);
-
-        // Handle spinner selection
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        // Already on product management, do nothing
-                        break;
-                    case 1:
-                        // Navigate to order management
-                        navigateToOrderManagement();
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
-    }
-
-    private void navigateToOrderManagement() {
-        NavController navController = getNavController();
-        navController.navigate(R.id.action_productManage_to_orderManage);
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

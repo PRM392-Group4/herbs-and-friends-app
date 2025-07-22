@@ -1,6 +1,9 @@
 package com.group4.herbs_and_friends_app.ui.admin_side.profile_management;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileManagementBinding;
 import com.group4.herbs_and_friends_app.ui.auth.login.HAuthVM;
+import com.group4.herbs_and_friends_app.utils.AppCts;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +45,7 @@ public class HProfileManagementFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private HAuthVM hAuthVM;
     private FirebaseUser currentUser;
+    private SharedPreferences sharedPreferences;
 
     @Inject
     FirebaseFirestore firestore;
@@ -68,6 +73,9 @@ public class HProfileManagementFragment extends Fragment {
         hProfileManagementVM = new ViewModelProvider(this).get(HProfileManagementVM.class);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        // Setup SharedPreferencs
+        sharedPreferences = getActivity().getSharedPreferences(AppCts.SharePref.PREF_AUTH_NAME, MODE_PRIVATE);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (currentUser != null) {
@@ -82,6 +90,7 @@ public class HProfileManagementFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(v -> {
             firebaseAuth.signOut();
+            sharedPreferences.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false);
             hAuthVM.fetchUserAndEmitNextDestination(null);
         });
 
@@ -171,5 +180,4 @@ public class HProfileManagementFragment extends Fragment {
             });
         }
     }
-
 }

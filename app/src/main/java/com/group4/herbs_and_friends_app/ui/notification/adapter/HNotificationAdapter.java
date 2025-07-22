@@ -36,7 +36,6 @@ public class HNotificationAdapter extends RecyclerView.Adapter<HNotificationAdap
         NotificationDto notification = notifications.get(position);
         holder.title.setText(notification.getTitle());
         holder.message.setText(notification.getMessage());
-        holder.type.setText(notification.getType() != null ? notification.getType().name() : "");
         // Format and display sendDate
         if (notification.getSendDate() != null) {
             long millis = notification.getSendDate().getTime();
@@ -74,7 +73,6 @@ public class HNotificationAdapter extends RecyclerView.Adapter<HNotificationAdap
             super(itemView);
             title = itemView.findViewById(R.id.tvNotificationTitle);
             message = itemView.findViewById(R.id.tvNotificationMessage);
-            type = itemView.findViewById(R.id.tvNotificationType);
             sendDate = itemView.findViewById(R.id.tvNotificationSendDate);
         }
     }

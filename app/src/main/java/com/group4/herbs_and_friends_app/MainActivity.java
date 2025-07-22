@@ -1,5 +1,6 @@
 package com.group4.herbs_and_friends_app;
 
+import android.content.SharedPreferences;
 import android.app.ComponentCaller;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.data.model.enums.Role;
 import com.group4.herbs_and_friends_app.databinding.ActivityMainBinding;
 import com.group4.herbs_and_friends_app.ui.auth.login.HAuthVM;
+import com.group4.herbs_and_friends_app.utils.AppCts;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import vn.zalopay.sdk.Environment;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private ActivityMainBinding binding;
     private HAuthVM hAuthVM;
+    private SharedPreferences sharedPrefs;
 
     // ================================
     // === Constructors
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         // Setup View Binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Setup Shared Preferences
+        sharedPrefs = getSharedPreferences(AppCts.SharePref.PREF_AUTH_NAME, MODE_PRIVATE);
 
         // Setup view models
         hAuthVM = new ViewModelProvider(this).get(HAuthVM.class);
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
      * Setup the Nav Host system if current user is customer
      */
     public void onLoginAsCustomer() {
+
         try {
         navController.setGraph(R.navigation.navigation_h_main, null);
 
@@ -163,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         binding.herbBottomNavigation.getMenu().clear();
         binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
 
+        // redirect to profile fragment
         NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
 
             navController.navigate(R.id.action_loginFragment_to_profileFragment);
@@ -171,6 +179,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (
                 Exception e) {
             Log.d("ERROR MAIN", e.getMessage().toString());
+        }
+
+        // Flow:
+        // - first login -> goes to profile
+        // - resume app + login -> goes to home
+        boolean isFirstLogin = sharedPrefs.getBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, true);
+        if (isFirstLogin) {
+            navController.navigate(R.id.action_loginFragment_to_profileFragment);
+            sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
+        } else {
+            navController.navigate(R.id.homeFragment);
         }
     }
 
