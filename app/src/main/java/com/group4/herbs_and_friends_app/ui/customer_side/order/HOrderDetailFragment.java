@@ -120,8 +120,11 @@ public class HOrderDetailFragment extends Fragment {
         binding.tvTransactionCode.setText("#" + order.getId());
 
         // Discount Code
+        if (order.getCouponId() == null || order.getCouponId().isEmpty() || !order.getCouponId().isBlank()) {
+            binding.tvDiscountCode.setText("Không có");
+        }
         orderDetailVM.getCouponCode().observe(getViewLifecycleOwner(), couponCode -> {
-            if (couponCode != null && !couponCode.isBlank()) {
+            if (couponCode != null && !couponCode.isBlank() && !couponCode.isEmpty()) {
                 binding.tvDiscountCode.setText("#" + couponCode);
             } else {
                 binding.tvDiscountCode.setText("Không có");

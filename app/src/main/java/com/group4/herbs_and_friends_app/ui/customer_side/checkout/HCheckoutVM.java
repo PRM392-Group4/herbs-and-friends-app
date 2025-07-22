@@ -11,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.group4.herbs_and_friends_app.data.api.OrderSchema;
+import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 import com.group4.herbs_and_friends_app.data.model.CartItem;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -35,6 +38,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
 import vn.zalopay.sdk.listeners.PayOrderListener;
+import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
 
 @HiltViewModel
 public class HCheckoutVM extends ViewModel {
@@ -67,9 +71,12 @@ public class HCheckoutVM extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isFastCheckout = new MutableLiveData<>(false);
 
+    // ========== Communications ==========
+    private final NotificationPublisher notificationPublisher;
+
     @Inject
     public HCheckoutVM(OrderRepository repository, CartRepository cartRepo,
-                       ProductRepository productRepo, CouponRepository couponRepository) {
+                       ProductRepository productRepo, CouponRepository couponRepository, NotificationPublisher notificationPublisher) {
         this.repository = repository;
         this.cartRepo = cartRepo;
         this.productRepo = productRepo;
@@ -82,6 +89,7 @@ public class HCheckoutVM extends ViewModel {
         totalPrice.addSource(subTotal, value -> calculateTotal());
         totalPrice.addSource(shippingFee, value -> calculateTotal());
         totalPrice.addSource(discountPrice, value -> calculateTotal());
+        this.notificationPublisher = notificationPublisher;
         calculateTotal();
     }
 
@@ -291,6 +299,7 @@ public class HCheckoutVM extends ViewModel {
 
                                 repository.updateOrderStatus(orderId.getValue(),
                                         OrderStatus.PENDING.getValue());
+
                                 if (!isFastCheckout.getValue()) {
                                     cartRepo.clearCart().observeForever(success -> {
                                         if (success) {
@@ -345,6 +354,29 @@ public class HCheckoutVM extends ViewModel {
 
     public interface RedirectCallback {
         void onRedirect(Bundle bundle);
+    }
+
+    public LiveData<Boolean> updateOrderStatus(String orderId, String newStatus) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        repository.updateOrderStatus(orderId, newStatus).observeForever(success -> {
+            if (success != null && success) {
+                // Fetch the order and send notification
+                repository.getOrderWithItems(orderId).observeForever(order -> {
+                    if (order != null && order.getUserId() != null) {
+                        String userId = order.getUserId();
+                        String title = "Đơn hàng của bạn đã có trạng thái mới: " + newStatus;
+                        NotificationDto notificationDto = new NotificationDto(
+                            title,
+                            NotificationTypes.ORDER_STATUS_UPDATED,
+                            new Date()
+                        );
+                        notificationPublisher.tryPublishToOneUser(userId, notificationDto);
+                    }
+                });
+            }
+            result.setValue(success);
+        });
+        return result;
     }
 
 }

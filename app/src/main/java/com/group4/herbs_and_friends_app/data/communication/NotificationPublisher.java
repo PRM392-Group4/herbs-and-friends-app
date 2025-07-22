@@ -99,7 +99,7 @@ public class NotificationPublisher {
     }
 
     public void tryPublishToOneUser(String receiverUserId, NotificationDto notificationDto) {
-        DatabaseReference presenceRef = FirebaseDatabase.getInstance()
+        DatabaseReference presenceRef = firebaseRealtimeInstance
                 .getReference("presence")
                 .child(receiverUserId);
 

@@ -17,6 +17,7 @@ import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.OrderItem;
 import com.group4.herbs_and_friends_app.data.model.Product;
+import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
 
 import java.util.ArrayList;
 import java.util.Collections;

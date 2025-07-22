@@ -11,6 +11,10 @@ import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
+import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
+import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -24,11 +28,13 @@ public class HOrderDetailVM extends ViewModel {
     private MutableLiveData<String> orderIdLive = new MutableLiveData<>();
     private LiveData<Order> orderLive;
     private final MutableLiveData<String> couponCode = new MutableLiveData<>();
+    private NotificationPublisher notificationPublisher;
 
     @Inject
-    public HOrderDetailVM(OrderRepository orderRepository, CouponRepository couponRepository) {
+    public HOrderDetailVM(OrderRepository orderRepository, CouponRepository couponRepository, NotificationPublisher notificationPublisher) {
         this.orderRepository = orderRepository;
         this.couponRepository = couponRepository;
+        this.notificationPublisher = notificationPublisher;
         // Set up reactive data flow
         this.orderLive = androidx.lifecycle.Transformations.switchMap(orderIdLive, orderId -> {
             if (orderId == null || orderId.isEmpty()) {
@@ -62,11 +68,32 @@ public class HOrderDetailVM extends ViewModel {
     }
 
     public LiveData<Boolean> updateOrderStatus(String orderId, String newStatus) {
-        return orderRepository.updateOrderStatus(orderId, newStatus);
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        orderRepository.updateOrderStatus(orderId, newStatus).observeForever(success -> {
+            Log.d("OrderDetailVM", "Order status updated: " + newStatus + " " + success);
+            if (success != null && success) {
+                orderRepository.getOrderWithItems(orderId).observeForever(order -> {
+
+                    Log.d("OrderDetailVM", "Order user id: " + order.getUserId());
+                    if (order != null && order.getUserId() != null) {
+                        String userId = order.getUserId();
+                        String title = "Đơn hàng " + orderId + " của bạn đã có trạng thái mới: " + newStatus;
+                        NotificationDto notificationDto = new NotificationDto(
+                            title,
+                            NotificationTypes.ORDER_STATUS_UPDATED,
+                            new Date()
+                        );
+                        notificationPublisher.tryPublishToOneUser(userId, notificationDto);
+                    }
+                });
+            }
+            result.setValue(success);
+        });
+        return result;
     }
 
     public LiveData<Boolean> cancelOrder(String orderId) {
-        return orderRepository.updateOrderStatus(orderId, "Cancelled");
+        return updateOrderStatus(orderId, "Cancelled");
     }
 
     public LiveData<String> getCouponCode() {
