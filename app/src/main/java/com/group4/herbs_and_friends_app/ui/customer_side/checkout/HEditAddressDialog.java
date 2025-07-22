@@ -77,7 +77,7 @@ public class HEditAddressDialog extends DialogFragment {
             String address = binding.editReceiverAddress.getText().toString().trim();
 
             // Basic validation
-            if (recipientName.isEmpty() || recipientPhone.isEmpty() || (args.getBoolean(ARG_IS_PICKUP) && address.isEmpty())) {
+            if (recipientName.isEmpty() || recipientPhone.isEmpty() || (!args.getBoolean(ARG_IS_PICKUP) && address.isEmpty())) {
                 binding.textError.setText("Please fill in all fields");
                 binding.textError.setVisibility(View.VISIBLE);
                 return;
