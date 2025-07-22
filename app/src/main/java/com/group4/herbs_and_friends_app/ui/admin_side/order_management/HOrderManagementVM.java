@@ -10,6 +10,10 @@ import androidx.lifecycle.ViewModel;
 import com.group4.herbs_and_friends_app.data.model.Order;
 import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
+import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
+import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
+import java.util.Date;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class HOrderManagementVM extends ViewModel {
 
     private OrderRepository orderRepository;
+    private NotificationPublisher notificationPublisher;
 
     // Original data from repository
     private LiveData<List<Order>> allOrdersLive;
@@ -35,8 +40,9 @@ public class HOrderManagementVM extends ViewModel {
     private MediatorLiveData<List<Order>> filteredOrdersLive = new MediatorLiveData<>();
 
     @Inject
-    public HOrderManagementVM(OrderRepository orderRepository) {
+    public HOrderManagementVM(OrderRepository orderRepository, NotificationPublisher notificationPublisher) {
         this.orderRepository = orderRepository;
+        this.notificationPublisher = notificationPublisher;
 
         this.allOrdersLive = orderRepository.getAllOrders();
 
@@ -109,6 +115,24 @@ public class HOrderManagementVM extends ViewModel {
     }
 
     public LiveData<Boolean> updateOrderStatus(String orderId, OrderStatus newStatus) {
-        return orderRepository.updateOrderStatus(orderId, newStatus.getValue());
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        orderRepository.updateOrderStatus(orderId, newStatus.getValue()).observeForever(success -> {
+            if (success != null && success) {
+                orderRepository.getOrderWithItems(orderId).observeForever(order -> {
+                    if (order != null && order.getUserId() != null) {
+                        String userId = order.getUserId();
+                        String title = "Đơn hàng của bạn đã có trạng thái mới: " + newStatus.getValue();
+                        NotificationDto notificationDto = new NotificationDto(
+                            title,
+                            NotificationTypes.ORDER_STATUS_UPDATED,
+                            new Date()
+                        );
+                        notificationPublisher.tryPublishToOneUser(userId, notificationDto);
+                    }
+                });
+            }
+            result.setValue(success);
+        });
+        return result;
     }
 }
