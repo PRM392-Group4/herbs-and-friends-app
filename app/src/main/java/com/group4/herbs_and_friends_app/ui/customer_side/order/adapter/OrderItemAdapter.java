@@ -51,7 +51,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     }
 
     static class OrderItemViewHolder extends RecyclerView.ViewHolder {
-        
+
         private TextView tvProductName;
         private TextView tvProductPrice;
         private TextView tvProductQuantity;

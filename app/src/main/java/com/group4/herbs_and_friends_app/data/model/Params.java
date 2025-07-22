@@ -9,7 +9,8 @@ public class Params {
     private List<String> categoryIds;
     private SortOptions sort;
 
-    public Params() {}
+    public Params() {
+    }
 
     public String getSearch() {
         return search;

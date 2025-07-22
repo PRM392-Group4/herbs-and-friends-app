@@ -1,6 +1,5 @@
 package com.group4.herbs_and_friends_app.data.communication;
 
-import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,56 +10,29 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 import com.group4.herbs_and_friends_app.data.repository.DevicePushNotificationTokenRepository;
 import com.group4.herbs_and_friends_app.di.PermissionManager;
 
-import java.util.HashMap;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationConsumer implements DefaultLifecycleObserver {
     public static final String TAG = "NotificationConsumer";
-
+    private final ValueEventListener onNewValueAddedCallback;
     private String storedUserId;
     private FirebaseDatabase firebaseRealtimeInstance;
     private DatabaseReference notifyDbRef;
     private DatabaseReference presenceDbRef;
-    private final ValueEventListener onNewValueAddedCallback;
     private MutableLiveData<List<NotificationDto>> notificationsLiveData = new MutableLiveData<>(new ArrayList<>());
-
-    @Override
-    public void onStart(@NonNull LifecycleOwner owner) {
-        Log.i(TAG, "onStart");
-        if (presenceDbRef != null) {
-            presenceDbRef.setValue("online");
-        }
-        DefaultLifecycleObserver.super.onStart(owner);
-    }
-
-    @Override
-    public void onStop(@NonNull LifecycleOwner owner) {
-        Log.i(TAG, "onStop");
-        if (presenceDbRef != null) {
-            presenceDbRef.setValue("offline");
-        }
-        DefaultLifecycleObserver.super.onStop(owner);
-    }
 
     public NotificationConsumer(FirebaseDatabase firebaseRealtimeInstance,
                                 FirebaseAuth firebaseAuthInstance,
@@ -106,6 +78,25 @@ public class NotificationConsumer implements DefaultLifecycleObserver {
             }
         });
     }
+
+    @Override
+    public void onStart(@NonNull LifecycleOwner owner) {
+        Log.i(TAG, "onStart");
+        if (presenceDbRef != null) {
+            presenceDbRef.setValue("online");
+        }
+        DefaultLifecycleObserver.super.onStart(owner);
+    }
+
+    @Override
+    public void onStop(@NonNull LifecycleOwner owner) {
+        Log.i(TAG, "onStop");
+        if (presenceDbRef != null) {
+            presenceDbRef.setValue("offline");
+        }
+        DefaultLifecycleObserver.super.onStop(owner);
+    }
+
     public void startListenToDataChanges() {
         notifyDbRef = firebaseRealtimeInstance
                 .getReference("notify")
@@ -146,7 +137,7 @@ public class NotificationConsumer implements DefaultLifecycleObserver {
     }
 
     private ValueEventListener initializeOnDataChangeCallback() {
-         return new ValueEventListener() {
+        return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.i(TAG, "onDataChange");
@@ -159,6 +150,7 @@ public class NotificationConsumer implements DefaultLifecycleObserver {
                 }
                 notificationsLiveData.postValue(notifications);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());

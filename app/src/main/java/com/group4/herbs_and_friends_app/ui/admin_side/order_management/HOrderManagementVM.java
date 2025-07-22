@@ -23,23 +23,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class HOrderManagementVM extends ViewModel {
 
     private OrderRepository orderRepository;
-    
+
     // Original data from repository
     private LiveData<List<Order>> allOrdersLive;
-    
+
     // Filter and search parameters
     private MutableLiveData<String> searchQueryLive = new MutableLiveData<>();
     private MutableLiveData<OrderStatus> selectedStatusLive = new MutableLiveData<>();
-    
+
     // Filtered results
     private MediatorLiveData<List<Order>> filteredOrdersLive = new MediatorLiveData<>();
 
     @Inject
     public HOrderManagementVM(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        
+
         this.allOrdersLive = orderRepository.getAllOrders();
-        
+
         // Setup filtering logic
         setupFiltering();
     }
@@ -59,17 +59,17 @@ public class HOrderManagementVM extends ViewModel {
         }
 
         List<Order> filtered = new ArrayList<>(allOrders);
-        
+
         // Apply search filter
         String searchQuery = searchQueryLive.getValue();
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             String query = searchQuery.trim().toLowerCase();
             filtered = filtered.stream()
                     .filter(order ->
-                                   order.getOrderNumber().toLowerCase().contains(query))
+                            order.getOrderNumber().toLowerCase().contains(query))
                     .collect(Collectors.toList());
         }
-        
+
         // Apply status filter
         OrderStatus selectedStatus = selectedStatusLive.getValue();
         if (selectedStatus != null) {
@@ -77,7 +77,7 @@ public class HOrderManagementVM extends ViewModel {
                     .filter(order -> order.getStatusEnum() == selectedStatus)
                     .collect(Collectors.toList());
         }
-        
+
         Log.d("HOrderManagementVM", "Filtered " + allOrders.size() + " orders down to " + filtered.size());
         filteredOrdersLive.setValue(filtered);
     }

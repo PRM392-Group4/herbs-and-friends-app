@@ -15,13 +15,6 @@ import com.group4.herbs_and_friends_app.databinding.ItemCheckoutProductBinding;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 public class OrderItemAdapter extends ListAdapter<CartItem, OrderItemAdapter.ItemViewHolder> {
-    private final Context context;
-
-    public OrderItemAdapter(Context context) {
-        super(DIFF_CALLBACK);
-        this.context = context;
-    }
-
     private static final DiffUtil.ItemCallback<CartItem> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<CartItem>() {
                 @Override
@@ -34,6 +27,12 @@ public class OrderItemAdapter extends ListAdapter<CartItem, OrderItemAdapter.Ite
                     return oldItem.equals(newItem);
                 }
             };
+    private final Context context;
+
+    public OrderItemAdapter(Context context) {
+        super(DIFF_CALLBACK);
+        this.context = context;
+    }
 
     @NonNull
     @Override

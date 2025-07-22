@@ -1,30 +1,26 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.checkout;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.databinding.DialogHEditAddressBinding;
 
 public class HEditAddressDialog extends DialogFragment {
-
-    private DialogHEditAddressBinding binding;
-
-    private OnAddressUpdatedListener listener;
-
-    // Callback interface to send data back to HCheckoutFragment
-    public interface OnAddressUpdatedListener {
-        void onAddressUpdated(String recipientName, String recipientPhone, String address);
-    }
 
     // Allow setting initial values for the dialog
     private static final String ARG_RECIPIENT_NAME = "recipient_name";
     private static final String ARG_RECIPIENT_PHONE = "recipient_phone";
     private static final String ARG_ADDRESS = "address";
     private static final String ARG_IS_PICKUP = "is_pickup";
+    private DialogHEditAddressBinding binding;
+    private OnAddressUpdatedListener listener;
 
     public static HEditAddressDialog newInstance(String recipientName, String recipientPhone,
                                                  String address, boolean isPickup) {
@@ -102,5 +98,10 @@ public class HEditAddressDialog extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    // Callback interface to send data back to HCheckoutFragment
+    public interface OnAddressUpdatedListener {
+        void onAddressUpdated(String recipientName, String recipientPhone, String address);
     }
 }

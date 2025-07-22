@@ -1,4 +1,5 @@
 package com.group4.herbs_and_friends_app.data.api;
+
 import android.util.Log;
 
 import org.json.JSONException;
@@ -48,7 +49,7 @@ public class HttpProvider {
                 data = new JSONObject(response.body().string());
             }
 
-        }  catch (IOException | JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 

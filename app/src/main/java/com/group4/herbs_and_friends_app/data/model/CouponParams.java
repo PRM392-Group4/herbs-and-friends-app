@@ -1,17 +1,14 @@
 package com.group4.herbs_and_friends_app.data.model;
 
-import com.group4.herbs_and_friends_app.data.model.enums.CouponSortOptions;
-import com.group4.herbs_and_friends_app.data.model.enums.SortOptions;
-
 import java.util.Date;
-import java.util.List;
 
 public class CouponParams {
     private String search;
     private Date effectiveDate;
     private Date expiryDate;
 
-    public CouponParams() {}
+    public CouponParams() {
+    }
 
     public String getSearch() {
         return search;

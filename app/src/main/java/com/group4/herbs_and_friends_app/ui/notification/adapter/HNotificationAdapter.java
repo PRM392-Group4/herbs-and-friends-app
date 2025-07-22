@@ -69,6 +69,7 @@ public class HNotificationAdapter extends RecyclerView.Adapter<HNotificationAdap
 
     static class NotificationViewHolder extends RecyclerView.ViewHolder {
         TextView title, message, type, sendDate;
+
         NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.tvNotificationTitle);

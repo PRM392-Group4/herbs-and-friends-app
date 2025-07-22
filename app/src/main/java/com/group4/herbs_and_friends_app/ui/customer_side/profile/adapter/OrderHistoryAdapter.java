@@ -22,10 +22,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private List<Order> orders;
     private OnOrderClickListener onOrderClickListener;
 
-    public interface OnOrderClickListener {
-        void onOrderClick(Order order);
-    }
-
     public OrderHistoryAdapter(Context context, OnOrderClickListener listener) {
         this.context = context;
         this.orders = new ArrayList<>();
@@ -53,6 +49,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     @Override
     public int getItemCount() {
         return orders.size();
+    }
+
+    public interface OnOrderClickListener {
+        void onOrderClick(Order order);
     }
 
     class OrderHistoryViewHolder extends RecyclerView.ViewHolder {

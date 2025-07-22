@@ -72,7 +72,7 @@ public class HCheckoutFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            Toast.makeText(getContext(), "Please log in to proceed with checkout", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Hãy đăng nhập để thanh toán", Toast.LENGTH_SHORT).show();
             return;
         }
         Bundle args = getArguments();
@@ -204,7 +204,7 @@ public class HCheckoutFragment extends Fragment {
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
         order.setShippingMethod(shippingMethod != null ? shippingMethod.getValue() : ShippingMethod.STANDARD.getValue());
-        order.setCouponId(binding.etCouponCode.getText().toString());
+        order.setCouponId(binding.etCouponId.getText().toString());
 //        order.setCoupon(coupon != null ? FirebaseFirestore.getInstance().collection("coupons").document(coupon.getId()) : null);
         order.setPlacedAt(new Date());
         order.setNote(binding.editNote.getText().toString()); // Optional, not in UI
@@ -217,7 +217,7 @@ public class HCheckoutFragment extends Fragment {
         // Create order and observe result
         checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
             if (checkoutVM.getOrderCreated().getValue() && success != null) {
-                Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tạo đơn hàng thành công", Toast.LENGTH_SHORT).show();
                 if (checkoutVM.getPaymentMethod().getValue() == PaymentMethod.ZALOPAY) {
                     checkoutVM.processPayment(requireActivity(), bundle -> {
                         Log.d("HCheckoutFragment", "Redirecting with bundle: result=" + bundle.getString("result") +
@@ -240,7 +240,7 @@ public class HCheckoutFragment extends Fragment {
                     navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
                 }
             } else {
-                Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Lỗi tạo đơn hàng", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -300,6 +300,7 @@ public class HCheckoutFragment extends Fragment {
                 @Override
                 public void onCouponSelected(Coupon coupon) {
                     binding.etCouponCode.setText(coupon.getCode());
+                    binding.etCouponId.setText(coupon.getId());
                     checkoutVM.setCoupon(coupon);
                 }
             });

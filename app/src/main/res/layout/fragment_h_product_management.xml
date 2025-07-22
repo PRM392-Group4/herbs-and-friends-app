@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.admin_side.product_management.HProductManagementFragment"
-    android:padding="16dp" >
+    android:padding="16dp"
+    tools:context=".ui.admin_side.product_management.HProductManagementFragment">
 
     <include
         android:id="@+id/include_actionbar_product_manage"
         layout="@layout/view_h_actionbar"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,10 +20,10 @@
         android:fillViewport="true"
         android:paddingHorizontal="5dp"
         android:paddingTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/include_actionbar_product_manage"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/include_actionbar_product_manage">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,15 +52,15 @@
                 style="@style/SquareButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:backgroundTint="@color/h_on_primary"
                 android:paddingHorizontal="7dp"
                 android:text="@string/btn_sort_placeholder_txt"
                 android:textColor="@color/h_black"
-                android:layout_marginStart="15dp"
                 app:icon="@drawable/ic_product_sort"
                 app:iconTint="@color/h_info"
-                app:layout_constraintStart_toEndOf="@id/btn_product_filter"
                 app:layout_constraintBottom_toTopOf="@id/product_manage_rv"
+                app:layout_constraintStart_toEndOf="@id/btn_product_filter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/h_info"
                 app:strokeWidth="1dp" />
@@ -85,19 +85,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/h_primary"
         android:contentDescription="@string/btn_add_product_content_desc"
         android:src="@drawable/ic_add"
-        app:tint="@color/h_white"
-        android:backgroundTint="@color/h_primary"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/h_white" />
 
     <include
         android:id="@+id/include_category_filter"
         layout="@layout/view_h_filter_sheet"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

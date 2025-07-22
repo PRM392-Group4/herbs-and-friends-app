@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.MaterialToolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/material_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    app:contentInsetStart="0dp"
-    app:contentInsetEnd="0dp">
+    app:contentInsetEnd="0dp"
+    app:contentInsetStart="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <!-- Back Arrow Button -->
         <com.google.android.material.button.MaterialButton
@@ -21,19 +20,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:visibility="visible"
             app:icon="@drawable/ic_back_arrow"
-            app:iconTint="@color/h_gray"
-            android:visibility="visible" />
+            app:iconTint="@color/h_gray" />
 
         <!-- Title -->
         <TextView
             android:id="@+id/action_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="@string/action_bar_title_placeholder_txt"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_marginStart="16dp"
-            android:textColor="@color/h_primary"/>
+            android:textColor="@color/h_primary" />
 
     </LinearLayout>
 

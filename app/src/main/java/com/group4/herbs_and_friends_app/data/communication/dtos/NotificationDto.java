@@ -8,7 +8,9 @@ public class NotificationDto {
     private String title;
     private NotificationTypes type;
     private Date sendDate;
-    public NotificationDto() {}
+
+    public NotificationDto() {
+    }
 
     public NotificationDto(String title, NotificationTypes type, Date sendDate) {
         this.title = title;
@@ -16,12 +18,12 @@ public class NotificationDto {
         this.sendDate = sendDate;
     }
 
-    public void setType(NotificationTypes type) {
-        this.type = type;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getSendDate() {
@@ -32,13 +34,15 @@ public class NotificationDto {
         this.sendDate = sendDate;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public NotificationTypes getType() {
         return type;
     }
 
-    public String getMessage() { return type.getMessage(); }
+    public void setType(NotificationTypes type) {
+        this.type = type;
+    }
+
+    public String getMessage() {
+        return type.getMessage();
+    }
 }

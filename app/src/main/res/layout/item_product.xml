@@ -30,11 +30,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/product_name_placeholder_txt"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/product_price"
@@ -42,16 +42,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/product_price_placeholder_txt"
-            android:textStyle="bold"
+            android:textColor="@color/h_secondary"
             android:textSize="15sp"
-            android:textColor="@color/h_secondary" />
+            android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_product_detail"
             style="@style/SquareButton"
-            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="@string/btn_product_detail"
             android:textSize="14sp" />
 
@@ -60,9 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            app:chipStrokeColor="@color/h_info"
+            android:text="@string/product_tag_placeholder_txt"
             android:textColor="@color/h_info"
-            android:text="@string/product_tag_placeholder_txt" />
+            app:chipStrokeColor="@color/h_info" />
 
     </LinearLayout>
 

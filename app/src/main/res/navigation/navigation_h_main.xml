@@ -117,7 +117,7 @@
             android:id="@+id/action_HCheckoutFragment_to_HOrderResultFragment"
             app:destination="@+id/HOrderResultFragment"
             app:popUpTo="@id/HCheckoutFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Order Result Fragment -->
@@ -129,8 +129,9 @@
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
             app:destination="@id/HOrderDetailFragment"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"/>
-        <action android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
-            app:destination="@id/homeFragment"/>
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

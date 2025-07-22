@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -24,13 +23,13 @@ import javax.annotation.Nullable;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
-
 @AndroidEntryPoint
 public class HHomeContainerFragment extends Fragment {
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_h_home_container, container, false);
+    }    private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (!isGranted) {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
@@ -38,12 +37,6 @@ public class HHomeContainerFragment extends Fragment {
                     }
                 }
             });
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_h_home_container, container, false);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -84,4 +77,6 @@ public class HHomeContainerFragment extends Fragment {
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show();
     }
+
+
 }

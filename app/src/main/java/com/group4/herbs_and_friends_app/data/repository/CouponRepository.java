@@ -1,6 +1,5 @@
 package com.group4.herbs_and_friends_app.data.repository;
 
-import android.os.Debug;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -9,11 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.FirebaseStorage;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.CouponParams;
-import com.group4.herbs_and_friends_app.data.model.Coupon;
-import com.group4.herbs_and_friends_app.data.model.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,7 +67,7 @@ public class CouponRepository {
                         couponList = filteredList;
                     }
                     // Apply search
-                    if(params.getSearch() != null && !params.getSearch().isEmpty()) {
+                    if (params.getSearch() != null && !params.getSearch().isEmpty()) {
                         List<Coupon> filteredList = filterBySearch(couponList, params.getSearch());
                         couponListLive.setValue(filteredList);
                     } else couponListLive.setValue(couponList);
@@ -108,7 +104,7 @@ public class CouponRepository {
         return isAddSuccess;
     }
 
-    public LiveData<Boolean> updateCoupon(String couponId, Map<String,Object> updatedCouponFields) {
+    public LiveData<Boolean> updateCoupon(String couponId, Map<String, Object> updatedCouponFields) {
         MutableLiveData<Boolean> isDeleteSuccess = new MutableLiveData<>();
 
         coupons.document(couponId)

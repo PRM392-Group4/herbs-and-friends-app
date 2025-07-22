@@ -19,6 +19,7 @@ import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.data.model.enums.PaymentMethod;
 import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.data.repository.CartRepository;
+import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
@@ -41,6 +42,8 @@ public class HCheckoutVM extends ViewModel {
     private final OrderRepository repository;
     private final CartRepository cartRepo;
     private final ProductRepository productRepo;
+    private final CouponRepository couponRepository;
+
     // ========== LiveData for Order Data ==========
     private final LiveData<List<CartItem>> orderItems;
     private final MutableLiveData<List<CartItem>> fastCheckoutItem =
@@ -66,10 +69,11 @@ public class HCheckoutVM extends ViewModel {
 
     @Inject
     public HCheckoutVM(OrderRepository repository, CartRepository cartRepo,
-                       ProductRepository productRepo) {
+                       ProductRepository productRepo, CouponRepository couponRepository) {
         this.repository = repository;
         this.cartRepo = cartRepo;
         this.productRepo = productRepo;
+        this.couponRepository = couponRepository;
         this.orderItems = cartRepo.getLiveCartItems();
         this.subTotal = cartRepo.getLiveTotalPrice();
         this.shippingFee = new MutableLiveData<>(ShippingMethod.STANDARD.getPrice());
@@ -83,11 +87,41 @@ public class HCheckoutVM extends ViewModel {
 
     // ========== Getters for UI ==========
 
+    private static List<OrderItem> fromCartToOrderItem(List<CartItem> items) {
+        List<OrderItem> list = new ArrayList<>();
+        if (items == null) {
+            return list;
+        }
+        for (CartItem item : items) {
+            OrderItem obj = new OrderItem();
+            obj.setProductId(item.getProductId());
+            obj.setName(item.getName());
+            obj.setQuantity(item.getQuantity());
+            obj.setUnitPrice(item.getPrice());
+            list.add(obj);
+        }
+        return list;
+    }
+
     public MutableLiveData<String> getOrderId() {
         return orderId;
     }
+
     public LiveData<List<CartItem>> getFastCheckoutItem() {
         return fastCheckoutItem;
+    }
+
+    // ========== Setters (used by Fragment binding) ==========
+    public void setFastCheckoutItem(CartItem item) {
+        List<CartItem> currentItems = fastCheckoutItem.getValue();
+        if (currentItems == null) {
+            currentItems = new ArrayList<>();
+        }
+        currentItems.clear(); // Clear previous items for fast checkout
+        currentItems.add(item);
+        fastCheckoutItem.setValue(currentItems);
+        isFastCheckout.setValue(true);
+        calculateTotal();
     }
 
     public LiveData<List<CartItem>> getOrderItems() {
@@ -98,6 +132,8 @@ public class HCheckoutVM extends ViewModel {
         return !fastCheckoutItem.getValue().isEmpty() ? calculateFastCheckoutSubTotal() :
                 this.subTotal;
     }
+
+
 
     public LiveData<Boolean> getIsFastCheckout() {
         return isFastCheckout;
@@ -115,6 +151,12 @@ public class HCheckoutVM extends ViewModel {
         return shippingMethod;
     }
 
+    public void setShippingMethod(ShippingMethod value) {
+        shippingMethod.setValue(value);
+        shippingFee.setValue(value.getPrice());
+        calculateTotal();
+    }
+
     public LiveData<Long> getShippingFee() {
         return shippingFee;
     }
@@ -123,49 +165,12 @@ public class HCheckoutVM extends ViewModel {
         return paymentMethod;
     }
 
-    public LiveData<Coupon> getCoupon() {
-        return coupon;
-    }
-
-    public MutableLiveData<Long> getDiscountPrice() {
-        return discountPrice;
-    }
-
-    public LiveData<String> getAddress() {
-        return address;
-    }
-    public LiveData<String> getRecipientName() { return recipientName; }
-    public LiveData<String> getRecipientPhone() { return recipientPhone; }
-
-    public LiveData<Boolean> getOrderCreated() {
-        return orderCreated;
-    }
-
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
-
-    // ========== Setters (used by Fragment binding) ==========
-    public void setFastCheckoutItem(CartItem item) {
-        List<CartItem> currentItems = fastCheckoutItem.getValue();
-        if (currentItems == null) {
-            currentItems = new ArrayList<>();
-        }
-        currentItems.clear(); // Clear previous items for fast checkout
-        currentItems.add(item);
-        fastCheckoutItem.setValue(currentItems);
-        isFastCheckout.setValue(true);
-        calculateTotal();
-    }
-
-    public void setShippingMethod(ShippingMethod value) {
-        shippingMethod.setValue(value);
-        shippingFee.setValue(value.getPrice());
-        calculateTotal();
-    }
-
     public void setPaymentMethod(PaymentMethod value) {
         paymentMethod.setValue(value);
+    }
+
+    public LiveData<Coupon> getCoupon() {
+        return coupon;
     }
 
     public void setCoupon(Coupon value) {
@@ -178,15 +183,40 @@ public class HCheckoutVM extends ViewModel {
         calculateTotal();
     }
 
+    public MutableLiveData<Long> getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public LiveData<String> getAddress() {
+        return address;
+    }
+
     public void setAddress(String value) {
         address.setValue(value);
     }
+
+    public LiveData<String> getRecipientName() {
+        return recipientName;
+    }
+
     public void setRecipientName(String value) {
         recipientName.setValue(value);
     }
 
+    public LiveData<String> getRecipientPhone() {
+        return recipientPhone;
+    }
+
     public void setRecipientPhone(String value) {
         recipientPhone.setValue(value);
+    }
+
+    public LiveData<Boolean> getOrderCreated() {
+        return orderCreated;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     // ========== Total Calculation ==========
@@ -213,7 +243,7 @@ public class HCheckoutVM extends ViewModel {
         MutableLiveData<String> result = new MutableLiveData<>();
         // Save order to Firestore
         repository.createOrder(order).observeForever(success -> {
-            if (success!=null) {
+            if (success != null) {
                 orderCreated.setValue(true);
 
                 productRepo.modifyProductStock(getOrderProducts(), false);
@@ -238,26 +268,10 @@ public class HCheckoutVM extends ViewModel {
                 orderItems.getValue().size();
     }
 
-    private static List<OrderItem> fromCartToOrderItem(List<CartItem> items) {
-        List<OrderItem> list = new ArrayList<>();
-        if (items == null) {
-            return list;
-        }
-        for (CartItem item : items) {
-            OrderItem obj = new OrderItem();
-            obj.setProductId(item.getProductId());
-            obj.setName(item.getName());
-            obj.setQuantity(item.getQuantity());
-            obj.setUnitPrice(item.getPrice());
-            list.add(obj);
-        }
-        return list;
-    }
-
-    public void processPayment(Activity activity, RedirectCallback redirect){
+    public void processPayment(Activity activity, RedirectCallback redirect) {
         OrderSchema orderApi = new OrderSchema();
         try {
-            JSONObject data = orderApi.createOrder(String.format("%.0f",(double)
+            JSONObject data = orderApi.createOrder(String.format("%.0f", (double)
                     getTotalPrice().getValue()));
             String code = data.getString("return_code");
 
@@ -324,11 +338,12 @@ public class HCheckoutVM extends ViewModel {
             }
         } catch (Exception e) {
             Log.d("Payment Error", e.getMessage());
-            Toast.makeText(activity.getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG);
+            Toast.makeText(activity.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
         }
 
     }
-    public interface RedirectCallback{
+
+    public interface RedirectCallback {
         void onRedirect(Bundle bundle);
     }
 

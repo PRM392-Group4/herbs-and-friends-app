@@ -1,4 +1,5 @@
 package com.group4.herbs_and_friends_app.data.api;
+
 import com.group4.herbs_and_friends_app.utils.Helpers;
 
 import org.json.JSONObject;
@@ -9,6 +10,26 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 public class OrderSchema {
+    public JSONObject createOrder(String amount) throws Exception {
+        CreateOrderData input = new CreateOrderData(amount);
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("app_id", input.AppId)
+                .add("app_user", input.AppUser)
+                .add("app_time", input.AppTime)
+                .add("amount", input.Amount)
+                .add("app_trans_id", input.AppTransId)
+                .add("embed_data", input.EmbedData)
+                .add("item", input.Items)
+                .add("bank_code", input.BankCode)
+                .add("description", input.Description)
+                .add("mac", input.Mac)
+                .build();
+
+        JSONObject data = HttpProvider.sendPost(AppInfo.URL_CREATE_ORDER, formBody);
+        return data;
+    }
+
     private class CreateOrderData {
         String AppId;
         String AppUser;
@@ -43,25 +64,5 @@ public class OrderSchema {
 
             Mac = Helpers.getMac(AppInfo.MAC_KEY, inputHMac);
         }
-    }
-
-    public JSONObject createOrder(String amount) throws Exception {
-        CreateOrderData input = new CreateOrderData(amount);
-
-        RequestBody formBody = new FormBody.Builder()
-                .add("app_id", input.AppId)
-                .add("app_user", input.AppUser)
-                .add("app_time", input.AppTime)
-                .add("amount", input.Amount)
-                .add("app_trans_id", input.AppTransId)
-                .add("embed_data", input.EmbedData)
-                .add("item", input.Items)
-                .add("bank_code", input.BankCode)
-                .add("description", input.Description)
-                .add("mac", input.Mac)
-                .build();
-
-        JSONObject data = HttpProvider.sendPost(AppInfo.URL_CREATE_ORDER, formBody);
-        return data;
     }
 }

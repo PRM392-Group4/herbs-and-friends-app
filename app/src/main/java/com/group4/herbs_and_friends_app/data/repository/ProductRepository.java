@@ -33,7 +33,7 @@ public class ProductRepository {
     public ProductRepository(FirebaseFirestore firestore,
                              FirebaseStorage storage) {
         this.firestore = firestore;
-        this.products  = firestore.collection("products");
+        this.products = firestore.collection("products");
         this.storage = storage;
         this.storageRef = storage.getReference().child("products")
                 .child("images");
@@ -57,13 +57,14 @@ public class ProductRepository {
         Query query = products;
 
         // Apply categories
-        if(params.getCategoryIds() != null && !params.getCategoryIds().isEmpty())
+        if (params.getCategoryIds() != null && !params.getCategoryIds().isEmpty())
             query = query.whereIn("categoryId", params.getCategoryIds());
 
         // Apply sort
-        if(params.getSort() != null) {
+        if (params.getSort() != null) {
             switch (params.getSort()) {
-                case PRICE_DEFAULT: break;
+                case PRICE_DEFAULT:
+                    break;
                 case PRICE_ASC:
                     query = query.orderBy("price", Query.Direction.ASCENDING);
                     break;
@@ -77,7 +78,7 @@ public class ProductRepository {
                     List<Product> productList = querySnapshot.toObjects(Product.class);
 
                     // Apply search
-                    if(params.getSearch() != null && !params.getSearch().isEmpty()) {
+                    if (params.getSearch() != null && !params.getSearch().isEmpty()) {
                         List<Product> filteredList = filterBySearch(productList, params.getSearch());
                         productListLive.setValue(filteredList);
                     } else productListLive.setValue(productList);
@@ -114,7 +115,7 @@ public class ProductRepository {
                     product.getTags()
                             .stream()
                             .anyMatch(tag -> tag.toLowerCase().contains(search.toLowerCase()));
-            if(nameMatch || tagMatch) filteredList.add(product);
+            if (nameMatch || tagMatch) filteredList.add(product);
         }
 
         return filteredList;
@@ -131,14 +132,14 @@ public class ProductRepository {
 
         // Set the product to preserve the generated id
         products
-            .document(product.getId())
-            .set(product)
-            .addOnSuccessListener(aVoid -> {
-                result.setValue(true);
-            })
-            .addOnFailureListener(e -> {
-                result.setValue(false);
-            });
+                .document(product.getId())
+                .set(product)
+                .addOnSuccessListener(aVoid -> {
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    result.setValue(false);
+                });
 
         return result;
     }
@@ -224,19 +225,19 @@ public class ProductRepository {
             String fileName = UUID.randomUUID().toString();
             StorageReference ref = storageRef.child(prodId).child(fileName);
             ref.putFile(uri)
-                .continueWithTask(task -> {
-                    if (!task.isSuccessful()) throw task.getException();
-                    return ref.getDownloadUrl();
-                })
-                .addOnSuccessListener(downloadUri -> {
-                    urls.add(downloadUri.toString());
-                    if (urls.size() == uris.size()) {
-                        live.setValue(urls);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d("Upload Images", "Failed to upload images");
-                });
+                    .continueWithTask(task -> {
+                        if (!task.isSuccessful()) throw task.getException();
+                        return ref.getDownloadUrl();
+                    })
+                    .addOnSuccessListener(downloadUri -> {
+                        urls.add(downloadUri.toString());
+                        if (urls.size() == uris.size()) {
+                            live.setValue(urls);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("Upload Images", "Failed to upload images");
+                    });
         }
         return live;
     }
@@ -253,7 +254,7 @@ public class ProductRepository {
         AtomicInteger productsLoaded = new AtomicInteger(0);
         int totalItems = orderItems.size();
 
-        if (!isAdding){
+        if (!isAdding) {
             for (OrderItem item : orderItems) {
                 if (item.getProductId() == null || item.getQuantity() <= 0) {
                     Log.e("ProductRepository", "Invalid order item: productId=" + item.getProductId() + ", quantity=" + item.getQuantity());

@@ -13,14 +13,6 @@ public enum PaymentMethod {
         this.displayName = displayName;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
     public static PaymentMethod fromValue(String value) {
         for (PaymentMethod method : PaymentMethod.values()) {
             if (method.value.equals(value)) {
@@ -28,5 +20,13 @@ public enum PaymentMethod {
             }
         }
         return CASH; // Default value
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }
