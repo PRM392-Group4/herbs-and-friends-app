@@ -41,7 +41,7 @@ public class Order {
     private User orderUser;    // Cached user for display purposes
     public Order() {}
 
-    public Order(String userId, OrderStatus status, long total, PaymentMethod paymentMethod, 
+    public Order(String userId, OrderStatus status, long total, PaymentMethod paymentMethod,
                  ShippingMethod shippingMethod, String address) {
         this.userId = userId;
         this.status = status.getValue();
@@ -51,6 +51,7 @@ public class Order {
         this.placedAt = new Date();
         this.address = address;
     }
+
 
     public String getId() {
         return id;

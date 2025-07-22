@@ -204,7 +204,7 @@ public class HCheckoutFragment extends Fragment {
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
         order.setShippingMethod(shippingMethod != null ? shippingMethod.getValue() : ShippingMethod.STANDARD.getValue());
-        order.setCouponId(binding.etCouponCode.getText().toString());
+        order.setCouponId(binding.etCouponId.getText().toString());
 //        order.setCoupon(coupon != null ? FirebaseFirestore.getInstance().collection("coupons").document(coupon.getId()) : null);
         order.setPlacedAt(new Date());
         order.setNote(binding.editNote.getText().toString()); // Optional, not in UI
@@ -300,6 +300,7 @@ public class HCheckoutFragment extends Fragment {
                 @Override
                 public void onCouponSelected(Coupon coupon) {
                     binding.etCouponCode.setText(coupon.getCode());
+                    binding.etCouponId.setText(coupon.getId());
                     checkoutVM.setCoupon(coupon);
                 }
             });
