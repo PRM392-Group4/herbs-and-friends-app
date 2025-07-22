@@ -3,7 +3,6 @@ package com.group4.herbs_and_friends_app.ui.customer_side.checkout;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -32,6 +31,7 @@ import com.group4.herbs_and_friends_app.data.model.enums.ShippingMethod;
 import com.group4.herbs_and_friends_app.databinding.FragmentHCheckoutBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchBinding;
 import com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters.HCouponSelectionAdapter;
+import com.group4.herbs_and_friends_app.ui.auth.login.HAuthVM;
 import com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter.OrderItemAdapter;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
@@ -46,9 +46,9 @@ public class HCheckoutFragment extends Fragment {
     private FragmentHCheckoutBinding binding;
     private OrderItemAdapter adapter;
     private HCheckoutVM checkoutVM;
+    private HAuthVM authVM;
     private FirebaseUser currentUser;
     private Bundle pendingNavigationBundle;
-    private SharedPreferences sharedPrefs;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -68,6 +68,7 @@ public class HCheckoutFragment extends Fragment {
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         checkoutVM = new ViewModelProvider(this).get(HCheckoutVM.class);
+        authVM = new ViewModelProvider(this).get(HAuthVM.class);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
@@ -241,25 +242,28 @@ public class HCheckoutFragment extends Fragment {
     }
 
     private void setupEditAddressAction() {
-        if (checkoutVM.getRecipientName().getValue().isEmpty()) {
-            binding.textReceiverName.setText("Tên người nhận");
-            checkoutVM.setRecipientName("");
-        }
-        if (currentUser.getPhoneNumber().isEmpty()) {
-            binding.textReceiverPhone.setText("Số điện thoại");
-            checkoutVM.setRecipientPhone("");
-        }
-        if (checkoutVM.getAddress().getValue().isEmpty()) {
-            binding.textReceiverAddress.setText("Địa chỉ nhận hàng");
+        if (currentUser.getUid() != null) {
+            authVM.fetchUser(currentUser.getUid(), user -> {
+                if (user == null) {
+                    binding.textReceiverAddress.setText("Địa chỉ nhận hàng");
+                    binding.textReceiverPhone.setText("Số điện thoại");
+                    binding.textReceiverName.setText("Tên người nhận");
+                    return;
+                }
+                // Set initial values for address fields
+                binding.textReceiverName.setText(user.getName());
+                binding.textReceiverPhone.setText(user.getPhone());
+                binding.textReceiverAddress.setText(user.getAddress());
+                checkoutVM.setRecipientName(user.getName());
+                checkoutVM.setRecipientPhone(user.getPhone());
+                checkoutVM.setAddress(user.getAddress());
+            }, () -> Log.e("HCheckoutFragment", "Failed to fetch user"));
         }
         binding.btnEditAddress.setOnClickListener(v -> {
             // Get current values from UI
-            String currentName = binding.textReceiverName.getText().toString().trim().equals("Tên người nhận") ? "" :
-                    binding.textReceiverName.getText().toString().trim();
-            String currentPhone = binding.textReceiverPhone.getText().toString().trim().equals("Số điện thoại") ? "" :
-                    binding.textReceiverPhone.getText().toString().trim();
-            String currentAddress = binding.textReceiverAddress.getText().toString().trim().equals("Địa chỉ nhận hàng") ? "" :
-                    binding.textReceiverAddress.getText().toString().trim();
+            String currentName = checkoutVM.getRecipientName().getValue();
+            String currentPhone = checkoutVM.getRecipientPhone().getValue();
+            String currentAddress = checkoutVM.getAddress().getValue();
 
             // Show dialog with current values
             HEditAddressDialog dialog = HEditAddressDialog.newInstance(currentName, currentPhone,
