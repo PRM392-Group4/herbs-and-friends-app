@@ -1,5 +1,7 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.order;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -37,7 +39,7 @@ public class HOrderDetailVM extends ViewModel {
             return orderRepository.getOrderWithItems(orderId);
         });
     }
-    public void getCouponCode(String couponId){
+    public void loadCouponCode(String couponId){
         couponRepository.getCouponById(couponId).observeForever(new Observer<Coupon>() {
             @Override
             public void onChanged(Coupon coupon) {
