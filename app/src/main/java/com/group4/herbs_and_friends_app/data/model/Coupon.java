@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app.data.model;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,68 +76,17 @@ public class Coupon {
         this.name = name;
     }
 
-    // Helper methods for display
-    public String getDiscountDisplay() {
-        return String.format(Locale.getDefault(), "%.0f%%", discount * 100);
-    }
-
-    public String getEffectiveDateDisplay() {
-        if (effectiveDate == null) return "";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        return sdf.format(effectiveDate);
-    }
-
-    public String getExpiryDateDisplay() {
-        if (expiryDate == null) return "";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        return sdf.format(expiryDate);
-    }
-
-    // Business logic methods
+    @Exclude
     public boolean isValid() {
         Date now = new Date();
         return now.after(effectiveDate) && now.before(expiryDate);
     }
 
-    public boolean isExpired() {
-        Date now = new Date();
-        return now.after(expiryDate);
-    }
-
-    public boolean isNotYetActive() {
-        Date now = new Date();
-        return now.before(effectiveDate);
-    }
-
-    public String getStatus() {
-        if (isNotYetActive()) {
-            return "Chưa hiệu lực";
-        } else if (isExpired()) {
-            return "Đã hết hạn";
-        } else if (isValid()) {
-            return "Đang hiệu lực";
-        } else {
-            return "Không xác định";
-        }
-    }
-
-    // Calculate discount amount for a given total
+    @Exclude
     public long calculateDiscountAmount(long totalAmount) {
         if (!isValid()) {
             return 0;
         }
         return (long) (totalAmount * discount);
-    }
-
-    @Override
-    public String toString() {
-        return "Coupon{" +
-                "id='" + id + '\'' +
-                ", code='" + code + '\'' +
-                ", discount=" + discount +
-                ", effectiveDate=" + effectiveDate +
-                ", expiryDate=" + expiryDate +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

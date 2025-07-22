@@ -20,7 +20,7 @@ public class HCouponSelectVM extends ViewModel {
 
     @Inject
     public HCouponSelectVM(CouponRepository couponRepository, CartRepository cartRepository) {
-        couponListLive = couponRepository.getAllCoupons();
+        couponListLive = couponRepository.getAllCoupons(false);
     }
 
     public LiveData<List<Coupon>> getCouponListLive() {

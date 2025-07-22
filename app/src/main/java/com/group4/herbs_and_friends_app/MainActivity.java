@@ -1,6 +1,7 @@
 package com.group4.herbs_and_friends_app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;

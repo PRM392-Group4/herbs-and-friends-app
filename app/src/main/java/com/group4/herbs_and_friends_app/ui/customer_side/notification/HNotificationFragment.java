@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group4.herbs_and_friends_app.databinding.FragmentHNotificationBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -42,12 +43,25 @@ public class HNotificationFragment extends Fragment {
         binding.rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvNotifications.setAdapter(adapter);
         hNotificationVM = new ViewModelProvider(this).get(HNotificationVM.class);
+        checkLoginState();
+    }
+
+    private void checkLoginState() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            binding.tvNotLoggedIn.setVisibility(View.VISIBLE);
+            binding.tvEmptyNotification.setVisibility(View.GONE);
+            binding.rvNotifications.setVisibility(View.GONE);
+        } else {
+            binding.tvNotLoggedIn.setVisibility(View.GONE);
+            binding.rvNotifications.setVisibility(View.VISIBLE);
+            setupInit();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setupInit();
+        checkLoginState();
     }
 
     @Override
@@ -69,7 +83,13 @@ public class HNotificationFragment extends Fragment {
      */
     private void setupObserverNotifications() {
         hNotificationVM.getNotificationsLiveData().observe(getViewLifecycleOwner(), notifications -> {
-            adapter.setNotifications(notifications != null ? notifications : new ArrayList<>());
+            List<NotificationDto> notificationList = notifications != null ? notifications : new ArrayList<>();
+            adapter.setNotifications(notificationList);
+            if (notificationList.isEmpty()) {
+                binding.tvEmptyNotification.setVisibility(View.VISIBLE);
+            } else {
+                binding.tvEmptyNotification.setVisibility(View.GONE);
+            }
         });
     }
 }
