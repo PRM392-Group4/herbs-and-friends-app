@@ -63,7 +63,6 @@ public class HOrderDetailFragment extends Fragment {
             orderId = HOrderDetailFragmentArgs.fromBundle(getArguments()).getOrderId();
         }
 
-
         setupActionBar();
         setupRecyclerView();
         observeData();
@@ -102,8 +101,8 @@ public class HOrderDetailFragment extends Fragment {
             if (order != null) {
                 populateOrderDetails(order);
                 setupOrderProcessing(order);
-                if (order.getCouponId() != null) {
-                    orderDetailVM.getCouponCode(order.getCouponId());
+                if (order.getCouponId() != null && !order.getCouponId().isEmpty() && !order.getCouponId().isBlank()) {
+                    orderDetailVM.loadCouponCode(order.getCouponId());
                 }
             } else {
                 showOrderNotFound();
@@ -122,7 +121,7 @@ public class HOrderDetailFragment extends Fragment {
 
         // Discount Code
         orderDetailVM.getCouponCode().observe(getViewLifecycleOwner(), couponCode -> {
-            if (couponCode != null) {
+            if (couponCode != null && !couponCode.isBlank()) {
                 binding.tvDiscountCode.setText("#" + couponCode);
             } else {
                 binding.tvDiscountCode.setText("Không có");
