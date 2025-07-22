@@ -89,4 +89,26 @@
     <string name="checkout_label_discount">Giảm giá</string>
     <string name="checkout_label_total">Tổng thanh toán</string>
     <string name="looker_embed_url">https://lookerstudio.google.com/embed/reporting/c0871a43-66c2-4e6b-9bf5-2b30b930d113/page/IU2RF</string>
+
+    <!--  Coupons -->
+    <string name="remove_filter">Xóa bộ lọc</string>
+    <string name="apply_filter">Áp dụng</string>
+    <string name="no_coupons">Không có mã giảm giá nào</string>
+    <string name="add_new_coupon">Thêm mã giảm giá mới</string>
+    <string name="until_date">Đến ngày</string>
+    <string name="from_date">Từ ngày</string>
+
+    <!--  Notifs permission  -->
+    <string name="notif_enable_title">Bật thông báo</string>
+    <string name="notif_enable_message">Ứng dụng muốn gửi thông báo cho bạn. Bạn sẽ nhận được cập nhật, ưu đãi và thông báo quan trọng.</string>
+    <string name="accept">Đồng ý</string>
+    <string name="deny">Từ chối</string>
+    <string name="dont_ask_again">Không hỏi lại</string>
+    <string name="notif_rationale_title">Tại sao nên bật thông báo?</string>
+    <string name="notif_rationale_message">Bật thông báo giúp bạn nhận được cập nhật, ưu đãi và thông báo quan trọng. Bạn có thể thay đổi lựa chọn này trong phần cài đặt bất cứ lúc nào.</string>
+    <string name="enable_notifications">Bật thông báo</string>
+    <string name="cancel">Hủy</string>
+    <string name="notif_settings_title">Bật thông báo trong Cài đặt</string>
+    <string name="notif_settings_message">Thông báo hiện đang bị tắt. Để bật thông báo, vui lòng vào phần cài đặt ứng dụng trên thiết bị và cho phép thông báo cho ứng dụng này.</string>
+    <string name="open_settings">Mở cài đặt</string>
 </resources>

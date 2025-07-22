@@ -6,25 +6,22 @@ import java.util.Date;
 
 public class NotificationDto {
     private String title;
-    private String message;
     private NotificationTypes type;
     private Date sendDate;
-
     public NotificationDto() {}
 
-    public NotificationDto(String title, String message, NotificationTypes type, Date sendDate) {
+    public NotificationDto(String title, NotificationTypes type, Date sendDate) {
         this.title = title;
-        this.message = message;
-        this.sendDate = sendDate;
         this.type = type;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        this.sendDate = sendDate;
     }
 
     public void setType(NotificationTypes type) {
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public Date getSendDate() {
@@ -35,19 +32,13 @@ public class NotificationDto {
         this.sendDate = sendDate;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public NotificationTypes getType() {
         return type;
     }
+
+    public String getMessage() { return type.getMessage(); }
 }

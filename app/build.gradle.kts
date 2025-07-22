@@ -37,11 +37,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("META-INF/LICENSE.md")
             excludes.add("META-INF/LICENSE-notice.md")
             excludes.add("META-INF/NOTICE.md")
+            excludes.add("META-INF/DEPENDENCIES")
         }
     }
 }
@@ -65,6 +66,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:22.1.2")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-messaging")
+
     // Glide (Java image loading)
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
@@ -72,11 +75,15 @@ dependencies {
     // GSON
     implementation("com.google.code.gson:gson:2.13.1")
 
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    // Httpclient
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
 
+    // Mailing
     implementation("com.sun.mail:android-mail:1.6.7")
     implementation("com.sun.mail:android-activation:1.6.7")
 
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-process:2.7.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)

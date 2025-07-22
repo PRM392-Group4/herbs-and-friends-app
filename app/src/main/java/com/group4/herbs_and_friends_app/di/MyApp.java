@@ -3,6 +3,8 @@ package com.group4.herbs_and_friends_app.di;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.lifecycle.ProcessLifecycleOwner;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
@@ -24,7 +26,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         // Reference eagerInitializer to ensure eager initialization
         if (eagerInitializer == null) {
             throw new IllegalStateException("EagerInitializer not injected!");
