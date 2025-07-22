@@ -3,16 +3,21 @@ package com.group4.herbs_and_friends_app.ui.customer_side.checkout;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -29,6 +34,7 @@ import com.group4.herbs_and_friends_app.databinding.FragmentHCheckoutBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchBinding;
 import com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters.HCouponSelectionAdapter;
 import com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter.OrderItemAdapter;
+import com.group4.herbs_and_friends_app.utils.AppCts;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import java.util.ArrayList;
@@ -43,7 +49,8 @@ public class HCheckoutFragment extends Fragment {
     private OrderItemAdapter adapter;
     private HCheckoutVM checkoutVM;
     private FirebaseUser currentUser;
-    private CartItem fastCheckoutItem;
+    private Bundle pendingNavigationBundle;
+    private SharedPreferences sharedPrefs;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -59,6 +66,9 @@ public class HCheckoutFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         checkoutVM = new ViewModelProvider(this).get(HCheckoutVM.class);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -74,7 +84,7 @@ public class HCheckoutFragment extends Fragment {
             int quantity = args.getInt("fastCheckoutItem_quantity");
             Long unitPrice = args.getLong("fastCheckoutItem_unitPrice");
             CartItem item = new CartItem(id, name, unitPrice, img, quantity);
-            fastCheckoutItem = item;
+
             if (item != null) {
                 checkoutVM.setFastCheckoutItem(item);
             }
@@ -87,7 +97,20 @@ public class HCheckoutFragment extends Fragment {
         setPriceDisplay();
         setShippingMethodAction();
         setPaymentMethodAction();
-        binding.btnCheckout.setOnClickListener(v -> placeOrder());
+        setupEditAddressAction();
+        binding.btnCheckout.setOnClickListener(v -> {
+            placeOrder();
+        });
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (pendingNavigationBundle != null) {
+            Log.d("HCheckoutFragment", "Processing pending navigation: result=" + pendingNavigationBundle.getString("result"));
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, pendingNavigationBundle);
+            pendingNavigationBundle = null;
+        }
     }
 
     private void setActionBar() {
@@ -106,7 +129,7 @@ public class HCheckoutFragment extends Fragment {
         checkoutVM.getOrderItems().observe(getViewLifecycleOwner(), items -> {
             if (!checkoutVM.getIsFastCheckout().getValue() && items != null && !items.isEmpty()) {
                 adapter.submitList(new ArrayList<>(items));
-            } else if (checkoutVM.getIsFastCheckout().getValue()){
+            } else if (checkoutVM.getIsFastCheckout().getValue()) {
                 adapter.submitList(checkoutVM.getFastCheckoutItem().getValue());
             }
         });
@@ -116,21 +139,21 @@ public class HCheckoutFragment extends Fragment {
         binding.radioGroupShipping.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radioExpress) {
                 checkoutVM.setShippingMethod(ShippingMethod.EXPRESS);
-                binding.shippingInfo.setVisibility(VISIBLE);
+                binding.textReceiverAddress.setVisibility(VISIBLE);
             } else if (checkedId == R.id.radioStandard) {
                 checkoutVM.setShippingMethod(ShippingMethod.STANDARD);
-                binding.shippingInfo.setVisibility(VISIBLE);
+                binding.textReceiverAddress.setVisibility(VISIBLE);
             } else {
                 checkoutVM.setShippingMethod(ShippingMethod.PICKUP);
-                binding.shippingInfo.setVisibility(GONE);
+                binding.textReceiverAddress.setVisibility(GONE);
             }
         });
     }
 
     private void setPaymentMethodAction() {
         binding.radioGroupPayment.setOnCheckedChangeListener((group, checked) -> {
-            if (checked == R.id.radioMomo) {
-                checkoutVM.setPaymentMethod(PaymentMethod.MOMO);
+            if (checked == R.id.radioZalo) {
+                checkoutVM.setPaymentMethod(PaymentMethod.ZALOPAY);
             } else {
                 checkoutVM.setPaymentMethod(PaymentMethod.CASH);
             }
@@ -153,12 +176,17 @@ public class HCheckoutFragment extends Fragment {
     }
 
     private void placeOrder() {
-
         // Collect form data
-        String address = binding.textReceiverAddress.getText().toString().trim();
-        String recipientName = binding.textReceiverName.getText().toString().trim();
-        String recipientPhone = binding.textReceiverPhone.getText().toString().trim();
+        String address = checkoutVM.getAddress().getValue();
+        String recipientName = checkoutVM.getRecipientName().getValue();
+        String recipientPhone = checkoutVM.getRecipientPhone().getValue();
+
         ShippingMethod shippingMethod = checkoutVM.getShippingMethod().getValue();
+        if ((recipientName.isEmpty() || recipientPhone.isEmpty()) || (shippingMethod != ShippingMethod.PICKUP && address.isEmpty())) {
+            binding.txtErrorAddress.setText("Vui lòng nhập đầy đủ thông tin.");
+            binding.txtErrorAddress.setVisibility(VISIBLE);
+            return;
+        }
         PaymentMethod paymentMethod = checkoutVM.getPaymentMethod().getValue();
         Coupon coupon = checkoutVM.getCoupon().getValue();
         Long total = checkoutVM.getTotalPrice().getValue();
@@ -166,7 +194,7 @@ public class HCheckoutFragment extends Fragment {
         // Create Order object
         Order order = new Order();
         order.setUserId(currentUser.getUid());
-        order.setStatus(paymentMethod == PaymentMethod.MOMO?
+        order.setStatus(paymentMethod == PaymentMethod.ZALOPAY  ?
                 OrderStatus.UNPAID.getValue() : OrderStatus.PENDING.getValue());
         order.setTotal(total != null ? total : 0);
         order.setPaymentMethod(paymentMethod != null ? paymentMethod.getValue() : PaymentMethod.MOMO.getValue());
@@ -181,16 +209,75 @@ public class HCheckoutFragment extends Fragment {
         order.setUserId(currentUser.getUid());
         order.setItems(checkoutVM.getOrderProducts());
 
-            // Create order and observe result
-            checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
-                if (success) {
-                    Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
-//                    NavHostFragment.findNavController(this).navigate(R.id.action_checkout_to_order_confirmation);
+        // Create order and observe result
+        checkoutVM.createOrder(order).observe(getViewLifecycleOwner(), success -> {
+            if (checkoutVM.getOrderCreated().getValue() && success!=null) {
+                Toast.makeText(getContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
+                if (checkoutVM.getPaymentMethod().getValue() == PaymentMethod.ZALOPAY){
+                    checkoutVM.processPayment(requireActivity(), bundle -> {
+                        Log.d("HCheckoutFragment", "Redirecting with bundle: result=" + bundle.getString("result") +
+                                ", total=" + bundle.getString("total") + ", orderId=" + bundle.getString("order_id"));
+                        if (isResumed()) {
+                            NavController navController = NavHostFragment.findNavController(HCheckoutFragment.this);
+                            navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
+                        } else {
+                            pendingNavigationBundle = bundle;
+                            Log.d("HCheckoutFragment", "Fragment not resumed, storing pending navigation");
+                        }
+                    });
                 } else {
-                    Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "Đặt hàng thành công");
+                    bundle.putString("total",
+                            "Đơn hàng của bạn có tổng giá trị là "+DisplayFormat.toMoneyDisplayString(checkoutVM.getTotalPrice().getValue()));
+                    bundle.putString("order_id", checkoutVM.getOrderId().getValue());
+                    NavController navController = NavHostFragment.findNavController(HCheckoutFragment.this);
+                    navController.navigate(R.id.action_HCheckoutFragment_to_HOrderResultFragment, bundle);
                 }
-            });
+            } else {
+                Toast.makeText(getContext(), "Failed to create order", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+    }
+
+    private void setupEditAddressAction() {
+        if (checkoutVM.getRecipientName().getValue().isEmpty()){
+            binding.textReceiverName.setText("Tên người nhận");
+            checkoutVM.setRecipientName("");
+        }
+        if (currentUser.getPhoneNumber().isEmpty()){
+            binding.textReceiverPhone.setText("Số điện thoại");
+            checkoutVM.setRecipientPhone("");
+        }
+        if (checkoutVM.getAddress().getValue().isEmpty()){
+            binding.textReceiverAddress.setText("Địa chỉ nhận hàng");
+        }
+        binding.btnEditAddress.setOnClickListener(v -> {
+            // Get current values from UI
+            String currentName = binding.textReceiverName.getText().toString().trim().equals("Tên người nhận") ? "" :
+                    binding.textReceiverName.getText().toString().trim();
+            String currentPhone = binding.textReceiverPhone.getText().toString().trim().equals("Số điện thoại") ? "" :
+                    binding.textReceiverPhone.getText().toString().trim();
+            String currentAddress = binding.textReceiverAddress.getText().toString().trim().equals("Địa chỉ nhận hàng") ? "" :
+                    binding.textReceiverAddress.getText().toString().trim();
+
+            // Show dialog with current values
+            HEditAddressDialog dialog = HEditAddressDialog.newInstance(currentName, currentPhone,
+                    currentAddress, checkoutVM.getShippingMethod().getValue() == ShippingMethod.PICKUP);
+            dialog.setOnAddressUpdatedListener((recipientName, recipientPhone, address) -> {
+                // Update UI
+                binding.textReceiverName.setText(recipientName);
+                binding.textReceiverPhone.setText(recipientPhone);
+                binding.textReceiverAddress.setText(address);
+                // Update ViewModel
+                checkoutVM.setAddress(address);
+                checkoutVM.setRecipientName(recipientName);
+                checkoutVM.setRecipientPhone(recipientPhone);
+                Log.d("HCheckoutFragment", "Address updated: name=" + recipientName + ", phone=" + recipientPhone + ", address=" + address);
+            });
+            dialog.show(getParentFragmentManager(), "HEditAddressDialog");
+        });
     }
 
     /**
@@ -211,4 +298,5 @@ public class HCheckoutFragment extends Fragment {
             bottomSheet.show(getParentFragmentManager(), "HCouponSelectBottomSheet");
         });
     }
+
 }

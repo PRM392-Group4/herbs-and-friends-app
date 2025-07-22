@@ -8,14 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 import com.group4.herbs_and_friends_app.R;
+import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Collections;
 
 public class HNotificationAdapter extends RecyclerView.Adapter<HNotificationAdapter.NotificationViewHolder> {
     private List<NotificationDto> notifications;
