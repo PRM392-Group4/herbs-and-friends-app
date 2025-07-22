@@ -182,7 +182,12 @@ public class HCheckoutFragment extends Fragment {
         String recipientPhone = checkoutVM.getRecipientPhone().getValue();
 
         ShippingMethod shippingMethod = checkoutVM.getShippingMethod().getValue();
-        if ((recipientName.isEmpty() || recipientPhone.isEmpty()) || (shippingMethod != ShippingMethod.PICKUP && address.isEmpty())) {
+        if (recipientName == null
+                || recipientPhone == null
+                || address == null
+                || recipientName.isEmpty()
+                || recipientPhone.isEmpty()
+                || (shippingMethod != ShippingMethod.PICKUP && address.isEmpty())) {
             binding.txtErrorAddress.setText("Vui lòng nhập đầy đủ thông tin.");
             binding.txtErrorAddress.setVisibility(VISIBLE);
             return;

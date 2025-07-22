@@ -1,10 +1,8 @@
 package com.group4.herbs_and_friends_app;
 
-import android.content.SharedPreferences;
-import android.app.ComponentCaller;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 int destinationId = destination.getId();
-                if (destinationId == R.id.HCheckoutFragment  || destinationId == R.id.HOrderResultFragment) {
+                if (destinationId == R.id.HCheckoutFragment || destinationId == R.id.HOrderResultFragment) {
                     binding.herbBottomNavigation.setVisibility(View.GONE);
                 } else {
                     binding.herbBottomNavigation.setVisibility(View.VISIBLE);
