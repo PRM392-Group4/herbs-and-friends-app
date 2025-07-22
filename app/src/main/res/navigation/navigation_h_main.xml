@@ -4,38 +4,39 @@
     android:id="@+id/herb_navigation_main"
     app:startDestination="@id/homeFragment">
 
+    <!-- Home Tab -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeContainerFragment"
-        android:label="Home">
-    </fragment>
+        android:label="Home" />
 
+    <!-- Cart Tab -->
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.cart.HCartFragment"
         android:label="Cart">
-
+        <!-- From Cart to Checkout -->
         <action
             android:id="@+id/fromCartToCheckoutNavigation"
             app:destination="@id/HCheckoutFragment" />
     </fragment>
 
+    <!-- Notification Tab -->
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.notification.HNotificationFragment"
         android:label="Notification" />
 
+    <!-- Profile Tab -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragment"
         android:label="Profile">
-
-        <!-- Đến Login -->
+        <!-- From Profile to Login -->
         <action
-            android:id="@+id/action_profileFragment_to_HLoginFragment"
-            app:destination="@id/HLoginFragment" />
-
-        <!-- Navigate to Order Detail -->
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <!-- From Profile to Order Detail -->
         <action
             android:id="@+id/action_profileFragment_to_HOrderDetailFragment"
             app:destination="@id/HOrderDetailFragment" />
@@ -43,25 +44,25 @@
 
     <!-- Login -->
     <fragment
-        android:id="@+id/HLoginFragment"
+        android:id="@+id/loginFragment"
         android:name="com.group4.herbs_and_friends_app.ui.auth.login.HLoginFragment"
         android:label="Login">
 
-        <!-- Đến Profile sau khi login -->
+        <!-- After login, back to Profile -->
         <action
-            android:id="@+id/action_HLoginFragment_to_profileFragment"
+            android:id="@+id/action_loginFragment_to_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
-        
-        <!-- Đến Register -->
+
+        <!-- Navigate to Register -->
         <action
-            android:id="@+id/action_HLoginFragment_to_HRegisterFragment"
+            android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/HRegisterFragment" />
 
-        <!-- Đến Reset -->
+        <!-- Navigate to Reset -->
         <action
-            android:id="@+id/action_HLoginFragment_to_HResetFragment"
+            android:id="@+id/action_loginFragment_to_resetFragment"
             app:destination="@id/HResetFragment" />
     </fragment>
 
@@ -71,17 +72,17 @@
         android:name="com.group4.herbs_and_friends_app.ui.auth.register.HRegisterFragment"
         android:label="Register">
 
-        <!-- Đến Profile sau khi đăng ký -->
+        <!-- After Register, go to Profile and clear back stack -->
         <action
-            android:id="@+id/action_HRegisterFragment_to_profileFragment"
+            android:id="@+id/action_registerFragment_to_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
 
-        <!-- Đến Login -->
+        <!-- Go back to Login -->
         <action
-            android:id="@+id/action_HRegisterFragment_to_HLoginFragment"
-            app:destination="@id/HLoginFragment" />
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <!-- Reset -->
@@ -90,11 +91,11 @@
         android:name="com.group4.herbs_and_friends_app.ui.auth.reset.HResetFragment"
         android:label="Reset">
 
-        <!-- Đến Login sau khi đăng ký -->
+        <!-- After Reset, go to Login and clear Reset screen -->
         <action
-            android:id="@+id/action_HResetFragment_to_HLoginFragment"
-            app:destination="@id/HLoginFragment"
-            app:popUpTo="@id/HLoginFragment"
+            android:id="@+id/action_resetFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/HResetFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -103,15 +104,14 @@
         android:id="@+id/HOrderDetailFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
         android:label="Order Detail">
-
         <argument
             android:name="orderId"
             app:argType="string" />
-
     </fragment>
+
+    <!-- Checkout Fragment -->
     <fragment
         android:id="@+id/HCheckoutFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
-        android:label="fragment_h_checkout"
-        />
+        android:label="Checkout" />
 </navigation>

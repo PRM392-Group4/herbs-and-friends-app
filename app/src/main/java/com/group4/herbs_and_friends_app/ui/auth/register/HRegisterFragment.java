@@ -90,7 +90,7 @@ public class HRegisterFragment extends Fragment {
             hRegisterVM.registerUser(email, password, confirmPassword,
                     () -> {
                         Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        navController.navigate(R.id.action_HRegisterFragment_to_profileFragment);
+                        navController.navigate(R.id.action_registerFragment_to_profileFragment);
                     },
                     () -> Toast.makeText(requireContext(), "Lỗi khi đăng ký. Vui lòng thử lại!", Toast.LENGTH_SHORT).show(),
                     () -> Toast.makeText(requireContext(), "Email đã tồn tại. Vui lòng đăng nhập!", Toast.LENGTH_SHORT).show(),
@@ -99,11 +99,11 @@ public class HRegisterFragment extends Fragment {
         });
 
         binding.btnGoogleSignIn.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HRegisterFragment_to_HLoginFragment);
+            navController.navigate(R.id.action_registerFragment_to_loginFragment);
         });
 
         binding.tvLogin.setOnClickListener(v -> {
-            navController.navigate(R.id.action_HRegisterFragment_to_HLoginFragment);
+            navController.navigate(R.id.action_registerFragment_to_loginFragment);
         });
     }
 

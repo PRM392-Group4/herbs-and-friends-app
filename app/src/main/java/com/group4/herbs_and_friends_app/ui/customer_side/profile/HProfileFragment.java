@@ -6,10 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,8 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.mail.PasswordUtils;
-import com.group4.herbs_and_friends_app.data.model.User;
-import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
 import com.group4.herbs_and_friends_app.databinding.FragmentHProfileBinding;
 import com.group4.herbs_and_friends_app.ui.customer_side.order.OrderHistoryClickHandler;
 import com.group4.herbs_and_friends_app.ui.customer_side.profile.adapter.OrderHistoryAdapter;
@@ -105,14 +100,14 @@ public class HProfileFragment extends Fragment {
 
         binding.layoutProfile.btnLogin.setOnClickListener(v ->{
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_profileFragment_to_HLoginFragment);
+                    .navigate(R.id.action_profileFragment_to_loginFragment);
             Log.d("btnLogin", "Go to Login");
         });
 
         binding.layoutProfile.btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_profileFragment_to_HLoginFragment);
+                    .navigate(R.id.action_profileFragment_to_loginFragment);
         });
 
         binding.layoutProfile.imgEdit.setOnClickListener(v -> showEditDialog());
