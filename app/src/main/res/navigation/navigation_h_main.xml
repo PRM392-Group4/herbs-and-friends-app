@@ -127,12 +127,10 @@
         android:label="fragment_h_order_result">
         <action
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
-            app:destination="@id/HOrderDetailFragment"/>
+            app:destination="@id/HOrderDetailFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false"/>
         <action android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
-            app:destination="@id/HHomeFragment"/>
+            app:destination="@id/homeFragment"/>
     </fragment>
-
-    <fragment android:id="@+id/HHomeFragment"
-        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeFragment"
-        android:label="fragment_h_home"/>
 </navigation>

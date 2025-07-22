@@ -14,6 +14,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.databinding.FragmentHOrderResultBinding;
+import com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragmentDirections;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -80,11 +82,15 @@ public class HOrderResultFragment extends Fragment {
 
         binding.buttonOrderDetails.setOnClickListener(v -> {
             Log.d("HOrderResultFragment", "Navigating to HOrderDetailsFragment with orderId=" + orderId);
-            Bundle bundle = new Bundle();
-            bundle.putString("order_id", orderId);
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_HOrderResultFragment_to_HOrderDetailsFragment, bundle);
+            navigateToOrderDetail(orderId);
         });
+    }
+
+    public void navigateToOrderDetail(String orderId) {
+        NavController navController = NavHostFragment.findNavController(this);
+        HOrderResultFragmentDirections.ActionHOrderResultFragmentToHOrderDetailsFragment action =
+                HOrderResultFragmentDirections.actionHOrderResultFragmentToHOrderDetailsFragment(orderId);
+        navController.navigate(action);
     }
 
     @Override

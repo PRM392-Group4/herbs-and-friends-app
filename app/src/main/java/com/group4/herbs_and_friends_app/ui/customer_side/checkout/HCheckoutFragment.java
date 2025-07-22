@@ -3,6 +3,7 @@ package com.group4.herbs_and_friends_app.ui.customer_side.checkout;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import com.group4.herbs_and_friends_app.databinding.FragmentHCheckoutBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchBinding;
 import com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.adapters.HCouponSelectionAdapter;
 import com.group4.herbs_and_friends_app.ui.customer_side.checkout.adapter.OrderItemAdapter;
+import com.group4.herbs_and_friends_app.utils.AppCts;
 import com.group4.herbs_and_friends_app.utils.DisplayFormat;
 
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class HCheckoutFragment extends Fragment {
     private HCheckoutVM checkoutVM;
     private FirebaseUser currentUser;
     private Bundle pendingNavigationBundle;
+    private SharedPreferences sharedPrefs;
 
     public static HCheckoutFragment newInstance() {
         return new HCheckoutFragment();
@@ -174,10 +177,16 @@ public class HCheckoutFragment extends Fragment {
 
     private void placeOrder() {
         // Collect form data
-        String address = binding.textReceiverAddress.getText().toString().trim();
-        String recipientName = binding.textReceiverName.getText().toString().trim();
-        String recipientPhone = binding.textReceiverPhone.getText().toString().trim();
+        String address = checkoutVM.getAddress().getValue();
+        String recipientName = checkoutVM.getRecipientName().getValue();
+        String recipientPhone = checkoutVM.getRecipientPhone().getValue();
+
         ShippingMethod shippingMethod = checkoutVM.getShippingMethod().getValue();
+        if (shippingMethod != ShippingMethod.PICKUP && (address.isEmpty() || recipientName.isEmpty() || recipientPhone.isEmpty())) {
+            binding.txtErrorAddress.setText("Vui lòng nhập đầy đủ thông tin địa chỉ, tên người nhận và số điện thoại.");
+            binding.txtErrorAddress.setVisibility(VISIBLE);
+            return;
+        }
         PaymentMethod paymentMethod = checkoutVM.getPaymentMethod().getValue();
         Coupon coupon = checkoutVM.getCoupon().getValue();
         Long total = checkoutVM.getTotalPrice().getValue();
@@ -233,13 +242,17 @@ public class HCheckoutFragment extends Fragment {
     }
 
     private void setupEditAddressAction() {
-        binding.textReceiverName.setText(!currentUser.getDisplayName().isEmpty() ?
-                currentUser.getDisplayName() : "Tên người nhận");
-        binding.textReceiverPhone.setText(!currentUser.getPhoneNumber().isEmpty() ?
-                currentUser.getPhoneNumber() : "Số điện thoại");
-        binding.textReceiverAddress.setText(!checkoutVM.getAddress().getValue().isEmpty() ?
-                checkoutVM.getAddress().getValue() : "Địa chỉ nhận hàng");
-
+        if (currentUser.getDisplayName().isEmpty()){
+            binding.textReceiverName.setText("Tên người nhận");
+            checkoutVM.setRecipientName("");
+        }
+        if (currentUser.getPhoneNumber().isEmpty()){
+            binding.textReceiverPhone.setText("Số điện thoại");
+            checkoutVM.setRecipientPhone("");
+        }
+        if (checkoutVM.getAddress().getValue().isEmpty()){
+            binding.textReceiverAddress.setText("Địa chỉ nhận hàng");
+        }
         binding.btnEditAddress.setOnClickListener(v -> {
             // Get current values from UI
             String currentName = binding.textReceiverName.getText().toString().trim().equals("Tên người nhận") ? "" :
@@ -258,6 +271,8 @@ public class HCheckoutFragment extends Fragment {
                 binding.textReceiverAddress.setText(address);
                 // Update ViewModel
                 checkoutVM.setAddress(address);
+                checkoutVM.setRecipientName(recipientName);
+                checkoutVM.setRecipientPhone(recipientPhone);
                 Log.d("HCheckoutFragment", "Address updated: name=" + recipientName + ", phone=" + recipientPhone + ", address=" + address);
             });
             dialog.show(getParentFragmentManager(), "HEditAddressDialog");
