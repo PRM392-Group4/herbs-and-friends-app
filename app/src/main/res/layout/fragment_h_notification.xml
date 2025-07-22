@@ -14,21 +14,21 @@
         android:id="@+id/tvEmptyNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bạn chưa có thông báo nào"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:text="Bạn chưa có thông báo nào"
+        android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
-        android:textColor="@android:color/darker_gray" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvNotLoggedIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Xin hãy đăng nhập bạn nhé"
         android:textColor="@color/h_primary"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_gravity="center"
         android:visibility="gone" />
 
 </FrameLayout>

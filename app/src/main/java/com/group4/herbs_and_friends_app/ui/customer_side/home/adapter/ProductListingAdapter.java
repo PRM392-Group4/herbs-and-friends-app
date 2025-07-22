@@ -17,6 +17,7 @@ import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Product;
 import com.group4.herbs_and_friends_app.databinding.ItemProductBinding;
 import com.group4.herbs_and_friends_app.ui.base.product.BaseProductAdapter;
+
 import java.util.List;
 
 public class ProductListingAdapter extends BaseProductAdapter {

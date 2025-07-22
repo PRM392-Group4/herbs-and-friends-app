@@ -41,7 +41,7 @@ public class CategoryRepository {
                         } else {
                             // Add as child category to parent category
                             for (Category parent : parentCategories) {
-                                if(Objects.equals(parent.getId(), category.getCategoryParentId())) {
+                                if (Objects.equals(parent.getId(), category.getCategoryParentId())) {
                                     category.setChildCategory(true);
                                     parent.addChildCategory(category);
                                     break;
@@ -54,7 +54,7 @@ public class CategoryRepository {
                     List<Category> arrangedCategories = new ArrayList<>();
                     for (Category parent : parentCategories) {
                         arrangedCategories.add(parent);
-                        if(parent.getChildCategories() != null)
+                        if (parent.getChildCategories() != null)
                             arrangedCategories.addAll(parent.getChildCategories());
                     }
 
@@ -81,7 +81,7 @@ public class CategoryRepository {
                         } else {
                             // Add as child category to parent category
                             for (Category parent : parentCategories) {
-                                if(Objects.equals(parent.getId(), category.getCategoryParentId())) {
+                                if (Objects.equals(parent.getId(), category.getCategoryParentId())) {
                                     category.setChildCategory(true);
                                     parent.addChildCategory(category);
                                     break;

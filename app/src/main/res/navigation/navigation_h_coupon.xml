@@ -9,7 +9,7 @@
         android:id="@+id/HCouponManagementFragment"
         android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponManagementFragment"
         android:label="fragment_h_coupon_management"
-        tools:layout="@layout/fragment_h_coupon_management" >
+        tools:layout="@layout/fragment_h_coupon_management">
         <action
             android:id="@+id/from_CouponList_to_CouponForm"
             app:destination="@id/HCouponFormFragment" />
@@ -18,12 +18,12 @@
         android:id="@+id/HCouponFormFragment"
         android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponFormFragment"
         android:label="fragment_h_coupon_form"
-        tools:layout="@layout/fragment_h_coupon_form" >
+        tools:layout="@layout/fragment_h_coupon_form">
 
         <argument
             android:name="couponId"
             app:argType="string"
-            app:nullable="true"/>
+            app:nullable="true" />
         <action
             android:id="@+id/from_CouponForm_to_CouponList"
             app:destination="@id/HCouponManagementFragment" />

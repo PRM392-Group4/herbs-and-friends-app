@@ -37,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class HProfileManagementFragment extends Fragment {
 
+    @Inject
+    FirebaseFirestore firestore;
     // ================================
     // === Fields
     // ================================
@@ -46,9 +48,6 @@ public class HProfileManagementFragment extends Fragment {
     private HAuthVM hAuthVM;
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
-
-    @Inject
-    FirebaseFirestore firestore;
 
     // ================================
     // === Lifecycle

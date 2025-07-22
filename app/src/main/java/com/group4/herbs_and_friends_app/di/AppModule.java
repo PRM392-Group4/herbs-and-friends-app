@@ -8,7 +8,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
-import com.group4.herbs_and_friends_app.data.communication.FCMClient;
 import com.group4.herbs_and_friends_app.data.communication.NotificationConsumer;
 import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher;
 import com.group4.herbs_and_friends_app.data.repository.AuthRepository;
@@ -18,7 +17,6 @@ import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 import com.group4.herbs_and_friends_app.data.repository.DevicePushNotificationTokenRepository;
 import com.group4.herbs_and_friends_app.data.repository.OrderRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
-import com.group4.herbs_and_friends_app.di.PermissionManager;
 
 import javax.inject.Singleton;
 
@@ -39,8 +37,9 @@ public class AppModule {
     @Provides
     @Singleton
     public FirebaseDatabase provideNotificationDatabaseReference() {
-        return  FirebaseDatabase.getInstance("https://modern-environs-437216-m4-default-rtdb.asia-southeast1.firebasedatabase.app");
+        return FirebaseDatabase.getInstance("https://modern-environs-437216-m4-default-rtdb.asia-southeast1.firebasedatabase.app");
     }
+
     @Provides
     @Singleton
     public FirebaseFirestore provideFirestore() {
@@ -49,11 +48,15 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public FirebaseStorage provideFirebaseStorage() { return FirebaseStorage.getInstance("gs://modern-environs-437216-m4.firebasestorage.app"); }
+    public FirebaseStorage provideFirebaseStorage() {
+        return FirebaseStorage.getInstance("gs://modern-environs-437216-m4.firebasestorage.app");
+    }
 
     @Provides
     @Singleton
-    public FirebaseMessaging provideFirebaseMessaging() { return FirebaseMessaging.getInstance(); }
+    public FirebaseMessaging provideFirebaseMessaging() {
+        return FirebaseMessaging.getInstance();
+    }
 
     @Provides
     @Singleton
@@ -63,7 +66,9 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public FirebaseApp provideFirebaseApp() { return FirebaseApp.getInstance(); }
+    public FirebaseApp provideFirebaseApp() {
+        return FirebaseApp.getInstance();
+    }
 
     // =========================
     // === Repositories
@@ -138,15 +143,15 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public NotificationConsumer provideNotificationConsumer(FirebaseDatabase firebaseRealtimeInstance, 
-                                                            FirebaseAuth firebaseAuthInstance, 
-                                                            DevicePushNotificationTokenRepository notificationTokenRepository, 
-                                                            FirebaseMessaging firebaseMessaging, 
+    public NotificationConsumer provideNotificationConsumer(FirebaseDatabase firebaseRealtimeInstance,
+                                                            FirebaseAuth firebaseAuthInstance,
+                                                            DevicePushNotificationTokenRepository notificationTokenRepository,
+                                                            FirebaseMessaging firebaseMessaging,
                                                             PermissionManager permissionManager) {
-        return new NotificationConsumer(firebaseRealtimeInstance, 
-                                        firebaseAuthInstance, 
-                                        notificationTokenRepository, 
-                                        firebaseMessaging, 
-                                        permissionManager);
+        return new NotificationConsumer(firebaseRealtimeInstance,
+                firebaseAuthInstance,
+                notificationTokenRepository,
+                firebaseMessaging,
+                permissionManager);
     }
 }

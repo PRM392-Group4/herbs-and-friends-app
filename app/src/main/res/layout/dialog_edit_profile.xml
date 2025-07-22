@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
         android:text="Cập nhật hồ sơ"
-        android:textSize="25dp"
         android:textColor="@color/h_primary"
-        android:textStyle="bold"
-        android:layout_marginBottom="30dp"/>
+        android:textSize="25dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtName"
-        android:hint="Tên"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
-        android:layout_marginBottom="12dp"/>
+        android:hint="Tên"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/edtPhone"
-        android:hint="Số điện thoại"
-        android:inputType="phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
-        android:layout_marginBottom="12dp"/>
+        android:hint="Số điện thoại"
+        android:inputType="phone"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/edtPassword"
-        android:hint="Đổi mật khẩu"
-        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
-        android:layout_marginBottom="12dp"/>
+        android:hint="Đổi mật khẩu"
+        android:inputType="textPassword"
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/edtAddress"
-        android:hint="Địa chỉ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
-        android:layout_marginBottom="12dp"/>
+        android:hint="Địa chỉ"
+        android:padding="12dp" />
 </LinearLayout>

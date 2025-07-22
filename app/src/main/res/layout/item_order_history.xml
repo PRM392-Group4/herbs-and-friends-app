@@ -41,8 +41,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
@@ -55,14 +55,14 @@
                 android:id="@+id/tvOrTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="13:45, 14/06/2025"/>
+                android:text="13:45, 14/06/2025" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
@@ -81,8 +81,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
@@ -96,13 +96,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="545,000"
-                android:textColor="@color/h_secondary"/>
+                android:textColor="@color/h_secondary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" đ"
-                android:textColor="@color/h_secondary"/>
+                android:textColor="@color/h_secondary" />
         </LinearLayout>
 
     </LinearLayout>

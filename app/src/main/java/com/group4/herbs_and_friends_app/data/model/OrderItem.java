@@ -11,11 +11,11 @@ public class OrderItem {
     private String name;
     private int quantity;
     private long unitPrice;
-
-    public OrderItem() {}
-
     @Exclude
     private String imgUrl;
+
+    public OrderItem() {
+    }
 
     public OrderItem(String productId, String name, int quantity, long unitPrice) {
         this.productId = productId;

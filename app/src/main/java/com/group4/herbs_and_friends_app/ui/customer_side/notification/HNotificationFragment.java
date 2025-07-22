@@ -10,15 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.group4.herbs_and_friends_app.R;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
+import com.group4.herbs_and_friends_app.databinding.FragmentHNotificationBinding;
 import com.group4.herbs_and_friends_app.ui.notification.adapter.HNotificationAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.group4.herbs_and_friends_app.databinding.FragmentHNotificationBinding;
-import com.google.firebase.auth.FirebaseAuth;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

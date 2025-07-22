@@ -62,8 +62,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-    implementation ("com.google.android.gms:play-services-auth:21.0.0")
-    implementation ("com.google.firebase:firebase-auth:22.1.2")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.google.firebase:firebase-auth:22.1.2")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-messaging")
@@ -76,7 +76,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.1")
 
     // Httpclient
-    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Mailing
     implementation("com.sun.mail:android-mail:1.6.7")

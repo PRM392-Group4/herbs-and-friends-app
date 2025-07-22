@@ -20,7 +20,8 @@ public class Category {
     @Exclude
     private boolean isChecked;
 
-    public Category() {}
+    public Category() {
+    }
 
     public String getId() {
         return id;
@@ -55,7 +56,7 @@ public class Category {
     }
 
     public void addChildCategory(Category child) {
-        if(childCategories == null) childCategories = new ArrayList<>();
+        if (childCategories == null) childCategories = new ArrayList<>();
         childCategories.add(child);
     }
 

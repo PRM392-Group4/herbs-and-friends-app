@@ -51,15 +51,15 @@ public class PushNotificationToken {
         return lastActive;
     }
 
+    public void setLastActive(Date lastActive) {
+        this.lastActive = lastActive;
+    }
+
     public String getDeviceName() {
         return deviceName;
     }
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
-    }
-
-    public void setLastActive(Date lastActive) {
-        this.lastActive = lastActive;
     }
 }

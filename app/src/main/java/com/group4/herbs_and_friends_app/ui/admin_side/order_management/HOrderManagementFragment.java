@@ -22,7 +22,6 @@ import com.group4.herbs_and_friends_app.data.model.enums.OrderStatus;
 import com.group4.herbs_and_friends_app.databinding.FragmentHOrderManageBinding;
 import com.group4.herbs_and_friends_app.databinding.ViewHActionbarWithoutSearchBinding;
 import com.group4.herbs_and_friends_app.ui.admin_side.order_management.adapter.OrderManageAdapter;
-import com.group4.herbs_and_friends_app.ui.customer_side.manage.HOrderManageFragmentDirections;
 
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class HOrderManagementFragment extends Fragment implements OrderManageAda
     private void setupRecyclerView() {
         orderAdapter = new OrderManageAdapter();
         orderAdapter.setOnOrderClickListener(this);
-        
+
         binding.rvOrders.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvOrders.setAdapter(orderAdapter);
     }
@@ -78,7 +77,8 @@ public class HOrderManagementFragment extends Fragment implements OrderManageAda
         // Search functionality
         binding.etSearchOrder.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -86,7 +86,8 @@ public class HOrderManagementFragment extends Fragment implements OrderManageAda
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Filter functionality

@@ -11,9 +11,9 @@ import com.group4.herbs_and_friends_app.data.model.Product;
 import java.util.List;
 
 public abstract class BaseProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    protected List<Product> productList;
     protected final Context context;
     protected final ProductActionListener listener;
+    protected List<Product> productList;
 
     public BaseProductAdapter(Context context,
                               ProductActionListener listener) {
@@ -40,7 +40,7 @@ public abstract class BaseProductAdapter extends RecyclerView.Adapter<RecyclerVi
      * Inflate and return the correct ViewHolder for the given viewType.
      */
     public abstract RecyclerView.ViewHolder buildViewHolder(ViewGroup parent,
-                                                                int viewType);
+                                                            int viewType);
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,
@@ -53,7 +53,7 @@ public abstract class BaseProductAdapter extends RecyclerView.Adapter<RecyclerVi
      * Bind data into the provided ViewHolder.
      */
     public abstract void bindViewHolder(RecyclerView.ViewHolder holder,
-                                           Product product);
+                                        Product product);
 
     @Override
     public int getItemCount() {
@@ -65,7 +65,9 @@ public abstract class BaseProductAdapter extends RecyclerView.Adapter<RecyclerVi
      */
     public interface ProductActionListener {
         void onProductDetailCLick(String productId);
+
         void onProductEditClick(String productId);
+
         void onProductDeleteClick(String productId, String productName);
     }
 }

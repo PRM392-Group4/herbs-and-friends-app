@@ -10,7 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.group4.herbs_and_friends_app.R;
 
 public class HProductManagementContainerFragment extends Fragment {
-    public HProductManagementContainerFragment() {}
+    public HProductManagementContainerFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

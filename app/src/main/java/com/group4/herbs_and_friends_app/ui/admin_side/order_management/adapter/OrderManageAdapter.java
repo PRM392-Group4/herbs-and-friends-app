@@ -1,6 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.admin_side.order_management.adapter;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +19,6 @@ public class OrderManageAdapter extends RecyclerView.Adapter<OrderManageAdapter.
 
     private List<Order> orders = new ArrayList<>();
     private OnOrderClickListener onOrderClickListener;
-
-    public interface OnOrderClickListener {
-        void onOrderClick(Order order);
-    }
 
     public OrderManageAdapter() {
         // Default constructor
@@ -61,6 +56,10 @@ public class OrderManageAdapter extends RecyclerView.Adapter<OrderManageAdapter.
         notifyDataSetChanged();
     }
 
+    public interface OnOrderClickListener {
+        void onOrderClick(Order order);
+    }
+
     class OrderManageViewHolder extends RecyclerView.ViewHolder {
         TextView tvOrId, tvOrStatus, tvOrTime, tvOrQuantity, tvOrTotal;
 
@@ -86,17 +85,17 @@ public class OrderManageAdapter extends RecyclerView.Adapter<OrderManageAdapter.
         public void bind(Order order) {
             // Set order ID
             tvOrId.setText(order.getOrderNumber());
-            
+
             // Set status with arrow
             tvOrStatus.setText(order.getStatusDisplay() + " >");
-            
+
             // Set time
             tvOrTime.setText(order.getPlacedAtDisplay());
-            
+
             // Set quantity
             tvOrQuantity.setText(String.valueOf(order.getTotalItemCount()));
             Log.d("OrderManageAdapter", "Order ID: " + order.getId() + " has " + order.getTotalItemCount() + " items");
-            
+
             // Set total (remove the "đ" from display as it's added in the layout)
             tvOrTotal.setText(order.getTotalDisplay().replace(" đ", ""));
         }

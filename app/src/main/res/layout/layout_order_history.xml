@@ -13,17 +13,17 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20sp"
             android:text="Đơn hàng"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginRight="20sp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tất cả"
-            android:layout_marginRight="2sp"/>
+            android:layout_marginRight="2sp"
+            android:text="Tất cả" />
 
         <Button
             android:id="@+id/button2"
@@ -36,5 +36,5 @@
         android:id="@+id/recyclerViewOrderHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="80sp"/>
+        android:layout_marginTop="80sp" />
 </FrameLayout>

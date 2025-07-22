@@ -4,8 +4,6 @@ import com.group4.herbs_and_friends_app.data.repository.CategoryRepository;
 import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 import com.group4.herbs_and_friends_app.ui.base.product.BaseProductViewModel;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;

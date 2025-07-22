@@ -5,11 +5,10 @@
     <!--    <stroke-->
     <!--        android:width="1dp"-->
     <!--        android:color="@color/h_tertiary" />-->
-    <corners
-        android:radius="8dp" />
+    <corners android:radius="8dp" />
     <padding
-        android:top="3dp"
         android:bottom="3dp"
         android:left="3dp"
-        android:right="3dp"/>
+        android:right="3dp"
+        android:top="3dp" />
 </shape>

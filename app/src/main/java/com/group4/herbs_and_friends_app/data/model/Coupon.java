@@ -3,21 +3,20 @@ package com.group4.herbs_and_friends_app.data.model;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Coupon {
 
     @DocumentId
     private String id;
     private String code;
-    private double discount;        
+    private double discount;
     private Date effectiveDate;
     private Date expiryDate;
     private String name;
 
-    public Coupon() {}
+    public Coupon() {
+    }
 
     public Coupon(String code, double discount, Date effectiveDate, Date expiryDate, String name) {
         this.code = code;

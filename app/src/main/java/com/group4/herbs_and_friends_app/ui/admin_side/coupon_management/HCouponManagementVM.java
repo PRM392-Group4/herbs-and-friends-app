@@ -8,7 +8,6 @@ import com.group4.herbs_and_friends_app.data.communication.NotificationPublisher
 import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
 import com.group4.herbs_and_friends_app.data.model.Coupon;
 import com.group4.herbs_and_friends_app.data.model.CouponParams;
-import com.group4.herbs_and_friends_app.data.model.enums.CouponSortOptions;
 import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
 import com.group4.herbs_and_friends_app.data.repository.CouponRepository;
 
@@ -24,23 +23,28 @@ public class HCouponManagementVM extends ViewModel {
     private final MutableLiveData<CouponParams> paramsLive = new MutableLiveData<>();
     private final MutableLiveData<List<Coupon>> filteredCouponsLive = new MutableLiveData<>();
     private final NotificationPublisher notificationPublisher;
-    
+
     @Inject
     public HCouponManagementVM(CouponRepository couponRepository, NotificationPublisher notificationPublisher) {
         this.couponRepository = couponRepository;
         // Initialize with default params
         CouponParams defaultParams = new CouponParams();
         paramsLive.setValue(defaultParams);
-        
+
         // Observe params changes and update coupons
         paramsLive.observeForever(this::updateCoupons);
 
         this.notificationPublisher = notificationPublisher;
     }
-    
+
     public LiveData<CouponParams> getParamsLive() {
         return paramsLive;
     }
+
+    public void setParamsLive(CouponParams params) {
+        paramsLive.setValue(params);
+    }
+
     public LiveData<Coupon> getCouponLiveData(String couponId) {
         return couponRepository.getCouponById(couponId);
     }
@@ -56,10 +60,7 @@ public class HCouponManagementVM extends ViewModel {
 
         return couponRepository.addCoupon(coupon);
     }
-    public void setParamsLive(CouponParams params) {
-        paramsLive.setValue(params);
-    }
-    
+
     public void setSearch(String search) {
         CouponParams currentParams = paramsLive.getValue();
         if (currentParams == null) {
@@ -68,7 +69,7 @@ public class HCouponManagementVM extends ViewModel {
         currentParams.setSearch(search);
         paramsLive.setValue(currentParams);
     }
-    
+
     public void setDateRange(Date startDate, Date endDate) {
         CouponParams currentParams = paramsLive.getValue();
         if (currentParams == null) {
@@ -78,16 +79,16 @@ public class HCouponManagementVM extends ViewModel {
         currentParams.setExpiryDate(endDate);
         paramsLive.setValue(currentParams);
     }
-    
+
     public void clearFilters() {
         CouponParams defaultParams = new CouponParams();
         paramsLive.setValue(defaultParams);
     }
-    
+
     public LiveData<Boolean> deleteCoupon(String couponId) {
         return couponRepository.deleteCoupon(couponId);
     }
-    
+
     public void refreshData() {
         CouponParams currentParams = paramsLive.getValue();
         if (currentParams != null) {
@@ -97,7 +98,7 @@ public class HCouponManagementVM extends ViewModel {
 
     private void updateCoupons(CouponParams params) {
         if (params == null) return;
-        
+
         // Get coupons with search and sort criteria
         couponRepository.getCouponWithCriteria(params, true).observeForever(coupons -> {
             if (coupons != null) {
@@ -107,39 +108,39 @@ public class HCouponManagementVM extends ViewModel {
             }
         });
     }
-    
+
     private List<Coupon> applyDateRangeFilter(List<Coupon> coupons, CouponParams params) {
         if (params.getEffectiveDate() == null && params.getExpiryDate() == null) {
             return coupons;
         }
-        
+
         List<Coupon> filteredList = new java.util.ArrayList<>();
         Date now = new Date();
-        
+
         for (Coupon coupon : coupons) {
             boolean includeCoupon = true;
-            
+
             // Filter by start date (effective date)
             if (params.getEffectiveDate() != null) {
-                if (coupon.getEffectiveDate() == null || 
-                    coupon.getEffectiveDate().before(params.getEffectiveDate())) {
+                if (coupon.getEffectiveDate() == null ||
+                        coupon.getEffectiveDate().before(params.getEffectiveDate())) {
                     includeCoupon = false;
                 }
             }
-            
+
             // Filter by end date (expiry date)
             if (params.getExpiryDate() != null) {
-                if (coupon.getExpiryDate() == null || 
-                    coupon.getExpiryDate().after(params.getExpiryDate())) {
+                if (coupon.getExpiryDate() == null ||
+                        coupon.getExpiryDate().after(params.getExpiryDate())) {
                     includeCoupon = false;
                 }
             }
-            
+
             if (includeCoupon) {
                 filteredList.add(coupon);
             }
         }
-        
+
         return filteredList;
     }
 }

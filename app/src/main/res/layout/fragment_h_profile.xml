@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="#FFFFFF"
         android:orientation="vertical"
         tools:context=".ui.customer_side.profile.HProfileFragment">
@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/h_kermit"
             app:tabIndicatorHeight="3dp"
-            app:tabTextColor="@android:color/darker_gray"
-            app:tabSelectedTextColor="@color/h_kermit"/>
+            app:tabSelectedTextColor="@color/h_kermit"
+            app:tabTextColor="@android:color/darker_gray" />
 
         <FrameLayout
             android:layout_width="match_parent"

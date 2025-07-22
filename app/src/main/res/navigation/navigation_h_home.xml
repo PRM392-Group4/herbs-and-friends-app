@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeMainFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeFragment"
-        android:label="Home Main" >
+        android:label="Home Main">
 
         <action
             android:id="@+id/home_to_productList"
@@ -20,8 +20,7 @@
             android:id="@+id/action_homeFragment_to_orderResultFragment"
             app:destination="@+id/HOrderResultFragment"
             app:popUpTo="@id/HCheckoutFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -40,12 +39,12 @@
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeProductDetailFragment"
-        android:label="Product Detail" >
+        android:label="Product Detail">
 
         <argument
             android:name="productId"
             app:argType="string"
-            app:nullable="false"/>
+            app:nullable="false" />
         <action
             android:id="@+id/productDetail_to_productList"
             app:destination="@id/productListFragment" />
@@ -57,14 +56,12 @@
     <fragment
         android:id="@+id/HCheckoutFragment"
         android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
-        android:label="fragment_h_checkout"
-        >>
+        android:label="fragment_h_checkout">>
         <action
             android:id="@+id/action_HCheckoutFragment_to_HOrderResultFragment"
             app:destination="@+id/HOrderResultFragment"
             app:popUpTo="@id/HCheckoutFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/HOrderResultFragment"
@@ -74,10 +71,10 @@
             android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
             app:destination="@id/HOrderDetailFragment"
             app:popUpTo="@id/homeMainFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
-            app:destination="@id/homeMainFragment"/>
+            app:destination="@id/homeMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/HOrderDetailFragment"

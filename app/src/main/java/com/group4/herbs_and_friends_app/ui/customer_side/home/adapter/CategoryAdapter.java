@@ -72,14 +72,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(category.isChecked());
 
-        if(category.isChildCategory()) {
+        if (category.isChildCategory()) {
             holder.indent.setVisibility(View.VISIBLE);
         } else holder.indent.setVisibility(View.GONE);
 
         holder.checkBox.setOnCheckedChangeListener((v, isChecked) -> {
             category.setChecked(isChecked);
 
-            if(isChecked) {
+            if (isChecked) {
                 if (category.getChildCategories() != null) {
                     for (Category child : category.getChildCategories()) {
                         child.setChecked(true);
@@ -87,14 +87,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     notifyDataSetChanged();
                 }
             } else {
-                if(category.isChildCategory()) {
+                if (category.isChildCategory()) {
                     Category parent = categoryList.stream()
                             .filter(c -> c.getId().equals(category.getCategoryParentId()))
                             .findFirst()
                             .get();
                     parent.setChecked(false);
                     notifyDataSetChanged();
-                } else if(category.getChildCategories() != null) {
+                } else if (category.getChildCategories() != null) {
                     for (Category child : category.getChildCategories()) {
                         child.setChecked(false);
                     }
@@ -108,20 +108,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public int getItemCount() {
-        return categoryList != null? categoryList.size() : 0;
+        return categoryList != null ? categoryList.size() : 0;
+    }
+
+    public interface CategoryCheckListener {
+        void onCategoryChecked(Category category);
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkBox;
         View indent;
+
         public CategoryViewHolder(@NonNull ItemFilterBinding binding) {
             super(binding.getRoot());
             checkBox = binding.filterCheckbox;
             indent = binding.indent;
         }
-    }
-
-    public interface CategoryCheckListener {
-        void onCategoryChecked(Category category);
     }
 }

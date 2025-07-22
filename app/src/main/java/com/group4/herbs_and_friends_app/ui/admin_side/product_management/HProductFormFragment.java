@@ -40,11 +40,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class HProductFormFragment extends Fragment {
+    private final ArrayList<Uri> imageUris = new ArrayList<>();
+    private final List<String> tags = new ArrayList<>();
     private FragmentHProductFormBinding binding;
     private HProductManagementVM viewModel;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
-    private final ArrayList<Uri> imageUris = new ArrayList<>();
-    private final List<String> tags = new ArrayList<>();
     private List<Category> categoryList = new ArrayList<>();
     private String editingProductId;
     private Product currentProduct;
@@ -179,12 +179,12 @@ public class HProductFormFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
-            wrap.setMargins(8,8,8,8);
+            wrap.setMargins(8, 8, 8, 8);
             container.setLayoutParams(wrap);
 
             // Add image view to the frame layout
             ImageView iv = new ImageView(requireContext());
-            FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(200,200);
+            FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(200, 200);
             iv.setLayoutParams(ivParams);
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(this).load(uri).into(iv);
@@ -193,7 +193,7 @@ public class HProductFormFragment extends Fragment {
             // Show image remove button
             ImageButton removeBtn = new ImageButton(requireContext());
             FrameLayout.LayoutParams btnParams = new FrameLayout.LayoutParams(
-                    48,48, Gravity.END|Gravity.TOP);
+                    48, 48, Gravity.END | Gravity.TOP);
             removeBtn.setLayoutParams(btnParams);
             removeBtn.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
             removeBtn.setBackgroundColor(Color.TRANSPARENT);
@@ -320,9 +320,18 @@ public class HProductFormFragment extends Fragment {
         boolean valid = true;
 
         // Show error if the inputs are invalid
-        if (name.isEmpty()) { binding.etName.setError("Vui lòng nhập tên cho cây"); valid = false; }
-        if (price.isEmpty()) { binding.etPrice.setError("Vui lòng nhập giá cây"); valid = false; }
-        if (stock.isEmpty()) { binding.etStock.setError("Vui lòng nhập số lượng tồn kho"); valid = false; }
+        if (name.isEmpty()) {
+            binding.etName.setError("Vui lòng nhập tên cho cây");
+            valid = false;
+        }
+        if (price.isEmpty()) {
+            binding.etPrice.setError("Vui lòng nhập giá cây");
+            valid = false;
+        }
+        if (stock.isEmpty()) {
+            binding.etStock.setError("Vui lòng nhập số lượng tồn kho");
+            valid = false;
+        }
 
         return valid;
     }

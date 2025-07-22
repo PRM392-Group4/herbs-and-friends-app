@@ -18,29 +18,29 @@ import java.util.Locale;
 public class Order {
     @DocumentId
     private String id;
-    private String userId;        
-    private String status;         
+    private String userId;
+    private String status;
     private long total;
     private String paymentMethod;
     private String shippingMethod;
     private DocumentReference coupon;
     private Date placedAt;
-    private String couponId;        
-    private String note;            
+    private String couponId;
+    private String note;
     private String address;
-    private String recipientName;   
+    private String recipientName;
     private String recipientPhone;
     private DocumentReference user;
 
     @Exclude
-    private List<OrderItem> items;  
+    private List<OrderItem> items;
 
     @Exclude
     private Coupon appliedCoupon;  // Cached coupon for display purposes
     @Exclude
     private User orderUser;    // Cached user for display purposes
-    public Order() {}
-
+    public Order() {
+    }
     public Order(String userId, OrderStatus status, long total, PaymentMethod paymentMethod,
                  ShippingMethod shippingMethod, String address) {
         this.userId = userId;
@@ -78,14 +78,15 @@ public class Order {
         this.coupon = coupon;
     }
 
-    public void setAppliedCoupon(Coupon appliedCoupon) {
-        this.appliedCoupon = appliedCoupon;
-    }
-
     @Exclude
     public Coupon getAppliedCoupon() {
         return appliedCoupon;
     }
+
+    public void setAppliedCoupon(Coupon appliedCoupon) {
+        this.appliedCoupon = appliedCoupon;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -246,7 +247,7 @@ public class Order {
 
     @Exclude
     public long getShippingFee() {
-        return (long)getShippingMethodEnum().getPrice();
+        return (long) getShippingMethodEnum().getPrice();
     }
 
     @Exclude

@@ -27,7 +27,6 @@ public class HOrderDetailVM extends ViewModel {
     public HOrderDetailVM(OrderRepository orderRepository, CouponRepository couponRepository) {
         this.orderRepository = orderRepository;
         this.couponRepository = couponRepository;
-        
         // Set up reactive data flow
         this.orderLive = androidx.lifecycle.Transformations.switchMap(orderIdLive, orderId -> {
             if (orderId == null || orderId.isEmpty()) {
@@ -55,6 +54,7 @@ public class HOrderDetailVM extends ViewModel {
     public void setOrderId(String orderId) {
         orderIdLive.setValue(orderId);
     }
+
     public LiveData<Order> getOrderLive() {
         return orderLive;
     }

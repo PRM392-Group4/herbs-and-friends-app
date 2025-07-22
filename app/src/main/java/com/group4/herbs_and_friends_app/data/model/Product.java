@@ -22,7 +22,8 @@ public class Product {
     @Exclude
     private Category category;
 
-    public Product() {}
+    public Product() {
+    }
 
     public String getId() {
         return id;
