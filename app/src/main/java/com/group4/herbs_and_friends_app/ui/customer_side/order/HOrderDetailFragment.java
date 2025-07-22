@@ -102,7 +102,9 @@ public class HOrderDetailFragment extends Fragment {
             if (order != null) {
                 populateOrderDetails(order);
                 setupOrderProcessing(order);
-                orderDetailVM.getCouponCode(order.getCouponId());
+                if (order.getCouponId() != null) {
+                    orderDetailVM.getCouponCode(order.getCouponId());
+                }
             } else {
                 showOrderNotFound();
             }
