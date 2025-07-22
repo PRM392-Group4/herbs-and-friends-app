@@ -1,7 +1,7 @@
 package com.group4.herbs_and_friends_app;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.group4.herbs_and_friends_app.data.model.enums.Role;
 import com.group4.herbs_and_friends_app.databinding.ActivityMainBinding;
 import com.group4.herbs_and_friends_app.ui.auth.login.HAuthVM;
+import com.group4.herbs_and_friends_app.utils.AppCts;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private ActivityMainBinding binding;
     private HAuthVM hAuthVM;
+    private SharedPreferences sharedPrefs;
 
     // ================================
     // === Constructors
@@ -40,9 +42,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) return;
+
         // Setup View Binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Setup Shared Preferences
+        sharedPrefs = getSharedPreferences(AppCts.SharePref.PREF_AUTH_NAME, MODE_PRIVATE);
 
         // Setup view models
         hAuthVM = new ViewModelProvider(this).get(HAuthVM.class);
@@ -135,16 +142,26 @@ public class MainActivity extends AppCompatActivity {
      * Setup the Nav Host system if current user is customer
      */
     public void onLoginAsCustomer() {
+
         navController.setGraph(R.navigation.navigation_h_main, null);
 
         // clear the current menu and inflate new navigation
         binding.herbBottomNavigation.getMenu().clear();
         binding.herbBottomNavigation.inflateMenu(R.menu.view_h_bottom_nav_menu);
 
-        NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
-        navController.navigate(R.id.action_loginFragment_to_profileFragment);
         // redirect to profile fragment
-//        navController.navigate(R.id.profileFragment);
+        NavigationUI.setupWithNavController(binding.herbBottomNavigation, navController);
+
+        // Flow:
+        // - first login -> goes to profile
+        // - resume app + login -> goes to home
+        boolean isFirstLogin = sharedPrefs.getBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, true);
+        if (isFirstLogin) {
+            navController.navigate(R.id.action_loginFragment_to_profileFragment);
+            sharedPrefs.edit().putBoolean(AppCts.SharePref.KEY_FIRST_LOGIN, false).apply();
+        } else {
+            navController.navigate(R.id.homeFragment);
+        }
     }
 
     /**
