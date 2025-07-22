@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     android:background="@color/h_background">
 
     <LinearLayout
@@ -406,7 +412,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
         <!-- Bottom Spacer -->
         <View
             android:layout_width="match_parent"
@@ -414,4 +419,43 @@
 
     </LinearLayout>
 
-</ScrollView> 
+</ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/orderProcessFooter"
+        android:visibility="gone"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="0dp"
+        android:minHeight="56dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rect_border_gray"
+        android:backgroundTint="#FFFFFF"
+        android:translationZ="999dp"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy đơn hàng"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="@color/h_gray"
+            android:textColor="@android:color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnProcess"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiếp tục xử lý"
+            android:layout_marginLeft="15dp"
+            android:backgroundTint="@color/h_primary"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
