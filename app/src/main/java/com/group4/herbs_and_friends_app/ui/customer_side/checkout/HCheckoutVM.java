@@ -178,7 +178,7 @@ public class HCheckoutVM extends ViewModel {
         double discountPercent = value != null ? value.getDiscount() : 0f;
         long sub = subTotal.getValue() != null ? subTotal.getValue() : 0;
         long fee = shippingFee.getValue() != null ? shippingFee.getValue() : 0;
-        long discountAmount = (long) ((sub + fee) * discountPercent);
+        long discountAmount = (long) ((sub) * discountPercent);
         discountPrice.setValue(discountAmount);
         calculateTotal();
     }
