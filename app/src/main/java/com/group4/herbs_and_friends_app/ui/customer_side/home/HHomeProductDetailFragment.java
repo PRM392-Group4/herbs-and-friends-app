@@ -71,7 +71,7 @@ public class HHomeProductDetailFragment extends Fragment {
         checkLoggedIn();
 
         hHomeVM = new ViewModelProvider(requireActivity()).get(HHomeVM.class);
-        if(loggedIn) hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
+        if (loggedIn) hCartVM = new ViewModelProvider(requireActivity()).get(HCartVM.class);
 
         setActionBar();
         setCarouselAdapter();
@@ -98,7 +98,7 @@ public class HHomeProductDetailFragment extends Fragment {
             if (quantity <= 0) {
                 Toast.makeText(requireContext(), "Số lượng không hợp lệ.", Toast.LENGTH_SHORT).show();
                 return;
-            } else if (quantity > currentStock){
+            } else if (quantity > currentStock) {
                 Toast.makeText(requireContext(), "Số lượng vượt quá hàng tồn kho.",
                         Toast.LENGTH_SHORT).show();
                 return;
@@ -112,7 +112,7 @@ public class HHomeProductDetailFragment extends Fragment {
 
             // Pass data via Bundle
             Bundle bundle = new Bundle();
-            if (currentProduct != null ){
+            if (currentProduct != null) {
                 bundle.putString("fastCheckoutItem_id", productId);
                 bundle.putString("fastCheckoutItem_name", currentProduct.getName());
                 bundle.putInt("fastCheckoutItem_quantity", quantity);
@@ -138,7 +138,7 @@ public class HHomeProductDetailFragment extends Fragment {
 
     private void checkLoggedIn() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {
+        if (user != null) {
             loggedIn = true;
         } else {
             binding.quantityLabel.setVisibility(View.GONE);
@@ -191,7 +191,7 @@ public class HHomeProductDetailFragment extends Fragment {
 
     private void performSearch() {
         Editable editable = binding.includeActionbarProductDetail.etSearch.getText();
-        if(editable == null) return;
+        if (editable == null) return;
 
         String search = editable.toString().trim();
         if (!search.isEmpty()) {
@@ -221,7 +221,7 @@ public class HHomeProductDetailFragment extends Fragment {
 
     private void fetchData(String productId) {
         hHomeVM.getSelectedProductLive(productId).observe(getViewLifecycleOwner(), product -> {
-            if(product != null) {
+            if (product != null) {
                 currentProduct = product;
                 populateData(product);
             } else {
@@ -266,7 +266,7 @@ public class HHomeProductDetailFragment extends Fragment {
     }
 
     private void checkOutOfStock() {
-        if(currentStock == 0) {
+        if (currentStock == 0) {
             binding.quantityLabel.setVisibility(View.GONE);
             binding.quantitySelector.setVisibility(View.GONE);
             binding.btnAddToCart.setVisibility(View.GONE);
@@ -277,12 +277,12 @@ public class HHomeProductDetailFragment extends Fragment {
 
     private void quantitySelectorListener() {
         binding.btnQuantityAdd.setOnClickListener(v -> {
-            if(quantity < currentStock) quantity++;
+            if (quantity < currentStock) quantity++;
             binding.textQuantity.setText(String.valueOf(quantity));
         });
 
         binding.btnQuantityMinus.setOnClickListener(v -> {
-            if(quantity > 1) quantity--;
+            if (quantity > 1) quantity--;
             binding.textQuantity.setText(String.valueOf(quantity));
         });
     }

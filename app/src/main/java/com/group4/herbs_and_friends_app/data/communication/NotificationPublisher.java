@@ -1,36 +1,27 @@
 package com.group4.herbs_and_friends_app.data.communication;
 
-import android.bluetooth.BluetoothClass;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 import com.group4.herbs_and_friends_app.data.communication.dtos.NotificationDto;
-import com.group4.herbs_and_friends_app.data.model.PushNotificationToken;
-import com.group4.herbs_and_friends_app.data.model.enums.NotificationTypes;
 import com.group4.herbs_and_friends_app.data.repository.DevicePushNotificationTokenRepository;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 public class NotificationPublisher {
     public static final String TAG = "NotificationPublisher";
     private final FirebaseDatabase firebaseRealtimeInstance;
     private final DevicePushNotificationTokenRepository notificationTokenRepository;
+
     public NotificationPublisher(FirebaseDatabase firebaseRealtimeInstance,
                                  DevicePushNotificationTokenRepository notificationTokenRepository) {
         this.firebaseRealtimeInstance = firebaseRealtimeInstance;
@@ -81,6 +72,7 @@ public class NotificationPublisher {
                                         }
                                     }
                                 }
+
                                 @Override
                                 public void onError(Exception e) {
                                     Log.e(TAG, e.getMessage());
@@ -128,6 +120,7 @@ public class NotificationPublisher {
                         public void onTokensReceived(List<String> tokenList) {
                             SendPushNotification(notificationDto, tokenList);
                         }
+
                         @Override
                         public void onError(Exception e) {
                             Log.e(TAG, e.getMessage());

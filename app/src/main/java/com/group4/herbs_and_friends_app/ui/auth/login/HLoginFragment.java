@@ -115,6 +115,7 @@ public class HLoginFragment extends Fragment {
     // ================================
     // === Lifecycle
     // ================================
+    private NavController navController;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -122,9 +123,6 @@ public class HLoginFragment extends Fragment {
         binding = FragmentHLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-    private NavController navController;
-
-
 
     @Override
     public void onDestroyView() {
@@ -157,15 +155,22 @@ public class HLoginFragment extends Fragment {
 
         // Event on text changing
         binding.etEmail.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
                     binding.etEmail.setCompoundDrawables(null, null, clearIcon, null);
                 } else {
                     binding.etEmail.setCompoundDrawables(null, null, null, null);
                 }
             }
-            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Event on touch edit text

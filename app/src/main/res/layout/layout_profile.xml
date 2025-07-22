@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,10 +11,10 @@
             android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/banner_profile"
             android:background="@drawable/banner_rounded"
-            android:clipToOutline="true" />
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/banner_profile" />
 
         <View
             android:layout_width="match_parent"
@@ -21,59 +22,60 @@
             android:background="@drawable/banner_overlay" />
 
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/imgEdit"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                app:srcCompat="@drawable/ic_edit"
                 android:layout_marginLeft="140dp"
-                android:background="@drawable/bt_rounded"/>
+                android:background="@drawable/bt_rounded"
+                app:srcCompat="@drawable/ic_edit" />
 
             <TextView
                 android:id="@+id/tvName"
-                android:text="Hãy đăng nhập vào tài khoản"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hãy đăng nhập vào tài khoản"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvEmail"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15sp"/>
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="15sp"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng nhập"
                     android:backgroundTint="@color/h_primary"
-                    android:visibility="visible"/>
+                    android:text="Đăng nhập"
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/btnLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng xuất"
                     android:backgroundTint="@color/h_carrot"
-                    android:visibility="gone"/>
+                    android:text="Đăng xuất"
+                    android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
 

@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Adapter for handling recycler view of category section in home fragment
- *  Displays 5 parent categories and "All category" option
- *  Not to be confused with full category list for filtering in product list fragment
+ * Adapter for handling recycler view of category section in home fragment
+ * Displays 5 parent categories and "All category" option
+ * Not to be confused with full category list for filtering in product list fragment
  */
 public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapter.HomeCategoryViewHolder> {
     private List<Category> categoryList = new ArrayList<>();
@@ -66,18 +66,6 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         return categoryList != null ? categoryList.size() : 0;
     }
 
-    public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {
-        ShapeableImageView categoryIcon;
-        TextView categoryName;
-        public HomeCategoryViewHolder(@NonNull ItemHomeCategoryBinding binding) {
-            super(binding.getRoot());
-            categoryIcon = binding.categoryIc;
-            categoryName = binding.categoryName;
-        }
-    }
-
-    public interface HomeCategoryClickListener { void onHomeCategoryClick(Category category); }
-
     private int[] getResIds(int position) {
         int[] resIds = new int[3];
 
@@ -115,5 +103,20 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         }
 
         return resIds;
+    }
+
+    public interface HomeCategoryClickListener {
+        void onHomeCategoryClick(Category category);
+    }
+
+    public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {
+        ShapeableImageView categoryIcon;
+        TextView categoryName;
+
+        public HomeCategoryViewHolder(@NonNull ItemHomeCategoryBinding binding) {
+            super(binding.getRoot());
+            categoryIcon = binding.categoryIc;
+            categoryName = binding.categoryName;
+        }
     }
 }

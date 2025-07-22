@@ -19,8 +19,8 @@ import java.util.Locale;
 
 public class HCouponManagementAdapter extends RecyclerView.Adapter<HCouponManagementAdapter.CouponViewHolder> {
 
-    private List<Coupon> couponList;
     private final ICouponActionListener listener;
+    private List<Coupon> couponList;
 
     public HCouponManagementAdapter(List<Coupon> couponList, ICouponActionListener listener) {
         this.couponList = couponList != null ? couponList : new ArrayList<>();
@@ -52,6 +52,7 @@ public class HCouponManagementAdapter extends RecyclerView.Adapter<HCouponManage
 
     public interface ICouponActionListener {
         void onCouponEditClick(String couponId);
+
         void onCouponDeleteClick(String couponId, String couponName);
     }
 
@@ -73,7 +74,7 @@ public class HCouponManagementAdapter extends RecyclerView.Adapter<HCouponManage
             tvName.setText(coupon.getName());
             tvCode.setText("Mã: " + coupon.getCode());
             tvDiscount.setText(String.format(Locale.getDefault(), "-%.0f%%", coupon.getDiscount() * 100));
-            
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String validity = "Hiệu lực: " + sdf.format(coupon.getEffectiveDate()) + " - " + sdf.format(coupon.getExpiryDate());
             tvValidity.setText(validity);

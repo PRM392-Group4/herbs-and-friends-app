@@ -42,14 +42,12 @@ public class HProfileFragment extends Fragment {
     // === Fields
     // ================================
 
-    private FragmentHProfileBinding binding;
-
-    private FirebaseUser currentUser;
-
     @Inject
     FirebaseFirestore firestore;
+    private FragmentHProfileBinding binding;
+    private FirebaseUser currentUser;
     private HProfileVM hProfileVM;
-    
+
     private OrderHistoryAdapter orderHistoryAdapter;
 
     // ================================
@@ -94,11 +92,16 @@ public class HProfileFragment extends Fragment {
                 }
             }
 
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
 
-        binding.layoutProfile.btnLogin.setOnClickListener(v ->{
+        binding.layoutProfile.btnLogin.setOnClickListener(v -> {
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_profileFragment_to_loginFragment);
             Log.d("btnLogin", "Go to Login");
@@ -141,12 +144,12 @@ public class HProfileFragment extends Fragment {
     private void setupOrderHistoryRecyclerView(View layoutHistory) {
         RecyclerView recyclerView = layoutHistory.findViewById(R.id.recyclerViewOrderHistory);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        
+
         orderHistoryAdapter = new OrderHistoryAdapter(requireContext(), order -> {
             // Navigate to order detail when clicked
             OrderHistoryClickHandler.navigateToOrderDetailsFromProfile(this, order.getId());
         });
-        
+
         recyclerView.setAdapter(orderHistoryAdapter);
     }
 

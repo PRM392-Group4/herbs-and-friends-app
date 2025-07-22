@@ -13,8 +13,6 @@ import com.group4.herbs_and_friends_app.data.repository.ProductRepository;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public abstract class BaseProductViewModel extends ViewModel {
     protected final CategoryRepository cateRepo;
     protected final ProductRepository productRepo;
@@ -46,6 +44,7 @@ public abstract class BaseProductViewModel extends ViewModel {
     public LiveData<Params> getParamsLive() {
         return paramsLive;
     }
+
     public void setParamsLive(Params params) {
         this.paramsLive.setValue(params);
     }
@@ -56,9 +55,11 @@ public abstract class BaseProductViewModel extends ViewModel {
     public LiveData<List<Product>> getAllProductsLive() {
         return productRepo.getAllProducts();
     }
+
     public LiveData<List<Product>> getProductsWithParamsLive() {
         return productsWithParamsLive;
     }
+
     public LiveData<Product> getSelectedProductLive(String productId) {
         return productRepo.getProductById(productId);
     }
@@ -69,6 +70,7 @@ public abstract class BaseProductViewModel extends ViewModel {
     public LiveData<List<Category>> getAllCategoriesLive() {
         return cateRepo.getCategories();
     }
+
     public LiveData<List<Category>> getParentCategoriesLive() {
         return cateRepo.getParentCategories();
     }

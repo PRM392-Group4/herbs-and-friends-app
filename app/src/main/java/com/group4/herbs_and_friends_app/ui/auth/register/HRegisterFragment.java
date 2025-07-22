@@ -30,11 +30,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class HRegisterFragment extends Fragment {
 
-    private FragmentHRegisterBinding binding;
-    private HRegisterVM hRegisterVM;
-
     @Inject
     FirebaseFirestore firestore;
+    private FragmentHRegisterBinding binding;
+    private HRegisterVM hRegisterVM;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,15 +57,22 @@ public class HRegisterFragment extends Fragment {
         }
 
         etEmail.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
                     etEmail.setCompoundDrawables(null, null, clearIcon, null);
                 } else {
                     etEmail.setCompoundDrawables(null, null, null, null);
                 }
             }
-            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         etEmail.setOnTouchListener((v, event) -> {

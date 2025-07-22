@@ -109,7 +109,7 @@ public class HHomeFragment extends Fragment implements ProductListingAdapter.Pro
 
     private void performSearch() {
         Editable editable = binding.includeActionbarHome.etSearch.getText();
-        if(editable == null) return;
+        if (editable == null) return;
 
         String search = editable.toString().trim();
         if (!search.isEmpty()) {
@@ -136,12 +136,12 @@ public class HHomeFragment extends Fragment implements ProductListingAdapter.Pro
         binding.homeCategoryRv.addItemDecoration(new GridRowSpacingDecoration(rowSpacing, 3));
 
         categoryAdapter = new HomeCategoryAdapter(requireContext(), category -> {
-            if(!category.getId().equals(getString(R.string.all_cate_id))) {
+            if (!category.getId().equals(getString(R.string.all_cate_id))) {
                 List<String> categoryIds = new ArrayList<>();
                 categoryIds.add(category.getId());
 
                 // Include child categories
-                if(category.getChildCategories() != null) {
+                if (category.getChildCategories() != null) {
                     List<String> childIds = null;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         childIds = category.getChildCategories()

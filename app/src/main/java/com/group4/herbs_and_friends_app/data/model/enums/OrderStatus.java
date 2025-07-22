@@ -16,14 +16,6 @@ public enum OrderStatus {
         this.displayName = displayName;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
     public static OrderStatus fromValue(String value) {
         for (OrderStatus status : OrderStatus.values()) {
             if (status.value.equals(value)) {
@@ -31,5 +23,13 @@ public enum OrderStatus {
             }
         }
         return PENDING; // Default value
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

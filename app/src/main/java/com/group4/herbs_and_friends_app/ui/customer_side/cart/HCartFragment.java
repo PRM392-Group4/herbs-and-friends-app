@@ -1,7 +1,6 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.cart;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,7 +146,7 @@ public class HCartFragment extends Fragment {
      */
     private void setupButtonCheckout() {
         binding.btnCheckout.setOnClickListener(v -> {
-            if (hCartVM.getCartItemsLive().getValue().isEmpty()){
+            if (hCartVM.getCartItemsLive().getValue().isEmpty()) {
                 Toast.makeText(getContext(), "Giỏ hàng đang trống.",
                         Toast.LENGTH_LONG).show();
             } else {
@@ -160,7 +159,7 @@ public class HCartFragment extends Fragment {
 
 
     /**
-     *  Setup action bar with title only
+     * Setup action bar with title only
      */
     private void setupActionBar() {
         binding.includeActionbarCart.actionBarTitle.setText("Giỏ hàng");

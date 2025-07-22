@@ -19,21 +19,6 @@ public class HCartRecycleViewAdapter extends ListAdapter<CartItem, HCartViewHold
     // === Fields
     // ===========================
 
-    private final IViewHolderListeners listeners;
-
-    // ===========================
-    // === Constructors
-    // ===========================
-
-    public HCartRecycleViewAdapter(IViewHolderListeners listeners) {
-        super(DIFF_CALLBACK);
-        this.listeners = listeners;
-    }
-
-    // ===========================
-    // === Methods
-    // ===========================
-
     private static final DiffUtil.ItemCallback<CartItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<CartItem>() {
 
         @Override
@@ -46,6 +31,20 @@ public class HCartRecycleViewAdapter extends ListAdapter<CartItem, HCartViewHold
             return oldItem.equals(newItem);
         }
     };
+
+    // ===========================
+    // === Constructors
+    // ===========================
+    private final IViewHolderListeners listeners;
+
+    // ===========================
+    // === Methods
+    // ===========================
+
+    public HCartRecycleViewAdapter(IViewHolderListeners listeners) {
+        super(DIFF_CALLBACK);
+        this.listeners = listeners;
+    }
 
     @NonNull
     @Override

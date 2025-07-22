@@ -40,12 +40,12 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
     // === Fields
     // ================================
 
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private FragmentHCouponManagementBinding binding;
     private HCouponManagementAdapter adapter;
     private HCouponManagementVM hCouponManagementVM;
     private Date startDate = null;
     private Date endDate = null;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     // ================================
     // === Lifecycle
@@ -99,10 +99,12 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
         binding.includeActionbarCouponManage.tilSearch.setHint("Hãy nhập tên mã giảm giá");
         binding.includeActionbarCouponManage.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -144,7 +146,7 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
     private void setupDateFiltering() {
         // Setup start date picker
         binding.etStartDate.setOnClickListener(v -> showDatePicker(true));
-        
+
         // Setup end date picker
         binding.etEndDate.setOnClickListener(v -> showDatePicker(false));
     }
@@ -152,7 +154,7 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
     private void setupFilterButtons() {
         // Apply date filter button
         binding.btnApplyDateFilter.setOnClickListener(v -> applyDateFilter());
-        
+
         // Clear filter button
         binding.btnClearDateFilter.setOnClickListener(v -> clearDateFilter());
     }
@@ -200,13 +202,13 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
 
     private void showDatePicker(boolean isStartDate) {
         Calendar calendar = Calendar.getInstance();
-        
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 (view, year, month, dayOfMonth) -> {
                     calendar.set(year, month, dayOfMonth);
                     Date selectedDate = calendar.getTime();
-                    
+
                     if (isStartDate) {
                         startDate = selectedDate;
                         binding.etStartDate.setText(dateFormat.format(selectedDate));
@@ -219,7 +221,7 @@ public class HCouponManagementFragment extends Fragment implements HCouponManage
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
-        
+
         datePickerDialog.show();
     }
 

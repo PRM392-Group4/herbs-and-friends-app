@@ -1,4 +1,5 @@
 package com.group4.herbs_and_friends_app.ui.customer_side.checkout;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
@@ -7,14 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.databinding.FragmentHOrderResultBinding;
-import com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragmentDirections;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,13 +59,13 @@ public class HOrderResultFragment extends Fragment {
         // Set payment time
         String paymentTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
                 .format(new Date());
-        if (result.contains("Thanh toán")){
+        if (result.contains("Thanh toán")) {
             binding.textPaymentTime.setText("Thanh toán lúc: " + paymentTime);
         } else {
             binding.textPaymentTime.setText("Đặt hàng lúc: " + paymentTime);
         }
 
-        if (!total.isEmpty()){
+        if (!total.isEmpty()) {
             binding.textTotal.setText(total);
             binding.textTotal.setVisibility(VISIBLE);
         } else {

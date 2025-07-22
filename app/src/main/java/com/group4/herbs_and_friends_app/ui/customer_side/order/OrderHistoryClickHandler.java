@@ -5,6 +5,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragmentDirections;
+
 public class OrderHistoryClickHandler {
 
     /**
@@ -13,7 +14,7 @@ public class OrderHistoryClickHandler {
      */
     public static void navigateToOrderDetailsFromProfile(Fragment fragment, String orderId) {
         NavController navController = NavHostFragment.findNavController(fragment);
-        HProfileFragmentDirections.ActionProfileFragmentToHOrderDetailFragment action = 
+        HProfileFragmentDirections.ActionProfileFragmentToHOrderDetailFragment action =
                 HProfileFragmentDirections.actionProfileFragmentToHOrderDetailFragment(orderId);
         navController.navigate(action);
     }

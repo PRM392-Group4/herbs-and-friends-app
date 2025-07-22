@@ -1,21 +1,19 @@
 package com.group4.herbs_and_friends_app.data.repository;
 
 import android.os.Build;
-import android.util.Log;
 
-import com.google.firebase.firestore.CollectionReference;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.group4.herbs_and_friends_app.data.model.PushNotificationToken;
 import com.google.firebase.firestore.SetOptions;
+import com.group4.herbs_and_friends_app.data.model.PushNotificationToken;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DevicePushNotificationTokenRepository {
@@ -87,8 +85,10 @@ public class DevicePushNotificationTokenRepository {
                 .addOnFailureListener(e -> result.setValue(false));
         return result;
     }
+
     public interface TokensCallback {
         void onTokensReceived(List<String> tokens);
+
         void onError(Exception e);
     }
 }

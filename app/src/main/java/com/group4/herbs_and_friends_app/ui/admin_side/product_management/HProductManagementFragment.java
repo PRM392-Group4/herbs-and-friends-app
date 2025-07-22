@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
-import com.group4.herbs_and_friends_app.R;
 import com.group4.herbs_and_friends_app.data.model.Category;
 import com.group4.herbs_and_friends_app.data.model.Params;
 import com.group4.herbs_and_friends_app.data.model.Product;
@@ -54,6 +50,7 @@ public class HProductManagementFragment extends BaseProductFilterFragment<HProdu
         binding.btnAddProduct.setOnClickListener(v -> navigateToAddProduct());
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

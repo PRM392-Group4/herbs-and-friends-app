@@ -135,7 +135,7 @@ public class HHomeProductListFragment extends BaseProductFilterFragment<HHomeVM>
     @Override
     public void onProductDetailCLick(String productId) {
         NavHostFragment.findNavController(this).navigate(
-            HHomeProductListFragmentDirections.productListToProductDetail(productId)
+                HHomeProductListFragmentDirections.productListToProductDetail(productId)
         );
     }
 

@@ -18,8 +18,8 @@ import java.util.Locale;
 
 public class HCouponSelectionAdapter extends RecyclerView.Adapter<HCouponSelectionAdapter.CouponViewHolder> {
 
-    private List<Coupon> couponList;
     private final IOnCouponSelectedListener listener;
+    private List<Coupon> couponList;
 
     public HCouponSelectionAdapter(List<Coupon> couponList, IOnCouponSelectedListener listener) {
         this.couponList = couponList != null ? couponList : new ArrayList<>();
@@ -68,7 +68,7 @@ public class HCouponSelectionAdapter extends RecyclerView.Adapter<HCouponSelecti
             tvName.setText(coupon.getName());
             tvCode.setText("Mã: " + coupon.getCode());
             tvDiscount.setText(String.format(Locale.getDefault(), "-%.0f%%", coupon.getDiscount() * 100));
-            
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String validity = "Hiệu lực: " + sdf.format(coupon.getEffectiveDate()) + " - " + sdf.format(coupon.getExpiryDate());
             tvValidity.setText(validity);

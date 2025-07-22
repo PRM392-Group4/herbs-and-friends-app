@@ -43,14 +43,23 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
 
     // Abstract methods to be implemented by child fragments
     protected abstract RecyclerView getProductRecyclerView();
+
     protected abstract MaterialButton getFilterButton();
+
     protected abstract MaterialButton getSortButton();
+
     protected abstract ViewHActionbarBinding getActionBarBinding();
+
     protected abstract ViewHFilterSheetBinding getFilterSheetBinding();
+
     protected abstract P getConcreteViewModel();
+
     protected abstract LiveData<Params> getParamsLiveFromVM(P vm);
+
     protected abstract void setParamsLiveToVM(P vm, Params params);
+
     protected abstract LiveData<List<Product>> getProductsWithParamsLiveFromVM(P vm);
+
     protected abstract LiveData<List<Category>> getAllCategoriesLiveFromVM(P vm);
 
     @Override
@@ -75,21 +84,24 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
     protected void setActionBar() {
         ViewHActionbarBinding actionbarBinding = getActionBarBinding();
 
-        if(actionbarBinding.getRoot().getId() == R.id.include_actionbar_product_manage)
+        if (actionbarBinding.getRoot().getId() == R.id.include_actionbar_product_manage)
             actionbarBinding.btnBack.setVisibility(View.GONE);
 
         actionbarBinding.btnBack.setOnClickListener(v -> getNavController().popBackStack());
 
         actionbarBinding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // Replace end icon of search bar upon text input changes
-                if(s != null && !s.toString().trim().isEmpty()) {
+                if (s != null && !s.toString().trim().isEmpty()) {
                     actionbarBinding.tilSearch.setEndIconDrawable(R.drawable.ic_cancel);
                 } else actionbarBinding.tilSearch.setEndIconDrawable(R.drawable.ic_search);
             }
@@ -111,7 +123,7 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
             if (editable != null && !editable.toString().trim().isEmpty()) {
                 // Clear and reload all products
                 actionbarBinding.etSearch.setText("");
-                if(params == null) params = new Params();
+                if (params == null) params = new Params();
                 params.setSearch(null);
                 setParamsLiveToVM(viewModel, params); // Reload with no search
             } else {
@@ -123,11 +135,11 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
 
     protected void performSearch() {
         Editable editable = getActionBarBinding().etSearch.getText();
-        if(editable == null) return;
+        if (editable == null) return;
 
         String search = editable.toString().trim();
         if (!search.isEmpty()) {
-            if(params == null) params = new Params();
+            if (params == null) params = new Params();
             params.setSearch(search);
             setParamsLiveToVM(viewModel, params);
         }
@@ -146,7 +158,7 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
         categoryAdapter = new CategoryAdapter(requireContext(), category -> {
             if (category.isChecked()) {
                 selectedCategoryIds.add(category.getId());
-                if(category.getChildCategories() != null) {
+                if (category.getChildCategories() != null) {
                     selectedCategoryIds.addAll(category.getChildCategories()
                             .stream()
                             .map(Category::getId)
@@ -154,7 +166,8 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
                 }
             } else {
                 selectedCategoryIds.remove(category.getId());
-                if (category.isChildCategory()) selectedCategoryIds.remove(category.getCategoryParentId());
+                if (category.isChildCategory())
+                    selectedCategoryIds.remove(category.getCategoryParentId());
                 if (category.getChildCategories() != null) {
                     selectedCategoryIds.removeAll(category.getChildCategories()
                             .stream()
@@ -168,7 +181,7 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
 
     protected void initParams() {
         LiveData<Params> vmParamsLive = getParamsLiveFromVM(viewModel);
-        if(vmParamsLive != null && vmParamsLive.getValue() != null) {
+        if (vmParamsLive != null && vmParamsLive.getValue() != null) {
             params = vmParamsLive.getValue();
             if (params.getSearch() != null)
                 getActionBarBinding().etSearch.setText(params.getSearch());
@@ -218,7 +231,7 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
     }
 
     protected void applyFilter(View filterSheet) {
-        if(params == null) params = new Params();
+        if (params == null) params = new Params();
         params.setCategoryIds(selectedCategoryIds.isEmpty() ? null : selectedCategoryIds);
         setParamsLiveToVM(viewModel, params);
 
@@ -230,7 +243,7 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
         categoryAdapter.clearSelectedCategories();
         selectedCategoryIds.clear();
 
-        if(params == null) params = new Params();
+        if (params == null) params = new Params();
         params.setCategoryIds(null);
         setParamsLiveToVM(viewModel, params);
 
@@ -258,13 +271,13 @@ public abstract class BaseProductFilterFragment<P extends ViewModel> extends Fra
         sortPriceMenu.setOnMenuItemClickListener(sortOption -> {
             getSortButton().setText(sortOption.getTitle());
 
-            if(params == null) params = new Params();
+            if (params == null) params = new Params();
 
-            if(sortOption.getItemId() == R.id.sort_price_default) {
+            if (sortOption.getItemId() == R.id.sort_price_default) {
                 params.setSort(SortOptions.PRICE_DEFAULT);
-            } else if(sortOption.getItemId() == R.id.sort_price_asc) {
+            } else if (sortOption.getItemId() == R.id.sort_price_asc) {
                 params.setSort(SortOptions.PRICE_ASC);
-            } else if(sortOption.getItemId() == R.id.sort_price_desc) {
+            } else if (sortOption.getItemId() == R.id.sort_price_desc) {
                 params.setSort(SortOptions.PRICE_DESC);
             }
 

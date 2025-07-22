@@ -49,6 +49,7 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ImageV
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
+
         public ImageViewHolder(@NonNull ItemImageCarouselBinding binding) {
             super(binding.getRoot());
             image = binding.itemImage;
