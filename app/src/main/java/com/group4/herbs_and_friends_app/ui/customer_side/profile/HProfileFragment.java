@@ -162,6 +162,10 @@ public class HProfileFragment extends Fragment {
     }
     
     private void setupFilterAndSortButtons(View layoutHistory) {
+        // Refresh button
+        View btnRefreshOrders = layoutHistory.findViewById(R.id.btnRefreshOrders);
+        btnRefreshOrders.setOnClickListener(v -> refreshOrderHistory());
+        
         // Status filter button
         View btnFilterStatus = layoutHistory.findViewById(R.id.btnFilterStatus);
         btnFilterStatus.setOnClickListener(v -> showStatusFilterMenu(btnFilterStatus));
@@ -278,8 +282,30 @@ public class HProfileFragment extends Fragment {
                 if (orders != null && orderHistoryAdapter != null) {
                     orderHistoryAdapter.setOrders(orders);
                     updateOrderHistoryUI(orders);
+                    updateActiveFilterChips();
                 }
             });
+        }
+    }
+    
+    private void refreshOrderHistory() {
+        if (currentUser != null) {
+            Log.d("HProfileFragment", "Refreshing order history manually");
+            
+            // Disable refresh button temporarily and show loading state
+            View layoutHistory = binding.layoutHistory.getRoot();
+            View btnRefreshOrders = layoutHistory.findViewById(R.id.btnRefreshOrders);
+            btnRefreshOrders.setEnabled(false);
+            
+            hProfileVM.refreshOrderHistory();
+            
+            // Show a brief toast to indicate refresh
+            Toast.makeText(requireContext(), "Đang làm mới danh sách đơn hàng...", Toast.LENGTH_SHORT).show();
+            
+            // Re-enable button after a short delay
+            btnRefreshOrders.postDelayed(() -> {
+                btnRefreshOrders.setEnabled(true);
+            }, 2000); // 2 seconds
         }
     }
     

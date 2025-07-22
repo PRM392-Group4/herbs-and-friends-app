@@ -146,4 +146,17 @@ public class HProfileVM extends ViewModel {
     public void fetchUser(String uid, Consumer<User> onUserLoaded, Runnable onFailure) {
         authRepository.getUserByUid(uid, onUserLoaded, onFailure);
     }
+
+    public void refreshOrderHistory() {
+        // Force refresh by getting new data from repository
+        Log.d("HProfileVM", "Manually refreshing order history");
+        this.allOrdersLive = orderRepository.getUserOrders();
+        
+        // Re-setup the mediator with the fresh data source
+        filteredOrdersLive.removeSource(allOrdersLive);
+        filteredOrdersLive.addSource(allOrdersLive, orders -> applyFiltersAndSort());
+        
+        // Trigger immediate update
+        applyFiltersAndSort();
+    }
 }
