@@ -69,26 +69,40 @@ public class HOrderDetailVM extends ViewModel {
 
     public LiveData<Boolean> updateOrderStatus(String orderId, String newStatus) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        orderRepository.updateOrderStatus(orderId, newStatus).observeForever(success -> {
-            Log.d("OrderDetailVM", "Order status updated: " + newStatus + " " + success);
-            if (success != null && success) {
-                orderRepository.getOrderWithItems(orderId).observeForever(order -> {
+        LiveData<Boolean> updateStatusLiveData = orderRepository.updateOrderStatus(orderId, newStatus);
 
-                    Log.d("OrderDetailVM", "Order user id: " + order.getUserId());
-                    if (order != null && order.getUserId() != null) {
-                        String userId = order.getUserId();
-                        String title = "Đơn hàng " + orderId + " của bạn đã có trạng thái mới: " + newStatus;
-                        NotificationDto notificationDto = new NotificationDto(
-                            title,
-                            NotificationTypes.ORDER_STATUS_UPDATED,
-                            new Date()
-                        );
-                        notificationPublisher.tryPublishToOneUser(userId, notificationDto);
-                    }
-                });
+        Observer<Boolean> updateStatusObserver = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean success) {
+                updateStatusLiveData.removeObserver(this);
+                Log.d("OrderDetailVM", "Order status updated: " + newStatus + " " + success);
+                if (success != null && success) {
+                    LiveData<Order> orderLiveData = orderRepository.getOrderWithItems(orderId);
+                    Observer<Order> orderObserver = new Observer<Order>() {
+                        @Override
+                        public void onChanged(Order order) {
+                            orderLiveData.removeObserver(this);
+
+                            Log.d("OrderDetailVM", "Order user id: " + order.getUserId());
+                            if (order != null && order.getUserId() != null) {
+                                String userId = order.getUserId();
+                                String title = "Đơn hàng " + orderId + " của bạn đã có trạng thái mới: " + newStatus;
+                                NotificationDto notificationDto = new NotificationDto(
+                                        title,
+                                        NotificationTypes.ORDER_STATUS_UPDATED,
+                                        new Date()
+                                );
+                                notificationPublisher.tryPublishToOneUser(userId, notificationDto);
+                            }
+                        }
+                    };
+                    orderLiveData.observeForever(orderObserver);
+                }
+                result.setValue(success);
             }
-            result.setValue(success);
-        });
+        };
+
+        updateStatusLiveData.observeForever(updateStatusObserver);
         return result;
     }
 
