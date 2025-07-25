@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_h_admin_main"
+    app:startDestination="@id/dashboardFragment">
+
+    <!-- Thống kê -->
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.dashboard_management.HDashboardManagementFragment"
+        android:label="Thống kê" />
+
+    <!-- Đơn hàng -->
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.order_management.HOrderManagementFragment"
+        android:label="Đơn hàng">
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
+
+    <!-- Chi tiết đơn hàng -->
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
+        android:label="Chi tiết đơn hàng">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Sản phẩm -->
+    <fragment
+        android:id="@+id/productManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.product_management.HProductManagementContainerFragment"
+        android:label="Manage" />
+
+    <!-- Ưu đãi -->
+    <fragment
+        android:id="@+id/couponManageFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponManagementContainerFragment"
+        android:label="fragment_h_coupon_management" />
+
+    <!-- Cá nhân -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.profile_management.HProfileManagementFragment"
+        android:label="Cá nhân" />
+
+</navigation>

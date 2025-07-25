@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Brand Colors -->
+    <color name="h_primary">#00AC53</color>
+    <color name="h_secondary">#FFB300</color>
+    <color name="h_tertiary">#00AC53</color>
+
+    <!-- Background & Surface -->
+    <color name="h_background">#FFFFFF</color>
+    <color name="h_surface">#FFFFFF</color>
+
+    <!-- Text on surfaces -->
+    <color name="h_on_primary">#FFFFFF</color>
+    <color name="h_on_secondary">#1C1C1C</color>
+    <color name="h_on_background">#1C1C1C</color>
+    <color name="h_on_surface">#1C1C1C</color>
+
+    <!-- Neutrals -->
+    <color name="h_white">#E6E0E9</color>
+    <color name="h_gray">#8F8F8F</color>
+    <color name="h_black">#1C1C1C</color>
+
+    <!-- Semantic -->
+    <color name="h_info">#1691FB</color>
+    <color name="h_error">#FB4942</color>
+    <color name="h_highlight">#3165FD</color>
+
+    <!-- Others -->
+    <color name="h_purple">#D585FA</color>
+    <color name="h_yellow_light">#FCEFCC</color>
+    <color name="h_red_light">#FCDAD8</color>
+    <color name="h_purple_light">#F5E6FC</color>
+    <color name="h_blue_light">#D5DFFD</color>
+    <color name="h_skyblue_light">#CFE8FC</color>
+    <color name="h_newsvine">#80D9FDE5</color>
+    <color name="h_kermit">#97DBAE</color>
+    <color name="h_carrot">#EE6457</color>
+    <color name="h_red">#FC0303</color>
+
+    <!-- Text Colors -->
+    <color name="h_text_primary">#1C1C1C</color>
+    <color name="h_text_secondary">#8F8F8F</color>
+
+    <!-- Additional UI Colors -->
+    <color name="h_gray_light">#F5F5F5</color>
+
+</resources>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="12dp">
+
+    <!-- 1. Thumbnail -->
+    <ImageView
+        android:id="@+id/ivThumbnail"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="@string/cart_viewholder_product_image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 2. Product name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Product Name"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:layout_constraintStart_toEndOf="@id/ivThumbnail"
+        app:layout_constraintTop_toTopOf="@id/ivThumbnail" />
+
+    <!-- 3. Product price -->
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="0 đ"
+        android:textColor="@color/h_primary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <!-- 4. Barrier gom tvName + tvPrice -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="tvName,tvPrice" />
+
+    <!-- 5. Minus button -->
+    <ImageButton
+        android:id="@+id/btnMinus"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/cart_viewholder_decrease_the_quantity"
+        android:src="@drawable/ic_cart_minus"
+        app:layout_constraintBottom_toBottomOf="@id/ivThumbnail"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/ivThumbnail" />
+
+    <!-- 6. Quantity -->
+    <TextView
+        android:id="@+id/tvQty"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="1"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnMinus"
+        app:layout_constraintStart_toEndOf="@id/btnMinus"
+        app:layout_constraintTop_toTopOf="@id/btnMinus" />
+
+    <!-- 7. Plus button -->
+    <ImageButton
+        android:id="@+id/btnPlus"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/cart_viewholder_increase_the_quantity"
+        android:src="@drawable/ic_cart_add"
+        app:layout_constraintBottom_toBottomOf="@id/ivThumbnail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvQty"
+        app:layout_constraintTop_toTopOf="@id/ivThumbnail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

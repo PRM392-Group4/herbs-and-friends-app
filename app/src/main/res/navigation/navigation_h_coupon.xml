@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_h_coupon"
+    app:startDestination="@id/HCouponManagementFragment">
+
+    <fragment
+        android:id="@+id/HCouponManagementFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponManagementFragment"
+        android:label="fragment_h_coupon_management"
+        tools:layout="@layout/fragment_h_coupon_management">
+        <action
+            android:id="@+id/from_CouponList_to_CouponForm"
+            app:destination="@id/HCouponFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/HCouponFormFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.admin_side.coupon_management.HCouponFormFragment"
+        android:label="fragment_h_coupon_form"
+        tools:layout="@layout/fragment_h_coupon_form">
+
+        <argument
+            android:name="couponId"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/from_CouponForm_to_CouponList"
+            app:destination="@id/HCouponManagementFragment" />
+    </fragment>
+</navigation>

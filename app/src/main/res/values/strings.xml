@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">herbs-and-friends-app</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home fragment -->
+    <string name="home_category_title">Phân loại</string>
+    <string name="product_list_title">Sản phẩm</string>
+    <string name="home_product_see_more">Xem thêm</string>
+    <string name="product_search_hint">Bạn đang tìm loại cây nào?</string>
+
+    <string name="home_category_placeholder_txt">Category</string>
+
+    <string name="btn_product_detail">Chi tiết</string>
+    <string name="product_name_placeholder_txt">Product name</string>
+    <string name="product_price_placeholder_txt">100.000 ₫</string>
+    <string name="btn_sort_placeholder_txt">Giá mặc định</string>
+    <string name="btn_filter_placeholder_txt">Tất cả</string>
+    <string name="product_tag_placeholder_txt">Tag</string>
+
+    <string name="product_description_placeholder_txt">The standard Lorem Ipsum passage, used since the 1500s. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</string>
+    <string name="btn_add_to_cart">Thêm vào giỏ hàng</string>
+    <string name="btn_fast_checkout">Mua ngay</string>
+    <string name="product_stock_placeholder_txt">Kho:</string>
+    <string name="btn_quantity_minus">−</string>
+    <string name="btn_quantity_add">+</string>
+    <string name="product_quantity_placeholder_txt">1</string>
+    <string name="product_item_stock_placeholder_txt">Kho: 1</string>
+    <string name="quantity_label">Số lượng</string>
+    <string name="product_not_found">Không tìm thấy sản phẩm</string>
+    <string name="product_out_of_stock">Sản phẩm tạm hết hàng</string>
+
+    <string name="filter_sheet_title_placeholder_txt">Lọc theo phân loại</string>
+    <string name="btn_clear_filter">Thiết lập lại</string>
+    <string name="btn_apply_filter">Áp dụng</string>
+
+    <string name="all_cate_id">all</string>
+    <string name="all_cate_name">Tất cả</string>
+    <string name="sort_price_default">Giá mặc định</string>
+    <string name="sort_price_asc">Giá tăng dần</string>
+    <string name="sort_price_desc">Giá giảm dần</string>
+    <string name="item_filter_checkbox_placeholder_txt">Filter option</string>
+    <string name="btn_product_filter_set">Bộ lọc</string>
+    <string name="btn_edit_text">Sửa</string>
+    <string name="btn_delete_text">Xóa</string>
+    <string name="btn_add_product_content_desc">Add New Product</string>
+    <string name="in_stock_placeholder_txt">Kho: %d</string>
+    <string name="action_bar_title_placeholder_txt">Thêm Cây</string>
+    <string name="updated_at_placeholder_txt">Cập nhật: 07/03/2025</string>
+    <string name="updated_text">Cập nhật: %s</string>
+    <string name="date_format">dd/MM/yyyy</string>
+
+    <!-- Authentication -->
+    <string name="default_client_id">524169331415-u7t94uk1obmmclnrei5t028k8hci2hg4.apps.googleusercontent.com</string>
+    <string name="gmail_sender_email">tuyenchau24424@gmail.com</string>
+    <string name="gmail_app_password">tibl thra hdwc cdtp</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Giỏ hàng</string>
+    <string name="cart_viewholder_decrease_the_quantity">Decrease the quantity</string>
+    <string name="cart_viewholder_increase_the_quantity">Increase the quantity</string>
+    <string name="cart_viewholder_product_image">Product Image</string>
+    <string name="cart_btn_go_to_login">Đăng nhập</string>
+
+    <!-- Management -->
+    <string-array name="manage_type_options">
+        <item>Quản lý cây</item>
+        <item>Quản lý đơn hàng</item>
+    </string-array>
+
+    <!--    Checkout-->
+    <string name="checkout_title">Xác nhận đơn hàng</string>
+    <string name="checkout_title_product">Sản phẩm</string>
+    <string name="checkout_title_delivery_method">Phương thức nhận hàng</string>
+    <string name="checkout_title_payment_method">Phương thức thanh toán</string>
+    <string name="checkout_title_payment_details">Chi tiết thanh toán</string>
+
+    <string name="checkout_placeholder_discount">Mã giảm giá</string>
+    <string name="checkout_placeholder_note">Ghi chú</string>
+
+    <string name="checkout_shipping_standard">Giao tiêu chuẩn (3-7 ngày)</string>
+    <string name="checkout_shipping_express">Giao nhanh (1-3 ngày)</string>
+    <string name="checkout_shipping_pick_up">Đến lấy tại cửa hàng</string>
+    <string name="checkout_payment_momo">Ví Momo</string>
+    <string name="checkout_payment_cash">Thanh toán khi nhận hàng</string>
+
+    <string name="checkout_label_subtotal">Tổng tiền hàng</string>
+    <string name="checkout_label_shipping">Phí vận chuyển</string>
+    <string name="checkout_label_discount">Giảm giá</string>
+    <string name="checkout_label_total">Tổng thanh toán</string>
+    <string name="looker_embed_url">https://lookerstudio.google.com/embed/reporting/c0871a43-66c2-4e6b-9bf5-2b30b930d113/page/IU2RF</string>
+
+    <!--  Coupons -->
+    <string name="remove_filter">Xóa bộ lọc</string>
+    <string name="apply_filter">Áp dụng</string>
+    <string name="no_coupons">Không có mã giảm giá nào</string>
+    <string name="add_new_coupon">Thêm mã giảm giá mới</string>
+    <string name="until_date">Đến ngày</string>
+    <string name="from_date">Từ ngày</string>
+
+    <!--  Notifs permission  -->
+    <string name="notif_enable_title">Bật thông báo</string>
+    <string name="notif_enable_message">Ứng dụng muốn gửi thông báo cho bạn. Bạn sẽ nhận được cập nhật, ưu đãi và thông báo quan trọng.</string>
+    <string name="accept">Đồng ý</string>
+    <string name="deny">Từ chối</string>
+    <string name="dont_ask_again">Không hỏi lại</string>
+    <string name="notif_rationale_title">Tại sao nên bật thông báo?</string>
+    <string name="notif_rationale_message">Bật thông báo giúp bạn nhận được cập nhật, ưu đãi và thông báo quan trọng. Bạn có thể thay đổi lựa chọn này trong phần cài đặt bất cứ lúc nào.</string>
+    <string name="enable_notifications">Bật thông báo</string>
+    <string name="cancel">Hủy</string>
+    <string name="notif_settings_title">Bật thông báo trong Cài đặt</string>
+    <string name="notif_settings_message">Thông báo hiện đang bị tắt. Để bật thông báo, vui lòng vào phần cài đặt ứng dụng trên thiết bị và cho phép thông báo cho ứng dụng này.</string>
+    <string name="open_settings">Mở cài đặt</string>
+</resources>

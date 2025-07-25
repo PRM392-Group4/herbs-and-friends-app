@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Item layout for category icon in home fragment -->
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/category_ic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="center"
+        android:src="@drawable/ic_default_background"
+        app:shapeAppearanceOverlay="@style/RoundedCornerIcon" />
+
+    <TextView
+        android:id="@+id/category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:gravity="center_horizontal"
+        android:text="@string/home_category_placeholder_txt"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

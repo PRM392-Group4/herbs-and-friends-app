@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/herb_navigation_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.home.HHomeContainerFragment"
+        android:label="Home" />
+
+    <!-- Cart Tab -->
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.cart.HCartFragment"
+        android:label="Cart">
+        <!-- From Cart to Checkout -->
+        <action
+            android:id="@+id/fromCartToCheckoutNavigation"
+            app:destination="@id/HCheckoutFragment" />
+    </fragment>
+
+    <!-- Notification Tab -->
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.notification.HNotificationFragment"
+        android:label="Notification" />
+
+    <!-- Profile Tab -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.profile.HProfileFragment"
+        android:label="Profile">
+        <!-- From Profile to Login -->
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <!-- From Profile to Order Detail -->
+        <action
+            android:id="@+id/action_profileFragment_to_HOrderDetailFragment"
+            app:destination="@id/HOrderDetailFragment" />
+    </fragment>
+
+    <!-- Login -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.login.HLoginFragment"
+        android:label="Login">
+
+        <!-- After login, back to Profile -->
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Navigate to Register -->
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/HRegisterFragment" />
+
+        <!-- Navigate to Reset -->
+        <action
+            android:id="@+id/action_loginFragment_to_resetFragment"
+            app:destination="@id/HResetFragment" />
+    </fragment>
+
+    <!-- Register -->
+    <fragment
+        android:id="@+id/HRegisterFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.register.HRegisterFragment"
+        android:label="Register">
+
+        <!-- After Register, go to Profile and clear back stack -->
+        <action
+            android:id="@+id/action_registerFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Go back to Login -->
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <!-- Reset -->
+    <fragment
+        android:id="@+id/HResetFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.auth.reset.HResetFragment"
+        android:label="Reset">
+
+        <!-- After Reset, go to Login and clear Reset screen -->
+        <action
+            android:id="@+id/action_resetFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/HResetFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Order Detail -->
+    <fragment
+        android:id="@+id/HOrderDetailFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.order.HOrderDetailFragment"
+        android:label="Order Detail">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Checkout Fragment -->
+    <fragment
+        android:id="@+id/HCheckoutFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HCheckoutFragment"
+        android:label="Checkout">
+        <action
+            android:id="@+id/action_HCheckoutFragment_to_HOrderResultFragment"
+            app:destination="@+id/HOrderResultFragment"
+            app:popUpTo="@id/HCheckoutFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Order Result Fragment -->
+    <fragment
+        android:id="@+id/HOrderResultFragment"
+        android:name="com.group4.herbs_and_friends_app.ui.customer_side.checkout.HOrderResultFragment"
+        android:label="fragment_h_order_result">
+        <action
+            android:id="@+id/action_HOrderResultFragment_to_HOrderDetailsFragment"
+            app:destination="@id/HOrderDetailFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_HOrderResultFragment_to_HHomeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+</navigation>
