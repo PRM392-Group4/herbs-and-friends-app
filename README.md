@@ -30,12 +30,13 @@ Herbs and Friends App is a modern Android e-commerce platform built with Java, f
 
 ## 👥 Team Members
 
-<!-- Add your team members here -->
-
-- **Member 1**: [Name] - [Role] - [Student ID]
-- **Member 2**: [Name] - [Role] - [Student ID]
-- **Member 3**: [Name] - [Role] - [Student ID]
-- **Member 4**: [Name] - [Role] - [Student ID]
+- **Member 1**: AnonyFriday 
+- **Member 2**: imbatcat
+- **Member 3**: khanhcnp
+- **Member 4**: alicee-19
+- **Member 5**: quanggiap2004
+- **Member 6**: r1nzl3rrr
+- **Member 7**: tuyenctnse182129
 
 ## 🛠 Technologies Used
 
